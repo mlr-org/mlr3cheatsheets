@@ -1,0 +1,122 @@
+\documentclass{beamer}
+
+\usepackage[orientation=landscape,size=a0,scale=1.4,debug]{beamerposter}
+\mode<presentation>{\usetheme{mlr}}
+
+\usepackage[utf8]{inputenc} % UTF-8
+\usepackage[english]{babel} % Language
+\usepackage{hyperref} % Hyperlinks
+\usepackage{ragged2e} % Text position
+\usepackage[export]{adjustbox} % Image position
+
+\title{mlr3 :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
+\newcommand{\packagedescription}{ % Package description in header
+	The \textbf{mlr3} package provides a framework for classification, regression and other machine learning tasks.
+}
+
+\newlength{\columnheight} % Adjust depending on header height
+\setlength{\columnheight}{84cm} 
+
+\begin{document}
+\begin{frame}[fragile]{}
+\begin{columns}
+	\begin{column}{.31\textwidth}
+		\begin{beamercolorbox}[center]{postercolumn}
+			\begin{minipage}{.98\textwidth}
+				\parbox[t][\columnheight]{\textwidth}{				
+					\begin{myblock}{Task}
+						Tasks objects store data (\textit{backend}) and additional meta-data for machine-learning problems.
+						\\[2\baselineskip]
+						task = \textbf{TaskClassif}\$new(backend, target) - The \textit{target} is a label with only few distinct values. 
+						\\[\baselineskip]
+						task = \textbf{TaskRegr}\$newt(backend, target) - The \textit{target} is a numeric quantity.
+						\\[\baselineskip]
+						task\$\textbf{data}() - Retrieves stored data.
+						\\[\baselineskip]
+						task\$\textbf{select}(cols) -  Subsets the task based on feature names (\textit{cols}).
+						\\[\baselineskip]
+						task\$\textbf{filter}(rows) - Subsets the task based on row ids (\textit{rows}).
+					\end{myblock}
+					\begin{myblock}{Learner}
+						Learner objects provide a unified interface to machine-learning algorithms.
+						\\[2\baselineskip]
+						learner = mlr\_learners\$\textbf{get}(id) - Extracts a specific learner by \textit{id}.
+						\\[\baselineskip]
+						learner\$\textbf{param\_set} - Returns a description of hyperparameter settings.
+					\end{myblock}\vfill
+				}
+			\end{minipage}
+		\end{beamercolorbox}
+	\end{column}
+	\begin{column}{.31\textwidth}
+		\begin{beamercolorbox}[center]{postercolumn}
+			\begin{minipage}{.98\textwidth}
+				\parbox[t][\columnheight]{\textwidth}{
+					\begin{myblock}{Train \& Predict}
+						Training fits a model to a given task. 
+						\\[2\baselineskip]
+						train\_set = sample(task\$nrow, 0.8 * task\$nrow) - Get train set.
+						\\[\baselineskip]
+						test\_set = setdiff(seq\_len(task\$nrow), train\_set) - Get test set.
+						\\[\baselineskip]
+						learner\$\textbf{train}(task, row\_ids = train\_set) - Train learner with the \textit{train\_set}.
+						\\[\baselineskip]
+						prediction = learner\$\textbf{predict}(task, row\_ids = test\_set) - Predict \textit{test\_set} with model.
+						\\[\baselineskip]
+						measure = mlr\_measures\$\textbf{get}(key) - Get measure by \textit{key}.
+						\\[\baselineskip]
+						prediction\$\textbf{score}(measure) - Access performance with \textit{measure}.
+					\end{myblock}
+					\begin{myblock}{Resampling}
+						Resampling is used to assess the performance of a learning algorithm.
+						\\[2\baselineskip]
+						\begin{minipage}{\textwidth}
+							\begin{columns}[T]
+								\begin{column}{0.2\textwidth}
+									\includegraphics[width=\textwidth]{img/cross_validation.png}
+								\end{column}
+								\begin{column}{0.8\textwidth}
+										resampling = mlr\_resamplings\$\textbf{get}(key) - Get resampling strategy by \textit{key}. 
+								\end{column}
+							\end{columns}
+						\end{minipage}
+						\\[\baselineskip]
+						resampling\$\textbf{instantiate}(task) - Apply splitting on \textit{task}.
+						\\[\baselineskip]
+						rr = \textbf{resample}(task, learner, resampling) - Executes resampling.
+						\\[\baselineskip]
+						rr\$\textbf{performance}(measure) - Extract performance of individual resampling iterations with \textit{measure}.
+						
+					\end{myblock}\vfill
+				}
+			\end{minipage}
+		\end{beamercolorbox}
+	\end{column}
+	\begin{column}{.31\textwidth}
+		\begin{beamercolorbox}[center]{postercolumn}
+			\begin{minipage}{.98\textwidth}
+				\parbox[t][\columnheight]{\textwidth}{
+					\begin{myblock}{Benchmarking}
+						Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
+					\end{myblock}
+					\begin{myblock}{Packages}
+						\href{https://github.com/mlr-org/mlr3pipelines}{mlr3pipelines} - Dataflow Programming\\
+						\href{https://github.com/mlr-org/mlr3tuning}{mlr3tuning} - Tuning Methods\\
+						\href{https://github.com/mlr-org/mlr3filters}{mlr3filters} - Feature Selection Filters\\ 
+						\href{https://github.com/mlr-org/mlr3survival}{mlr3survival} - Survival analysis\\
+						\href{https://github.com/mlr-org/mlr3fswrap}{mlr3fswrap} - Wrapper feature selection\\
+						\href{https://github.com/mlr-org/mlr3learners}{mlr3learners} - Recommended learners\\
+						\href{https://github.com/mlr-org/mlr3viz}{mlr3viz} - Visualizations \\
+						\href{https://github.com/mlr-org/mlr3ordinal}{mlr3ordinal} - Ordinal Regression 
+					\end{myblock}
+					\begin{myblock}{Resources}
+						\href{https://mlr3book.mlr-org.com/index.html}{mlr3book}\\
+						\href{https://github.com/mlr-org}{mlr-org on GitHub}
+					\end{myblock}\vfill
+				}
+			\end{minipage}
+		\end{beamercolorbox}
+	\end{column}
+\end{columns}
+\end{frame}
+\end{document}
