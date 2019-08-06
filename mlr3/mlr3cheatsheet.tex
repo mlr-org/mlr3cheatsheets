@@ -8,6 +8,7 @@
 \usepackage{hyperref} % Hyperlinks
 \usepackage{ragged2e} % Text position
 \usepackage[export]{adjustbox} % Image position
+\usepackage[most]{tcolorbox}
 
 \title{mlr3 :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
 \newcommand{\packagedescription}{ % Package description in header
@@ -16,6 +17,14 @@
 
 \newlength{\columnheight} % Adjust depending on header height
 \setlength{\columnheight}{84cm} 
+
+\newtcolorbox{codebox}{%
+	sharp corners,
+	leftrule=0pt,
+	rightrule=0pt,
+	toprule=0pt,
+	bottomrule=0pt,
+	hbox}
 
 \begin{document}
 \begin{frame}[fragile]{}
@@ -26,23 +35,44 @@
 				\parbox[t][\columnheight]{\textwidth}{				
 					\begin{myblock}{Task}
 						Tasks objects store data (\textit{backend}) and additional meta-data for machine-learning problems.
-						\\[2\baselineskip]
-						task = \textbf{TaskClassif}\$new(backend, target) - The \textit{target} is a label with only few distinct values. 
-						\\[\baselineskip]
-						task = \textbf{TaskRegr}\$newt(backend, target) - The \textit{target} is a numeric quantity.
-						\\[\baselineskip]
-						task\$\textbf{data}() - Retrieves stored data.
-						\\[\baselineskip]
-						task\$\textbf{select}(cols) -  Subsets the task based on feature names (\textit{cols}).
-						\\[\baselineskip]
-						task\$\textbf{filter}(rows) - Subsets the task based on row ids (\textit{rows}).
+						\\
+						\begin{codebox}
+							task = \textbf{TaskClassif}\$new(backend, target)
+						\end{codebox}
+						\hspace*{1ex}The \textit{target} is a label with only few distinct values.
+						\\
+						\begin{codebox}
+							task = \textbf{TaskRegr}\$newt(backend, target)
+						\end{codebox}
+						\hspace*{1ex}The \textit{target} is a numeric quantity.
+						\\
+						\begin{codebox}
+							task\$\textbf{data}()
+						\end{codebox}
+						\hspace*{1ex}Retrieves stored data.
+						\\
+						\begin{codebox}
+							task\$\textbf{select}(cols)
+						\end{codebox}
+						\hspace*{1ex}Subsets the task based on feature names (\textit{cols}).
+						\\
+						\begin{codebox}
+							task\$\textbf{filter}(rows)
+						\end{codebox}
+						\hspace*{1ex}Subsets the task based on row ids (\textit{rows}).
 					\end{myblock}
 					\begin{myblock}{Learner}
 						Learner objects provide a unified interface to machine-learning algorithms.
-						\\[2\baselineskip]
-						learner = mlr\_learners\$\textbf{get}(id) - Extracts a specific learner by \textit{id}.
-						\\[\baselineskip]
-						learner\$\textbf{param\_set} - Returns a description of hyperparameter settings.
+						\\
+						\begin{codebox}
+							learner = mlr\_learners\$\textbf{get}(id)
+						\end{codebox}
+						\hspace*{1ex}Extracts a specific learner by \textit{id}.
+						\\
+						\begin{codebox}
+							learner\$\textbf{param\_set}
+						\end{codebox}
+						\hspace*{1ex}Returns a description of hyperparameter settings.
 					\end{myblock}\vfill
 				}
 			\end{minipage}
@@ -54,39 +84,68 @@
 				\parbox[t][\columnheight]{\textwidth}{
 					\begin{myblock}{Train \& Predict}
 						Training fits a model to a given task. 
-						\\[2\baselineskip]
-						train\_set = sample(task\$nrow, 0.8 * task\$nrow) - Get train set.
-						\\[\baselineskip]
-						test\_set = setdiff(seq\_len(task\$nrow), train\_set) - Get test set.
-						\\[\baselineskip]
-						learner\$\textbf{train}(task, row\_ids = train\_set) - Train learner with the \textit{train\_set}.
-						\\[\baselineskip]
-						prediction = learner\$\textbf{predict}(task, row\_ids = test\_set) - Predict \textit{test\_set} with model.
-						\\[\baselineskip]
-						measure = mlr\_measures\$\textbf{get}(key) - Get measure by \textit{key}.
-						\\[\baselineskip]
-						prediction\$\textbf{score}(measure) - Access performance with \textit{measure}.
+						\\
+						\begin{codebox}
+							train\_set = sample(task\$nrow, 0.8 * task\$nrow)
+						\end{codebox}
+						\hspace*{1ex}Get train set.
+						\\
+						\begin{codebox}
+							test\_set = setdiff(seq\_len(task\$nrow), train\_set)
+						\end{codebox}
+						\hspace*{1ex}Get test set.
+						\\
+						\begin{codebox}
+							learner\$\textbf{train}(task, row\_ids = train\_set)
+						\end{codebox}
+						\hspace*{1ex}Train learner with the \textit{train\_set}.
+						\\
+						\begin{codebox}
+							prediction = learner\$\textbf{predict}(task, row\_ids = test\_set)
+						\end{codebox}
+						\hspace*{1ex}Predict \textit{test\_set} with model.
+						\\
+						\begin{codebox}
+							measure = mlr\_measures\$\textbf{get}(key)
+						\end{codebox}
+						\hspace*{1ex}Get measure by \textit{key}.
+						\\
+						\begin{codebox}
+							prediction\$\textbf{score}(measure)
+						\end{codebox}
+						\hspace*{1ex}Access performance with \textit{measure}.
 					\end{myblock}
 					\begin{myblock}{Resampling}
 						Resampling is used to assess the performance of a learning algorithm.
-						\\[2\baselineskip]
+						\\[\baselineskip]
 						\begin{minipage}{\textwidth}
 							\begin{columns}[T]
 								\begin{column}{0.2\textwidth}
 									\includegraphics[width=\textwidth]{img/cross_validation.png}
 								\end{column}
 								\begin{column}{0.8\textwidth}
-										resampling = mlr\_resamplings\$\textbf{get}(key) - Get resampling strategy by \textit{key}. 
+										\begin{codebox}
+										resampling = mlr\_resamplings\$\textbf{get}(key)
+										\end{codebox}
+										\hspace*{1ex}Get resampling strategy by \textit{key}. 
 								\end{column}
 							\end{columns}
 						\end{minipage}
 						\\[\baselineskip]
-						resampling\$\textbf{instantiate}(task) - Apply splitting on \textit{task}.
-						\\[\baselineskip]
-						rr = \textbf{resample}(task, learner, resampling) - Executes resampling.
-						\\[\baselineskip]
-						rr\$\textbf{performance}(measure) - Extract performance of individual resampling iterations with \textit{measure}.
-						
+						\begin{codebox}
+							resampling\$\textbf{instantiate}(task)
+						\end{codebox}
+						\hspace*{1ex}Apply splitting on \textit{task}.
+						\\
+						\begin{codebox}
+							rr = \textbf{resample}(task, learner, resampling)
+						\end{codebox}
+						\hspace*{1ex}Executes resampling.
+						\\
+						\begin{codebox}
+							rr\$\textbf{performance}(measure)
+						\end{codebox}
+						\hspace*{1ex}Extract performance of individual resampling iterations with \textit{measure}.
 					\end{myblock}\vfill
 				}
 			\end{minipage}
@@ -100,18 +159,22 @@
 						Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
 					\end{myblock}
 					\begin{myblock}{Packages}
-						\href{https://github.com/mlr-org/mlr3pipelines}{mlr3pipelines} - Dataflow Programming\\
-						\href{https://github.com/mlr-org/mlr3tuning}{mlr3tuning} - Tuning Methods\\
-						\href{https://github.com/mlr-org/mlr3filters}{mlr3filters} - Feature Selection Filters\\ 
-						\href{https://github.com/mlr-org/mlr3survival}{mlr3survival} - Survival analysis\\
-						\href{https://github.com/mlr-org/mlr3fswrap}{mlr3fswrap} - Wrapper feature selection\\
-						\href{https://github.com/mlr-org/mlr3learners}{mlr3learners} - Recommended learners\\
-						\href{https://github.com/mlr-org/mlr3viz}{mlr3viz} - Visualizations \\
-						\href{https://github.com/mlr-org/mlr3ordinal}{mlr3ordinal} - Ordinal Regression 
+						\begin{itemize}
+							\item \href{https://github.com/mlr-org/mlr3pipelines}{mlr3pipelines} - Dataflow Programming
+							\item \href{https://github.com/mlr-org/mlr3tuning}{mlr3tuning} - Tuning Methods
+							\item \href{https://github.com/mlr-org/mlr3filters}{mlr3filters} - Feature Selection Filters
+							\item \href{https://github.com/mlr-org/mlr3survival}{mlr3survival} - Survival analysis
+							\item \href{https://github.com/mlr-org/mlr3fswrap}{mlr3fswrap} - Wrapper feature selection
+							\item \href{https://github.com/mlr-org/mlr3learners}{mlr3learners} - Recommended learners
+							\item \href{https://github.com/mlr-org/mlr3viz}{mlr3viz} - Visualizations
+							\item \href{https://github.com/mlr-org/mlr3ordinal}{mlr3ordinal} - Ordinal Regression
+						\end{itemize}
 					\end{myblock}
 					\begin{myblock}{Resources}
-						\href{https://mlr3book.mlr-org.com/index.html}{mlr3book}\\
-						\href{https://github.com/mlr-org}{mlr-org on GitHub}
+						\begin{itemize}
+							\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book}
+							\item \href{https://github.com/mlr-org}{mlr-org on GitHub} 
+						\end{itemize}
 					\end{myblock}\vfill
 				}
 			\end{minipage}
