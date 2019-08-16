@@ -87,7 +87,6 @@
           
           4. A \textbf{resampling} specifies a series of train and test sets.
           \end{myblock}
-    
 				  \includegraphics[width=\textwidth]{img/ml_abstraction.png}
 				}
 			\end{minipage}
@@ -97,7 +96,7 @@
 		\begin{beamercolorbox}[center]{postercolumn}
 			\begin{minipage}{.98\textwidth}
 				\parbox[t][\columnheight]{\textwidth}{
-									\begin{myblock}{Task}
+				  \begin{myblock}{Task}
 						Tasks objects store data (\textit{backend}) and additional meta-data for machine learning problems. A \textit{backend} allows fine-grained control over how data is accessed. If you simply provide the dataset, it is automatically converted to a \textit{DataBackendDataTable}.
 						\\
 						\begin{codebox}
@@ -161,103 +160,103 @@
 						\hspace*{1ex}Returns a description of hyperparameter settings.
 					\end{myblock}
 				\begin{myblock}{Train \& Predict}
-						Training fits a model to a given task. 
-						\\
-						\begin{codebox}
-							train\_set = \textbf{sample}(task\$nrow, 0.8 * task\$nrow)
-						\end{codebox}
-						\hspace*{1ex}Get train set.
-						\\
-						\begin{codebox}
-							test\_set = \textbf{setdiff}(seq\_len(task\$nrow), train\_set)
-						\end{codebox}
-						\hspace*{1ex}Get test set.
-						\\
-						\begin{codebox}
-							learner\$\textbf{train}(task, row\_ids = train\_set)
-						\end{codebox}
-						\hspace*{1ex}Train model with the \textit{train\_set}.
-						\\
-						\begin{codebox}
-							prediction = learner\$\textbf{predict}(task, row\_ids = test\_set)
-						\end{codebox}
-						\hspace*{1ex}Predict \textit{test\_set} with model.
-						\\
-						\begin{codebox}
-							measure = \textbf{mlr\_measures}\$\textbf{get}(key)
-						\end{codebox}
-						\hspace*{1ex}Get measure by \textit{key} from mlr\_measure dictionary.
-						\\
-						\begin{codebox}
-							prediction\$\textbf{score}(measure)
-						\end{codebox}
-						\hspace*{1ex}Access performance with \textit{measure}.
-					\end{myblock}
+					Training fits a model to a given task. 
+					\\
+					\begin{codebox}
+						train\_set = \textbf{sample}(task\$nrow, 0.8 * task\$nrow)
+					\end{codebox}
+					\hspace*{1ex}Get train set.
+					\\
+					\begin{codebox}
+						test\_set = \textbf{setdiff}(seq\_len(task\$nrow), train\_set)
+					\end{codebox}
+					\hspace*{1ex}Get test set.
+					\\
+					\begin{codebox}
+						learner\$\textbf{train}(task, row\_ids = train\_set)
+					\end{codebox}
+					\hspace*{1ex}Train model with the \textit{train\_set}.
+					\\
+					\begin{codebox}
+						prediction = learner\$\textbf{predict}(task, row\_ids = test\_set)
+					\end{codebox}
+					\hspace*{1ex}Predict \textit{test\_set} with model.
+					\\
+					\begin{codebox}
+						measure = \textbf{mlr\_measures}\$\textbf{get}(key)
+					\end{codebox}
+					\hspace*{1ex}Get measure by \textit{key} from mlr\_measure dictionary.
+					\\
+					\begin{codebox}
+						prediction\$\textbf{score}(measure)
+					\end{codebox}
+					\hspace*{1ex}Access performance with \textit{measure}.
+				\end{myblock}
 										}
 			\end{minipage}
 		\end{beamercolorbox}
 	\end{column}
 		\begin{column}{.245\textwidth}
-		\begin{beamercolorbox}[center]{postercolumn}
-			\begin{minipage}{.98\textwidth}
-				\parbox[t][\columnheight]{\textwidth}{
-					\begin{myblock}{Resampling}
-						Resampling is used to assess the performance of a learning algorithm.
-						\\[\baselineskip]
-						\begin{minipage}{\textwidth}
-							\begin{columns}[T]
-								\begin{column}{0.2\textwidth}
-									\includegraphics[width=\textwidth]{img/cross_validation.png}
-								\end{column}
-								\begin{column}{0.8\textwidth}
-										\begin{codebox}
-										resampling = \textbf{mlr\_resamplings}\$\textbf{get}(key)
-										\end{codebox}
-										\hspace*{1ex}Get resampling strategy by \textit{key} from mlr\_resamplings \hspace*{1ex}dictionary.
-								\end{column}
-							\end{columns}
-						\end{minipage}
-						\\[\baselineskip]
-						\begin{codebox}
-							resampling\$\textbf{instantiate}(task)
-						\end{codebox}
-						\hspace*{1ex}Apply splitting on \textit{task}.
-						\\
-						\begin{codebox}
-							rr = \textbf{resample}(task, learner, resampling)
-						\end{codebox}
-						\hspace*{1ex}Executes resampling.
-						\\
-						\begin{codebox}
-							rr\$\textbf{performance}(measure)
-						\end{codebox}
-						\hspace*{1ex}Extract performance of individual resampling iterations with \textit{measure}.
-					\end{myblock}
-				\begin{myblock}{Benchmarking}
-						Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
-						\\
-						\begin{codeboxmultiline}[width=21.95cm]
-							design = \textbf{expand\_grid}(\\
-							\hspace*{1ex}tasks = mlr\_tasks\$mget(key),\\
-							\hspace*{1ex}learners = mlr\_learners\$mget(key),\\
-							\hspace*{1ex}resamplings = mlr\_resamplings\$mget(key))
-						\end{codeboxmultiline}
-						\hspace*{1ex}Create benchmark design.
-						\\
-						\begin{codebox}
-							bmr = \textbf{benchmark}(design)
-						\end{codebox}
-						\hspace*{1ex}Execute benchmark with \textit{design}.
-						\\
-						\begin{codebox}
-							bmr\$\textbf{aggregate}(measure)
-						\end{codebox}
-						\hspace*{1ex}Calculate and aggregate performance.
-					\end{myblock}\vfill
-				}
-			\end{minipage}
-		\end{beamercolorbox}
-	\end{column}
-\end{columns}
-\end{frame}
-\end{document}
+		  \begin{beamercolorbox}[center]{postercolumn}
+			   \begin{minipage}{.98\textwidth}
+				  \parbox[t][\columnheight]{\textwidth}{
+					  \begin{myblock}{Resampling}
+						  Resampling is used to assess the performance of a learning algorithm.
+						  \\[\baselineskip]
+						    \begin{minipage}{\textwidth}
+							    \begin{columns}[T]
+								    \begin{column}{0.2\textwidth}
+									    \includegraphics[width=\textwidth]{img/cross_validation.png}
+								    \end{column}
+								    \begin{column}{0.8\textwidth}
+										  \begin{codebox}
+										    resampling = \textbf{mlr\_resamplings}\$\textbf{get}(key)
+										  \end{codebox}
+										  \hspace*{1ex}Get resampling strategy by \textit{key} from mlr\_resamplings \hspace*{1ex}dictionary.
+								    \end{column}
+							     \end{columns}
+					      	\end{minipage}
+						      \\[\baselineskip]
+						      \begin{codebox}
+							      resampling\$\textbf{instantiate}(task)
+						      \end{codebox}
+						      \hspace*{1ex}Apply splitting on \textit{task}.
+						      \\
+					      	\begin{codebox}
+							      rr = \textbf{resample}(task, learner, resampling)
+						      \end{codebox}
+						      \hspace*{1ex}Executes resampling.
+						      \\
+						      \begin{codebox}
+							      rr\$\textbf{performance}(measure)
+						      \end{codebox}
+						      \hspace*{1ex}Extract performance of individual resampling iterations with \textit{measure}.
+					      \end{myblock}
+				        \begin{myblock}{Benchmarking}
+						      Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
+						    \\
+						      \begin{codeboxmultiline}[width=21.95cm]
+							      design = \textbf{expand\_grid}(\\
+							      \hspace*{1ex}tasks = mlr\_tasks\$mget(key),\\
+							      \hspace*{1ex}learners = mlr\_learners\$mget(key),\\
+							      \hspace*{1ex}resamplings = mlr\_resamplings\$mget(key))
+						      \end{codeboxmultiline}
+						      \hspace*{1ex}Create benchmark design.
+						      \\
+						      \begin{codebox}
+							      bmr = \textbf{benchmark}(design)
+						      \end{codebox}
+						      \hspace*{1ex}Execute benchmark with \textit{design}.
+					      	\\
+						      \begin{codebox}
+							      bmr\$\textbf{aggregate}(measure)
+						      \end{codebox}
+						      \hspace*{1ex}Calculate and aggregate performance.
+					        \end{myblock}\vfill
+				            }
+		          	\end{minipage}
+		          \end{beamercolorbox}
+	           \end{column}
+            \end{columns}
+          \end{frame}
+        \end{document}
