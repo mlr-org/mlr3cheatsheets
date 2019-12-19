@@ -74,6 +74,7 @@
 					\begin{myblock}{Intro \& Workflow}
 					The mlr3 package provides R6 classes for the essential building
 					blocks of this machine learning workflow:
+
 					\begin{enumerate}
 						\item A \textbf{task} encapsulates the data along with additional information, such as 
 						what the prediction target is.
@@ -227,6 +228,11 @@
 							     \end{columns}
 					      	\end{minipage}
 						      \\[\baselineskip]
+						      \begin{codebox}
+						      	resampling = \textbf{rsmp}(key)
+						      \end{codebox}
+						      Get resampling strategy by \textit{key} with convenience function.
+						      \\
 						      \begin{codebox}
 							      resampling\$\textbf{instantiate}(task)
 						      \end{codebox}
