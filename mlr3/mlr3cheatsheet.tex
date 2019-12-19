@@ -74,18 +74,13 @@
 					\begin{myblock}{Intro \& Workflow}
 					The mlr3 package provides R6 classes for the essential building
 					blocks of this machine learning workflow:
-					
-          1. A \textbf{task} encapsulates the data along with additional information, such as 
-          what the prediction target is.
-          
-          2. A \textbf{learner} encapsulates one of R's many machine learning algorithms and allows 
-          to train models and make predictions.
-          Most learners have hyperparameters.
-          
-          3. A \textbf{measure} computes a numeric score based on predicted and ground-truth values 
-          and their difference.
-          
-          4. A \textbf{resampling} specifies a series of train and test sets.
+					\begin{enumerate}
+						\item A \textbf{task} encapsulates the data along with additional information, such as 
+						what the prediction target is.
+						\item A \textbf{learner} encapsulates one of R's many machine learning algorithms and allows to train models and make predictions. Most learners have hyperparameters.
+						\item A \textbf{measure} computes a numeric score based on predicted and ground-truth values and their difference.
+						\item A \textbf{resampling} specifies a series of train and test sets.
+					\end{enumerate}
           \end{myblock}
 				  \includegraphics[width=\textwidth]{img/ml_abstraction.png}
 				}
