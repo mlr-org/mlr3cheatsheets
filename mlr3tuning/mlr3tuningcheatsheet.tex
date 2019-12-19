@@ -169,9 +169,20 @@
 							\hspace*{1ex}terminator,\\
 							\hspace*{1ex}tuner)
 						\end{codeboxmultiline}
-						
-						
-						
+						The AutoTuner is constructed by supplying a \textit{task}, \textit{learner}, \textit{resampling}, \textit{param\_set}, \textit{terminator} and \textit{tuner}. 
+						\\
+						\\
+						The AutoTuner inherits from the Learner class and therefore can be used like any other learner.
+						\\
+						\begin{codebox}
+							at\$predict(task, row\_ids)
+						\end{codebox}
+						Use the tuned Learner in AutoTuner to create a new Prediction.
+						\\
+						\begin{codebox}
+							at\$train(task)
+						\end{codebox}
+						Train the tuned Learner in AutoTuner on a new Task.
 						\end{myblock}
 					\vfill}
 				\end{minipage}
