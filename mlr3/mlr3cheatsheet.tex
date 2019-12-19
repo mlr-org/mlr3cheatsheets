@@ -162,7 +162,7 @@
 						\begin{codebox}
 							learner = \textbf{lrn}(key, ...)
 						\end{codebox}
-						 Get learner by \textit{key} from mlr\_learner dictionary and construct the learner with specific hyperparameter and settings (...) in one go.
+						 Get learner by \textit{key} and construct the learner with specific hyperparameter and settings (...) in one go.
 						\\
 						\begin{codebox}
 							learner\$\textbf{param\_set}
@@ -196,6 +196,11 @@
 						measure = \textbf{mlr\_measures}\$\textbf{get}(key)
 					\end{codebox}
 					Get measure by \textit{key} from mlr\_measure dictionary.
+					\\
+					\begin{codebox}
+						measure = \textbf{msr}(key)
+					\end{codebox}
+					Get measure by \textit{key} with convenience function.
 					\\
 					\begin{codebox}
 						prediction\$\textbf{score}(measure)
