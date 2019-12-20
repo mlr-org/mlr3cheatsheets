@@ -90,35 +90,25 @@
 						\begin{myblock}{Terminator}
 							The \codeinline{Terminator} determines when to stop the tuning. The package provides four \codeinline{Terminator} classes:
 							\\
-							\begin{codebox}
-								terminator = \textbf{TerminatorClockTime}\$new()
-							\end{codebox}
-							Terminate after a given time.
+							\begin{itemize}
+								\item \textit{clock\_time} After a given time.
+								\item \textit{evals} After a given amount of iterations.
+								\item \textit{model\_time} After a given model time.
+								\item \textit{perf\_reached} After a specific performance is reached.
+								\item \textit{stagnation} After the performance stagnates.
+							\end{itemize}
+							\vspace{0.5cm}
+							Keys to access the terminators.
 							\\
 							\begin{codebox}
-								terminator = \textbf{TerminatorEvals}\$new()
+								terminator = \textbf{term}(.key, ...)
 							\end{codebox}
-							Terminate after a given amount of iterations.
+							Get terminator by \textit{.key} and construct terminator with settings (...) in one go.
 							\\
 							\begin{codebox}
-								terminator = \textbf{TerminatorPerfReached}\$new()
+								terminator = term("\textbf{combo}", terminators, any)
 							\end{codebox}
-							Terminate after a specific performance is reached.
-							\\
-							\begin{codebox}
-								terminator = \textbf{TerminatorStagnation}\$new()
-							\end{codebox}
-							Terminate when tuning does not improve.
-							\\
-							\begin{codebox}
-								terminator = \textbf{TerminatorCombo}\$new()
-							\end{codebox}
-							A combination of the above in an ALL or ANY fashion.
-							\\
-							\begin{codebox}
-								terminator = \textbf{term}(key, ...)
-							\end{codebox}
-							Get terminator by \textit{key} and construct terminator with settings (...) in one go.
+							List of \textit{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance}
 							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
@@ -143,27 +133,20 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner}
-							The \codeinline{Tuner} describes the tuning strategy. The package provides three algorithms:
-							\\
-							\begin{codebox}
-								tuner = \textbf{TunerGridSearch}\$new()
-							\end{codebox}
-							Grid search.
-							\\
-							\begin{codebox}
-								tuner = \textbf{TunerRandomSearch}\$new()
-							\end{codebox}
-							Random Search.
-							\\
-							\begin{codebox}
-								tuner = \textbf{TunerGenSA}\$new()
-							\end{codebox}
-							Generalized Simulated Annealing.
+							The \codeinline{Tuner} describes the tuning strategy. The package provides grid search, random search, generalized simulated annealing and additionally hyperparameter configurations fully specified by the user.
+							\begin{itemize}
+								\item \textit{grid\_search}
+								\item \textit{random\_search}
+								\item \textit{gensa}
+								\item \textit{design\_points}
+							\end{itemize}
+							\vspace{0.5cm}
+							Keys to access the tuners.
 							\\
 							\begin{codebox}
 								tuner = \textbf{tnr}(.key, ...)
 							\end{codebox}
-							Get tuner by \textit{.key} and construct tuner with settings (...) in one go.
+							Get the tuner by \textit{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Triggering the tuning}
 							To start the tuning, the \codeinline{TuningInstance} is passed to the \codeinline{tune} method of the \codeinline{Tuner}.
