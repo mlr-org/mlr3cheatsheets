@@ -121,7 +121,7 @@
 						Get terminator by \textit{key} and construct terminator with settings (...) in one go. 
 					\end{myblock}	
 				\begin{myblock}{TuningInstance}
-					The TuningInstance specifies a general search scenario.
+					The TuningInstance specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
 					\\
 					\begin{codeboxmultiline}[width=18cm]
 						instance = \textbf{TuningInstance}\$new(\\
