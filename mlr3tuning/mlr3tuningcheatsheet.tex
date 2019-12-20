@@ -63,27 +63,27 @@
 						\begin{codebox}
 							terminator = TerminatorClockTime\$new()
 						\end{codebox}
-						Terminate after a given time 
+						Terminate after a given time.
 						\\
 						\begin{codebox}
 							terminator = TerminatorEvals\$new()
 						\end{codebox}
-						Terminate after a given amount of iterations 
+						Terminate after a given amount of iterations. 
 						\\
 						\begin{codebox}
 							terminator = TerminatorPerfReached\$new()
 						\end{codebox}
-						Terminate after a specific performance is reached  
+						Terminate after a specific performance is reached.  
 						\\
 						\begin{codebox}
 							terminator = TerminatorStagnation\$new()
 						\end{codebox}
-						Terminate when tuning does not improve
+						Terminate when tuning does not improve.
 						\\
 						\begin{codebox}
 							terminator = TerminatorCombo\$new()
 						\end{codebox}
-						A combination of the above in an ALL or ANY fashion
+						A combination of the above in an ALL or ANY fashion.
 						\\
 						\begin{codebox}
 							terminator = term(key, ...)
@@ -99,7 +99,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{ParamterSet}
-						The ParamSet defines the hyperparamter to tune and the tuning space.
+						The ParamSet defines the hyperparameter to tune and the tuning space.
 							\\
 							\begin{codeboxmultiline}[width=18cm]
 								tune\_ps = ParamSet\$new(list(\\
@@ -136,17 +136,17 @@
 							\begin{codebox}
 								tuner = TunerGridSearch\$new()
 							\end{codebox}
-							Grid search
+							Grid search.
 							\\
 							\begin{codebox}
 								tuner = TunerRandomSearch\$new()
 							\end{codebox}
-							Random Search
+							Random Search.
 							\\
 							\begin{codebox}
 								tuner = TunerGenSA\$new()
 							\end{codebox}
-							Generalized Simulated Annealing
+							Generalized Simulated Annealing.
 							\\
 							\begin{codebox}
 								tuner = trn(key, ...)
