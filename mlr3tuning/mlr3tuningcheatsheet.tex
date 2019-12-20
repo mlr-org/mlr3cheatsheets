@@ -121,7 +121,7 @@
 						Get terminator by \textit{key} and construct terminator with settings (...) in one go. 
 					\end{myblock}	
 				\begin{myblock}{TuningInstance}
-					The TuningInstance specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
+					The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
 					\\
 					\begin{codeboxmultiline}[width=18cm]
 						instance = \textbf{TuningInstance}\$new(\\
@@ -131,7 +131,7 @@
 						\hspace*{1ex}tune\_ps,\\
 						\hspace*{1ex}terminator)
 					\end{codeboxmultiline}
-					The TuningInstance is constructed by supplying \textit{task}, \textit{learner}, \textit{resampling}, \textit{tune\_ps} and \textit{terminator}. 
+					The \codeinline{TuningInstance} is constructed by supplying \textit{task}, \textit{learner}, \textit{resampling}, \textit{tune\_ps} and \textit{terminator}. 
 					\\
 				\end{myblock}	
 					\vfill}
@@ -176,7 +176,7 @@
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
-							Returns all resampling results together with the used hyperparameters.
+							Returns all resampling results together with the used hyperparameters. Use \textit{unnest} to display hyperparameter without (\textit{tune\_x}) or with (\textit{params}) trafo applied. 
 							\\
 							\begin{codebox}
 								instance\$\textbf{result}
