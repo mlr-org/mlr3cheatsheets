@@ -44,6 +44,18 @@
 	bottomrule=0pt,
 	#1}
 
+\newtcolorbox{codeboxinline}{%
+	sharp corners,
+	leftrule=0pt,
+	rightrule=0pt,
+	toprule=0pt,
+	bottomrule=0pt,
+	hbox,
+	nobeforeafter,
+	tcbox raise base}
+
+\newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+
 \begin{document}
 \begin{frame}[fragile]{}
 	\begin{columns}
@@ -154,7 +166,7 @@
 							Get tuner by \textit{key} and construct tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Triggering the tuning}
-							To start the tuning, the TuningInstance is passed to the tune method of the Tuner.
+							To start the tuning, the \codeinline{TuningInstance} is passed to the \codeinline{tune} method of the \codeinline{Tuner}.
 							\\
 							\begin{codebox}
 								tuner\$tune(instance)
