@@ -102,9 +102,10 @@
 						The ParamSet defines the hyperparamter to tune and the tuning space.
 							\\
 							\begin{codeboxmultiline}[width=18cm]
-							tune\_ps = ParamSet\$new(list(\\
-							\hspace*{1ex}ParamInt\$new(id, lower, upper)))
-						\end{codeboxmultiline}
+								tune\_ps = ParamSet\$new(list(\\
+								\hspace*{1ex}ParamInt\$new(id, lower, upper)\\
+								\hspace*{1ex}ParamDbl\$new(id, lower, upper)))
+							\end{codeboxmultiline}
 					The \textit{id} (character value) refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space. 	
 						\end{myblock}	
 					\begin{myblock}{TuningInstance}
