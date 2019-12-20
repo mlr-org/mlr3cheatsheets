@@ -74,8 +74,10 @@
 							\\
 							\begin{codeboxmultiline}[width=19cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
-								\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper)\\
-								\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper)))
+								\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper),\\
+								\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper),\\
+								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
+								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
 							The \textit{id} refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space.
 						\end{myblock}
@@ -121,7 +123,7 @@
 								\hspace*{1ex}tune\_ps,\\
 								\hspace*{1ex}terminator)
 							\end{codeboxmultiline}
-							The \codeinline{TuningInstance} is constructed by supplying \textit{task}, \textit{learner}, \textit{resampling}, \textit{tune\_ps} and \textit{terminator}.
+							Constructs the \codeinline{TuningInstance}.
 							\\
 						\end{myblock}
 						\vfill}
@@ -186,7 +188,7 @@
 								\hspace*{1ex}terminator,\\
 								\hspace*{1ex}tuner)
 							\end{codeboxmultiline}
-							The \codeinline{AutoTuner} is constructed by supplying \textit{learner}, \textit{resampling}, \textit{measures}, \textit{tune\_ps}, \textit{terminator} and \textit{tuner}.
+							Constructs the \codeinline{AutoTuner}.
 							\\
 							\\
 							The \codeinline{AutoTuner} inherits from the \codeinline{Learner} class and therefore can be used like any other learner.
