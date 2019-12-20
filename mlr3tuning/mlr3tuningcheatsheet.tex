@@ -192,7 +192,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Automatic Tuning}
-						The \codeinline{AutoTuner} wraps a learner and augments it with an automatic tuning for a given set of hyperparameters. 
+						The \codeinline{AutoTuner} wraps a learner and augments it with an automatic tuning for a given set of hyperparameters.
 						\\
 						\begin{codeboxmultiline}[width=18cm]
 							at = \textbf{AutoTuner}\$new(\\
@@ -203,20 +203,22 @@
 							\hspace*{1ex}terminator,\\
 							\hspace*{1ex}tuner)
 						\end{codeboxmultiline}
-						The \codeinline{AutoTuner} is constructed by supplying \textit{learner}, \textit{task},  \textit{resampling}, \textit{measures}, \textit{tune\_ps}, \textit{terminator} and \textit{tuner}. 
+						The \codeinline{AutoTuner} is constructed by supplying \textit{learner}, \textit{resampling}, \textit{measures}, \textit{tune\_ps}, \textit{terminator} and \textit{tuner}. 
 						\\
 						\\
 						The \codeinline{AutoTuner} inherits from the \codeinline{Learner} class and therefore can be used like any other learner.
 						\\
 						\begin{codebox}
-							at\$\textbf{predict}(task, row\_ids)
-						\end{codebox}
-						Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by suppling a \textit{task} and \textit{row\_ids}.
-						\\
-						\begin{codebox}
 							at\$\textbf{train}(task)
 						\end{codebox}
-						Train the tuned \codeinline{Learner} in \codeinline{AutoTuner} on a new \textit{task}.
+						The automatic tuning is started by supplying \textit{task} to the \codeinline{train} method.
+						\\
+						\begin{codebox}
+							at\$\textbf{predict}(task, row\_ids)
+						\end{codebox}
+						Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \textit{task} and \textit{row\_ids}.
+						\\
+						.
 						\end{myblock}
 					\vfill}
 				\end{minipage}
