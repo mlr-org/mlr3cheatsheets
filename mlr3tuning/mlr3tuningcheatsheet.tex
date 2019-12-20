@@ -57,7 +57,25 @@
 							\\
 							\includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\end{myblock}
-					\begin{myblock}{Terminator}
+						\begin{myblock}{ParamterSet}
+						The ParamSet defines the hyperparameter to tune and the tuning space.
+						\\
+						\begin{codeboxmultiline}[width=18cm]
+							tune\_ps = ParamSet\$new(list(\\
+							\hspace*{1ex}ParamInt\$new(id, lower, upper)\\
+							\hspace*{1ex}ParamDbl\$new(id, lower, upper)))
+						\end{codeboxmultiline}
+						The \textit{id} (character value) refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space. 	
+					\end{myblock}	
+					\vfill}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+						\begin{myblock}{Terminator}
 						The Terminator determines when to stop the tuning. The package provides four Terminator classes:
 						\\
 						\begin{codebox}
@@ -90,38 +108,20 @@
 						\end{codebox}
 						Get terminator by \textit{key} and construct terminator with settings (...) in one go. 
 					\end{myblock}	
-					\vfill}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{ParamterSet}
-						The ParamSet defines the hyperparameter to tune and the tuning space.
-							\\
-							\begin{codeboxmultiline}[width=18cm]
-								tune\_ps = ParamSet\$new(list(\\
-								\hspace*{1ex}ParamInt\$new(id, lower, upper)\\
-								\hspace*{1ex}ParamDbl\$new(id, lower, upper)))
-							\end{codeboxmultiline}
-					The \textit{id} (character value) refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space. 	
-						\end{myblock}	
-					\begin{myblock}{TuningInstance}
-						The TuningInstance specifies a general search scenario.
-						\\
-						\begin{codeboxmultiline}[width=18cm]
-							instance = \textbf{TuningInstance}\$new(\\
-							\hspace*{1ex}task,\\
-							\hspace*{1ex}learner,\\
-							\hspace*{1ex}resampling,\\
-							\hspace*{1ex}param\_set,\\
-							\hspace*{1ex}terminator)
-						\end{codeboxmultiline}
-						The TuningInstance is constructed by supplying a \textit{task}, \textit{learner}, \textit{resampling}, \textit{param\_set} and \textit{terminator}. 
-						\\
-					\end{myblock}	
+				\begin{myblock}{TuningInstance}
+					The TuningInstance specifies a general search scenario.
+					\\
+					\begin{codeboxmultiline}[width=18cm]
+						instance = \textbf{TuningInstance}\$new(\\
+						\hspace*{1ex}task,\\
+						\hspace*{1ex}learner,\\
+						\hspace*{1ex}resampling,\\
+						\hspace*{1ex}param\_set,\\
+						\hspace*{1ex}terminator)
+					\end{codeboxmultiline}
+					The TuningInstance is constructed by supplying a \textit{task}, \textit{learner}, \textit{resampling}, \textit{param\_set} and \textit{terminator}. 
+					\\
+				\end{myblock}	
 					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -152,6 +152,24 @@
 								tuner = trn(key, ...)
 							\end{codebox}
 							Get tuner by \textit{key} and construct tuner with settings (...) in one go.
+						\end{myblock}
+						\begin{myblock}{Triggering the tuning}
+							To start the tuning, the TuningInstance is passed to the tune method of the Tuner.
+							\\
+							\begin{codebox}
+								tuner\$tune(instance)
+							\end{codebox}
+							Starts the tuning.
+							\\
+							\begin{codebox}
+								instance\$archive(unnest)
+							\end{codebox}
+							Returns all resampling results together with the used hyperparameter.
+							\\
+							\begin{codebox}
+								instance\$result
+							\end{codebox}
+							Returns a list with the optimal hyperparameter configuration and the estimated performance.
 						\end{myblock}
 					\vfill}
 				\end{minipage}
