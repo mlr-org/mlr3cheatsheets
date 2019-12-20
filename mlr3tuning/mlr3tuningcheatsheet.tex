@@ -70,16 +70,16 @@
 							\includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\end{myblock}
 						\begin{myblock}{ParamterSet}
-						The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space.
-						\\
-						\begin{codeboxmultiline}[width=19cm]
-							tune\_ps = \textbf{ParamSet}\$new(list(\\
-							\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper)\\
-							\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper)))
-						\end{codeboxmultiline}
-						The \textit{id} refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space. 	
-					\end{myblock}	
-					\vfill}
+							The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space.
+							\\
+							\begin{codeboxmultiline}[width=19cm]
+								tune\_ps = \textbf{ParamSet}\$new(list(\\
+								\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper)\\
+								\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper)))
+							\end{codeboxmultiline}
+							The \textit{id} refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space.
+						\end{myblock}
+						\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -88,53 +88,53 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Terminator}
-						The \codeinline{Terminator} determines when to stop the tuning. The package provides four \codeinline{Terminator} classes:
-						\\
-						\begin{codebox}
-							terminator = \textbf{TerminatorClockTime}\$new()
-						\end{codebox}
-						Terminate after a given time.
-						\\
-						\begin{codebox}
-							terminator = \textbf{TerminatorEvals}\$new()
-						\end{codebox}
-						Terminate after a given amount of iterations. 
-						\\
-						\begin{codebox}
-							terminator = \textbf{TerminatorPerfReached}\$new()
-						\end{codebox}
-						Terminate after a specific performance is reached.  
-						\\
-						\begin{codebox}
-							terminator = \textbf{TerminatorStagnation}\$new()
-						\end{codebox}
-						Terminate when tuning does not improve.
-						\\
-						\begin{codebox}
-							terminator = \textbf{TerminatorCombo}\$new()
-						\end{codebox}
-						A combination of the above in an ALL or ANY fashion.
-						\\
-						\begin{codebox}
-							terminator = \textbf{term}(key, ...)
-						\end{codebox}
-						Get terminator by \textit{key} and construct terminator with settings (...) in one go. 
-					\end{myblock}	
-				\begin{myblock}{TuningInstance}
-					The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
-					\\
-					\begin{codeboxmultiline}[width=18cm]
-						instance = \textbf{TuningInstance}\$new(\\
-						\hspace*{1ex}task,\\
-						\hspace*{1ex}learner,\\
-						\hspace*{1ex}resampling,\\
-						\hspace*{1ex}tune\_ps,\\
-						\hspace*{1ex}terminator)
-					\end{codeboxmultiline}
-					The \codeinline{TuningInstance} is constructed by supplying \textit{task}, \textit{learner}, \textit{resampling}, \textit{tune\_ps} and \textit{terminator}. 
-					\\
-				\end{myblock}	
-					\vfill}
+							The \codeinline{Terminator} determines when to stop the tuning. The package provides four \codeinline{Terminator} classes:
+							\\
+							\begin{codebox}
+								terminator = \textbf{TerminatorClockTime}\$new()
+							\end{codebox}
+							Terminate after a given time.
+							\\
+							\begin{codebox}
+								terminator = \textbf{TerminatorEvals}\$new()
+							\end{codebox}
+							Terminate after a given amount of iterations.
+							\\
+							\begin{codebox}
+								terminator = \textbf{TerminatorPerfReached}\$new()
+							\end{codebox}
+							Terminate after a specific performance is reached.
+							\\
+							\begin{codebox}
+								terminator = \textbf{TerminatorStagnation}\$new()
+							\end{codebox}
+							Terminate when tuning does not improve.
+							\\
+							\begin{codebox}
+								terminator = \textbf{TerminatorCombo}\$new()
+							\end{codebox}
+							A combination of the above in an ALL or ANY fashion.
+							\\
+							\begin{codebox}
+								terminator = \textbf{term}(key, ...)
+							\end{codebox}
+							Get terminator by \textit{key} and construct terminator with settings (...) in one go.
+						\end{myblock}
+						\begin{myblock}{TuningInstance}
+							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
+							\\
+							\begin{codeboxmultiline}[width=18cm]
+								instance = \textbf{TuningInstance}\$new(\\
+								\hspace*{1ex}task,\\
+								\hspace*{1ex}learner,\\
+								\hspace*{1ex}resampling,\\
+								\hspace*{1ex}tune\_ps,\\
+								\hspace*{1ex}terminator)
+							\end{codeboxmultiline}
+							The \codeinline{TuningInstance} is constructed by supplying \textit{task}, \textit{learner}, \textit{resampling}, \textit{tune\_ps} and \textit{terminator}.
+							\\
+						\end{myblock}
+						\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -176,14 +176,14 @@
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
-							Returns all resampling results together with the used hyperparameters. Use \textit{unnest} to display hyperparameter without (\textit{tune\_x}) or with (\textit{params}) trafo applied. 
+							Returns all resampling results together with the used hyperparameters. Use \textit{unnest} to display hyperparameter without (\textit{tune\_x}) or with (\textit{params}) trafo applied.
 							\\
 							\begin{codebox}
 								instance\$\textbf{result}
 							\end{codebox}
 							Returns a list with the optimal hyperparameter configuration and the estimated performance.
 						\end{myblock}
-					\vfill}
+						\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -192,35 +192,34 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Automatic Tuning}
-						The \codeinline{AutoTuner} wraps a learner and augments it with an automatic tuning for a given set of hyperparameters.
-						\\
-						\begin{codeboxmultiline}[width=18cm]
-							at = \textbf{AutoTuner}\$new(\\
-							\hspace*{1ex}learner,\\
-							\hspace*{1ex}resampling,\\
-							\hspace*{1ex}measures,\\
-							\hspace*{1ex}tune\_ps,\\
-							\hspace*{1ex}terminator,\\
-							\hspace*{1ex}tuner)
-						\end{codeboxmultiline}
-						The \codeinline{AutoTuner} is constructed by supplying \textit{learner}, \textit{resampling}, \textit{measures}, \textit{tune\_ps}, \textit{terminator} and \textit{tuner}. 
-						\\
-						\\
-						The \codeinline{AutoTuner} inherits from the \codeinline{Learner} class and therefore can be used like any other learner.
-						\\
-						\begin{codebox}
-							at\$\textbf{train}(task)
-						\end{codebox}
-						The automatic tuning is started by supplying \textit{task} to the \codeinline{train} method.
-						\\
-						\begin{codebox}
-							at\$\textbf{predict}(task, row\_ids)
-						\end{codebox}
-						Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \textit{task} and \textit{row\_ids}.
-						\\
-						.
+							The \codeinline{AutoTuner} wraps a learner and augments it with an automatic tuning for a given set of hyperparameters.
+							\\
+							\begin{codeboxmultiline}[width=18cm]
+								at = \textbf{AutoTuner}\$new(
+								\hspace*{1ex}learner,\\
+								\hspace*{1ex}resampling,\\
+								\hspace*{1ex}measures,\\
+								\hspace*{1ex}tune\_ps,\\
+								\hspace*{1ex}terminator,\\
+								\hspace*{1ex}tuner)
+							\end{codeboxmultiline}
+							The \codeinline{AutoTuner} is constructed by supplying \textit{learner}, \textit{resampling}, \textit{measures}, \textit{tune\_ps}, \textit{terminator} and \textit{tuner}.
+							\\
+							\\
+							The \codeinline{AutoTuner} inherits from the \codeinline{Learner} class and therefore can be used like any other learner.
+							\\
+							\begin{codebox}
+								at\$\textbf{train}(task)
+							\end{codebox}
+							The automatic tuning is started by supplying \textit{task} to the \codeinline{train} method.
+							\\
+							\begin{codebox}
+								at\$\textbf{predict}(task, row\_ids)
+							\end{codebox}
+							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \textit{task} and \textit{row\_ids}.
+							\\
 						\end{myblock}
-					\vfill}
+						\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
