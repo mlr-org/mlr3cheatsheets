@@ -70,14 +70,14 @@
 							\includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\end{myblock}
 						\begin{myblock}{ParamterSet}
-						The ParamSet defines the hyperparameter to tune and the tuning space.
+						The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space.
 						\\
 						\begin{codeboxmultiline}[width=19cm]
 							tune\_ps = \textbf{ParamSet}\$new(list(\\
 							\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper)\\
 							\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper)))
 						\end{codeboxmultiline}
-						The \textit{id} (character value) refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space. 	
+						The \textit{id} refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space. 	
 					\end{myblock}	
 					\vfill}
 				\end{minipage}
@@ -128,10 +128,10 @@
 						\hspace*{1ex}task,\\
 						\hspace*{1ex}learner,\\
 						\hspace*{1ex}resampling,\\
-						\hspace*{1ex}tune\_set,\\
+						\hspace*{1ex}tune\_ps,\\
 						\hspace*{1ex}terminator)
 					\end{codeboxmultiline}
-					The TuningInstance is constructed by supplying a \textit{task}, \textit{learner}, \textit{resampling}, \textit{param\_set} and \textit{terminator}. 
+					The TuningInstance is constructed by supplying \textit{task}, \textit{learner}, \textit{resampling}, \textit{tune\_ps} and \textit{terminator}. 
 					\\
 				\end{myblock}	
 					\vfill}
