@@ -68,9 +68,12 @@
 							\\
 							\\
 							\includegraphics[width=\textwidth]{img/tuning_objects.png}
+							\\
+							\\
+							The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
 						\end{myblock}
 						\begin{myblock}{ParamterSet}
-							The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space.
+							The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space (1).
 							\\
 							\begin{codeboxmultiline}[width=19cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
@@ -79,7 +82,19 @@
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-							The \textit{id} refers to the hyperparameter of the learner. The \textit{lower} and \textit{upper} parameter define the bounds of the tuning space.
+							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \textit{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl} set \textit{lower} and \textit{upper} to define the tuning space. Use \textit{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
+							\\
+							\begin{codebox}
+								tune\_ps\$\textbf{add}(id, on, cond)
+							\end{codebox}
+							Adds dependency to the \codeinline{ParamSet}, so that \textit{id} depends on parameter \textit{on}.
+							\textit{cond} is an object of class \codeinline{Condition}.
+							\\
+							\begin{codeboxmultiline}[width=21cm]
+								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
+								\hspace*{1ex}x\$id = -log(x\$id)\}
+							\end{codeboxmultiline}
+							Set a transformation for parameter \textit{id}.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -90,7 +105,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Terminator}
-							The \codeinline{Terminator} determines when to stop the tuning. The package provides four \codeinline{Terminator} classes:
+							The \codeinline{Terminator} determines when to stop the tuning (2). The package provides four \codeinline{Terminator} classes:
 							\\
 							\begin{itemize}
 								\item \textit{clock\_time} After a given time.
@@ -100,7 +115,7 @@
 								\item \textit{stagnation} After the performance stagnates.
 							\end{itemize}
 							\vspace{0.5cm}
-							Keys to access the terminators.
+							Keys to access the \codeinline{Terminator} subclasses.
 							\\
 							\begin{codebox}
 								terminator = \textbf{term}(.key, ...)
@@ -123,7 +138,7 @@
 								\hspace*{1ex}tune\_ps,\\
 								\hspace*{1ex}terminator)
 							\end{codeboxmultiline}
-							Constructs the \codeinline{TuningInstance}.
+							Constructs the \codeinline{TuningInstance} (3).
 							\\
 						\end{myblock}
 						\vfill}
@@ -143,7 +158,7 @@
 								\item \textit{design\_points}
 							\end{itemize}
 							\vspace{0.5cm}
-							Keys to access the tuners.
+							Keys to access the \codeinline{Tuner} subclasses.
 							\\
 							\begin{codebox}
 								tuner = \textbf{tnr}(.key, ...)
@@ -151,12 +166,15 @@
 							Get the tuner by \textit{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Triggering the tuning}
-							To start the tuning, the \codeinline{TuningInstance} is passed to the \codeinline{tune} method of the \codeinline{Tuner}.
+							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{tune} method of \codeinline{Tuner}.
 							\\
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
-							Starts the tuning.
+							Starts the tuning (4).
+							\\
+							\\
+							The \codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results use the following methods of \codeinline{TuningInstance}:
 							\\
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
