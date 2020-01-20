@@ -46,6 +46,18 @@
 	bottomrule=0pt,
 	#1}
 
+\newtcolorbox{codeboxinline}{%
+	sharp corners,
+	leftrule=0pt,
+	rightrule=0pt,
+	toprule=0pt,
+	bottomrule=0pt,
+	hbox,
+	nobeforeafter,
+	tcbox raise base}
+
+\newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+
 \begin{document}
 \begin{frame}[fragile]{}
 	\begin{columns}
@@ -91,27 +103,27 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Task}
-							Tasks objects store data (\textit{backend}) and additional meta-data for machine learning problems. A \textit{backend} allows fine-grained control over how data is accessed. If you simply provide the dataset, it is automatically converted to a \textit{DataBackendDataTable}.
+							Tasks objects store data (\codeinline{backend}) and additional meta-data for machine learning problems. A \codeinline{backend} allows fine-grained control over how data is accessed. If you simply provide the dataset, it is automatically converted to a \codeinline{DataBackendDataTable}.
 							\\
 							\begin{codebox}
 								task = \textbf{TaskClassif}\$new(backend, target)
 							\end{codebox}
-							The \textit{target} is handed over as character value. For classification, the name of the target column is a label with only few distinct values.
+							The \codeinline{target} is handed over as character value. For classification, the name of the target column is a label with only few distinct values.
 							\\
 							\begin{codebox}
 								task = \textbf{TaskRegr}\$newt(backend, target)
 							\end{codebox}
-							The \textit{target} is a numeric quantity.
+							The \codeinline{target} is a numeric quantity.
 							\\
 							\begin{codebox}
 								task = \textbf{mlr\_tasks}\$\textbf{get}(key)
 							\end{codebox}
-							Get predefined task by \textit{key} from mlr\_task dictionary. The key (character value) identifies these tasks.
+							Get predefined task by \codeinline{key} from mlr\_task dictionary. The key (character value) identifies these tasks.
 							\\
 							\begin{codebox}
 								task = \textbf{tsk}(key)
 							\end{codebox}
-							Get predefined task by \textit{key} with convenience function.
+							Get predefined task by \codeinline{key} with convenience function.
 							\\
 							\begin{codebox}
 								task\$\textbf{data}()
@@ -124,17 +136,17 @@
 							\begin{codebox}
 								task\$\textbf{set\_row\_role}(rows, new\_roles)
 							\end{codebox}
-							Assign role (\textit{new\_roles}) to \textit{cols} / \textit{rows}. These task methods change the view on the data and can be used to subset the task.
+							Assign role (\codeinline{new\_roles}) to \codeinline{cols} / \codeinline{rows}. These task methods change the view on the data and can be used to subset the task.
 							\\
 							\begin{codebox}
 								task\$\textbf{select}(cols)
 							\end{codebox}
-							Subsets the task based on feature names (\textit{cols}).
+							Subsets the task based on feature names (\codeinline{cols}).
 							\\
 							\begin{codebox}
 								task\$\textbf{filter}(rows)
 							\end{codebox}
-							Subsets the task based on row ids (\textit{rows}).
+							Subsets the task based on row ids (\codeinline{rows}).
 						\end{myblock}
 						\vfill
 					}
@@ -151,12 +163,12 @@
 							\begin{codebox}
 								learner = \textbf{mlr\_learners}\$\textbf{get}(key)
 							\end{codebox}
-							Get learner by \textit{key} from mlr\_learner dictionary.
+							Get learner by \codeinline{key} from mlr\_learner dictionary.
 							\\
 							\begin{codebox}
 								learner = \textbf{lrn}(key, ...)
 							\end{codebox}
-							Get learner by \textit{key} and construct the learner with specific hyperparameter and settings (...) in one go.
+							Get learner by \codeinline{key} and construct the learner with specific hyperparameter and settings (...) in one go.
 							\\
 							\begin{codebox}
 								learner\$\textbf{param\_set}
@@ -179,27 +191,27 @@
 							\begin{codebox}
 								learner\$\textbf{train}(task, row\_ids = train\_set)
 							\end{codebox}
-							Train model with the \textit{train\_set}.
+							Train model with the \codeinline{train\_set}.
 							\\
 							\begin{codebox}
 								prediction = learner\$\textbf{predict}(task, row\_ids = test\_set)
 							\end{codebox}
-							Predict \textit{test\_set} with model.
+							Predict \codeinline{test\_set} with model.
 							\\
 							\begin{codebox}
 								measure = \textbf{mlr\_measures}\$\textbf{get}(key)
 							\end{codebox}
-							Get measure by \textit{key} from mlr\_measure dictionary.
+							Get measure by \codeinline{key} from mlr\_measure dictionary.
 							\\
 							\begin{codebox}
 								measure = \textbf{msr}(key)
 							\end{codebox}
-							Get measure by \textit{key} with convenience function.
+							Get measure by \codeinline{key} with convenience function.
 							\\
 							\begin{codebox}
 								prediction\$\textbf{score}(measure)
 							\end{codebox}
-							Access performance with \textit{measure}.
+							Access performance with \codeinline{measure}.
 						\end{myblock}
 					}
 				\end{minipage}
@@ -224,7 +236,7 @@
 										\begin{codebox}
 											resampling = \textbf{mlr\_resamplings}\$\textbf{get}(key)
 										\end{codebox}
-										Get resampling strategy by \textit{key} from mlr\_resamplings dictionary.
+										Get resampling strategy by \codeinline{key} from mlr\_resamplings dictionary.
 									\end{column}
 								\end{columns}
 							\end{minipage}
@@ -232,12 +244,12 @@
 							\begin{codebox}
 								resampling = \textbf{rsmp}(key)
 							\end{codebox}
-							Get resampling strategy by \textit{key} with convenience function.
+							Get resampling strategy by \codeinline{key} with convenience function.
 							\\
 							\begin{codebox}
 								resampling\$\textbf{instantiate}(task)
 							\end{codebox}
-							Apply splitting on \textit{task}.
+							Apply splitting on \codeinline{task}.
 							\\
 							\begin{codebox}
 								rr = \textbf{resample}(task, learner, resampling)
@@ -247,7 +259,7 @@
 							\begin{codebox}
 								rr\$\textbf{performance}(measure)
 							\end{codebox}
-							Extract performance of individual resampling iterations with \textit{measure}.
+							Extract performance of individual resampling iterations with \codeinline{measure}.
 						\end{myblock}
 						\begin{myblock}{Benchmarking}
 							Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
@@ -263,7 +275,7 @@
 							\begin{codebox}
 								bmr = \textbf{benchmark}(design)
 							\end{codebox}
-							Execute benchmark with \textit{design}.
+							Execute benchmark with \codeinline{design}.
 							\\
 							\begin{codebox}
 								bmr\$\textbf{aggregate}(measure)
