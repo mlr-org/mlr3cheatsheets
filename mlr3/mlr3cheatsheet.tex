@@ -168,24 +168,14 @@
 							Training fits a model to a given task.
 							\\
 							\begin{codebox}
-								train\_set = \textbf{sample}(task\$nrow, 0.8 * task\$nrow)
+								learner\$\textbf{train}(task, row\_ids)
 							\end{codebox}
-							Get train set.
+							Train model on the observations in \codeinline{task} with \codeinline{row\_ids}.
 							\\
 							\begin{codebox}
-								test\_set = \textbf{setdiff}(seq\_len(task\$nrow), train\_set)
+								prediction = learner\$\textbf{predict}(task, row\_ids)
 							\end{codebox}
-							Get test set.
-							\\
-							\begin{codebox}
-								learner\$\textbf{train}(task, row\_ids = train\_set)
-							\end{codebox}
-							Train model with the \codeinline{train\_set}.
-							\\
-							\begin{codebox}
-								prediction = learner\$\textbf{predict}(task, row\_ids = test\_set)
-							\end{codebox}
-							Predict \codeinline{test\_set} with model.
+							Predict on the observations in \codeinline{task} with \codeinline{row\_ids}.
 							\\
 							\begin{codebox}
 								measure = \textbf{msr}(key)
