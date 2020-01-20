@@ -107,12 +107,12 @@
 							\begin{codebox}
 								task = \textbf{TaskClassif}\$new(backend, target)
 							\end{codebox}
-							The \codeinline{target} is handed over as character value. For classification, the name of the target column is a label with only few distinct values.
+							For classification, \codeinline{target} is a character vector with representing class labels.
 							\\
 							\begin{codebox}
 								task = \textbf{TaskRegr}\$new(backend, target)
 							\end{codebox}
-							The \codeinline{target} is a numeric quantity.
+							For regression, \codeinline{target} is a numeric vector.
 							\\
 							\begin{codebox}
 								task = \textbf{tsk}(key)
