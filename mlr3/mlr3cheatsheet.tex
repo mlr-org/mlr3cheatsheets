@@ -232,10 +232,10 @@
 							Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
 							\\
 							\begin{codeboxmultiline}[width=21.95cm]
-								design = \textbf{expand\_grid}(\\
-								\hspace*{1ex}tasks = mlr\_tasks\$mget(key),\\
-								\hspace*{1ex}learners = mlr\_learners\$mget(key),\\
-								\hspace*{1ex}resamplings = mlr\_resamplings\$mget(key))
+								design = data.table(\\
+								\hspace*{1ex}task = tsks(.keys),\\
+								\hspace*{1ex}learners = lrns(.keys),\\
+								\hspace*{1ex}resamplings = rsmps(.keys)))
 							\end{codeboxmultiline}
 							Create benchmark design.
 							\\
