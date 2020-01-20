@@ -232,12 +232,12 @@
 							Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
 							\\
 							\begin{codeboxmultiline}[width=21.95cm]
-								design = data.table(\\
+								design = \textbf{benchmark\_grid}(\\
 								\hspace*{1ex}task = tsks(.keys),\\
 								\hspace*{1ex}learner = lrns(.keys),\\
 								\hspace*{1ex}resampling = rsmps(.keys)))
 							\end{codeboxmultiline}
-							Create benchmark design.
+							\codeinline{benchmark\_grid} creates an exhaustive design and instantiates the resampling.
 							\\
 							\begin{codebox}
 								bmr = \textbf{benchmark}(design)
