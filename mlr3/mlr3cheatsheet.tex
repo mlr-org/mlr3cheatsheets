@@ -115,14 +115,9 @@
 							The \codeinline{target} is a numeric quantity.
 							\\
 							\begin{codebox}
-								task = \textbf{mlr\_tasks}\$\textbf{get}(key)
-							\end{codebox}
-							Get predefined task by \codeinline{key} from mlr\_task dictionary. The key (character value) identifies these tasks.
-							\\
-							\begin{codebox}
 								task = \textbf{tsk}(key)
 							\end{codebox}
-							Get predefined task by \codeinline{key} with convenience function.
+							Get predefined task by \codeinline{key}.
 							\\
 							\begin{codebox}
 								task\$\textbf{data}()
@@ -160,11 +155,6 @@
 							Learner objects provide a unified interface to machine learning algorithms.
 							\\
 							\begin{codebox}
-								learner = \textbf{mlr\_learners}\$\textbf{get}(key)
-							\end{codebox}
-							Get learner by \codeinline{key} from mlr\_learner dictionary.
-							\\
-							\begin{codebox}
 								learner = \textbf{lrn}(key, ...)
 							\end{codebox}
 							Get learner by \codeinline{key} and construct the learner with specific hyperparameter and settings (...) in one go.
@@ -198,14 +188,9 @@
 							Predict \codeinline{test\_set} with model.
 							\\
 							\begin{codebox}
-								measure = \textbf{mlr\_measures}\$\textbf{get}(key)
-							\end{codebox}
-							Get measure by \codeinline{key} from mlr\_measure dictionary.
-							\\
-							\begin{codebox}
 								measure = \textbf{msr}(key)
 							\end{codebox}
-							Get measure by \codeinline{key} with convenience function.
+							Get measure by \codeinline{key}.
 							\\
 							\begin{codebox}
 								prediction\$\textbf{score}(measure)
@@ -222,28 +207,11 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Resampling}
 							Resampling is used to assess the performance of a learning algorithm.
-							\\[\baselineskip]
-							\begin{minipage}{\textwidth}
-								\begin{columns}[T]
-									\begin{column}{0.2\textwidth}\leftskip=14pt
-										\includegraphics[width=\textwidth]{img/cross_validation.png}
-									\end{column}
-									\begin{column}{0.01\textwidth}
-										% Space between image and text
-									\end{column}
-									\begin{column}{0.79\textwidth}
-										\begin{codebox}
-											resampling = \textbf{mlr\_resamplings}\$\textbf{get}(key)
-										\end{codebox}
-										Get resampling strategy by \codeinline{key} from mlr\_resamplings dictionary.
-									\end{column}
-								\end{columns}
-							\end{minipage}
-							\\[\baselineskip]
+							\\
 							\begin{codebox}
 								resampling = \textbf{rsmp}(key)
 							\end{codebox}
-							Get resampling strategy by \codeinline{key} with convenience function.
+							Get resampling strategy by \codeinline{key}.
 							\\
 							\begin{codebox}
 								resampling\$\textbf{instantiate}(task)
