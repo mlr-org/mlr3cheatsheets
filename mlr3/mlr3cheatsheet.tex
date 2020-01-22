@@ -179,7 +179,7 @@
 							Access performance with \codeinline{measure}.
 						\end{myblock}
 						\begin{myblock}{Resampling}	
-						Resampling is used to assess the performance of a learning algorithm by randomly drawing samples from a data set. mlr3 entails 6 predefined resampling strategies:
+						Resampling objects define how a task is partitioned into a series of train and test sets. mlr3 entails 6 predefined resampling strategies.
 						\\
 						\begin{itemize}
 							\item Holdout-validation
@@ -209,7 +209,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Resample \& Benchmark}
-							In order to get the performance of a learning algorithm the \codeinline{resample} function is called.
+							The \codeinline{resample} function uses the series of train and test sets defined by the \codeinline{Resampling} object to estimate the performance of a learning algorithm. For this, a model is fitted on each train set (\codeinline{\$train}) and the performance is estimated on the corresponding test sets (\codeinline{\$predict}).
 							\\
 							\begin{codebox}
 								rr = \textbf{resample}(task, learner, resampling)
@@ -227,7 +227,7 @@
 							Extract the performance of individual resampling iterations with \codeinline{measure}.
 							\\
 							\\
-							Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
+							The \codeinline{benchmark} function is used to compare the performance of different learners on multiple task and/or different resampling schemes.
 							\\
 							\begin{codeboxmultiline}[width=21.95cm]
 								design = \textbf{benchmark\_grid}(\\
