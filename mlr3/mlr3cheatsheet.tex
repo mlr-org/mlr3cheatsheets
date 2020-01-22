@@ -179,17 +179,19 @@
 							Access performance with \codeinline{measure}.
 						\end{myblock}
 						\begin{myblock}{Resampling}	
-						Resampling objects define how a task is partitioned into a series of train and test sets. mlr3 entails 6 predefined resampling strategies.
+						Resampling objects define how a task is partitioned into a series of train and test sets. mlr3 entails six predefined resampling strategies:
 						\\
 						\begin{itemize}
-							\item Holdout-validation
-							\item Leave-one-out cross validation
-							\item Cross-validation
-							\item Repeated cross-validation
-							\item Out-of-bag bootstrap
-							\item Monte-Carlo cross-validation
+							\item \codeinline{holdout} - Holdout-validation.
+							\item Leave-one-out cross validation.
+							\item \codeinline{cv} - Cross-validation.
+							\item \codeinline{repeated\_cv} - Repeated cross-validation.
+							\item \codeinline{bootstrap} - Out-of-bag bootstrap.
+							\item Monte-Carlo cross-validation.
 						\end{itemize}
-						\vspace{1cm}
+						\vspace{0.5cm}
+						Keys to access resampling strategies.
+						\\
 						\begin{codebox}
 							resampling = \textbf{rsmp}(.key)
 						\end{codebox}

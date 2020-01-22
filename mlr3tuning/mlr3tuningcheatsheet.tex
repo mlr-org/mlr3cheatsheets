@@ -114,11 +114,11 @@
 							The \codeinline{Terminator} determines when to stop the tuning (2). The package provides four \codeinline{Terminator} classes:
 							\\
 							\begin{itemize}
-								\item \textit{clock\_time} After a given time.
-								\item \textit{evals} After a given amount of iterations.
-								\item \textit{model\_time} After a given model time.
-								\item \textit{perf\_reached} After a specific performance is reached.
-								\item \textit{stagnation} After the performance stagnates.
+								\item \codeinline{clock\_time} - After a given time.
+								\item \codeinline{evals} - After a given amount of iterations.
+								\item \codeinline{model\_time}  - After a given model time.
+								\item \codeinline{perf\_reached} - After a specific performance.
+								\item \codeinline{stagnation} - After the performance stagnates.
 							\end{itemize}
 							\vspace{0.5cm}
 							Keys to access the \codeinline{Terminator} subclasses.
@@ -156,12 +156,13 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner}
-							The \codeinline{Tuner} describes the tuning strategy. The package provides grid search, random search, generalized simulated annealing and additionally hyperparameter configurations fully specified by the user.
+							The \codeinline{Tuner} describes the tuning strategy. The package provides three tuning strategies and additionally hyperparameter configurations fully specified by the user:
+							\\
 							\begin{itemize}
-								\item \textit{grid\_search}
-								\item \textit{random\_search}
-								\item \textit{gensa}
-								\item \textit{design\_points}
+								\item \codeinline{grid\_search} - Grid search.
+								\item \codeinline{random\_search} - Random search.
+								\item \codeinline{gensa} - Generalized simulated annealing.
+								\item \codeinline{design\_points} - Specified by the user.
 							\end{itemize}
 							\vspace{0.5cm}
 							Keys to access the \codeinline{Tuner} subclasses.
