@@ -119,9 +119,9 @@
 							For regression, \codeinline{target} is a numeric vector.
 							\\
 							\begin{codebox}
-								task = \textbf{tsk}(key)
+								task = \textbf{tsk}(.key)
 							\end{codebox}
-							Get predefined task by \codeinline{key}.
+							Get predefined task by \codeinline{.key}.
 							\\
 							\begin{codebox}
 								task\$\textbf{select}(cols)
@@ -137,9 +137,9 @@
 						Learner objects provide a unified interface to machine learning algorithms. The \href{https://github.com/mlr-org/mlr3learners}{mlr3learners package} (https://github.com/mlr-org/mlr3learners) and the \href{https://github.com/mlr3learners}{mlr3learners organization} (https://github.com/mlr3learners) provide additional learning algorithms for mlr3.
 						\\
 						\begin{codebox}
-							learner = \textbf{lrn}(key, ...)
+							learner = \textbf{lrn}(.key, ...)
 						\end{codebox}
-						Get learner by \codeinline{key} and construct the learner with specific hyperparameter and settings (...) in one go.
+						Get learner by \codeinline{.key} and construct the learner with specific hyperparameter and settings (...) in one go.
 						\\
 						\begin{codebox}
 							learner\$\textbf{param\_set}
@@ -169,9 +169,9 @@
 							Predict on the observations in \codeinline{task} with \codeinline{row\_ids}.
 							\\
 							\begin{codebox}
-								measure = \textbf{msr}(key)
+								measure = \textbf{msr}(.key)
 							\end{codebox}
-							Get measure by \codeinline{key}.
+							Get measure by \codeinline{.key}.
 							\\
 							\begin{codebox}
 								prediction\$\textbf{score}(measure)
@@ -191,9 +191,9 @@
 						\end{itemize}
 						\vspace{1cm}
 						\begin{codebox}
-							resampling = \textbf{rsmp}(key)
+							resampling = \textbf{rsmp}(.key)
 						\end{codebox}
-						Get resampling strategy by \codeinline{key}.
+						Get resampling strategy by \codeinline{.key}.
 						\\
 						\begin{codebox}
 							resampling\$\textbf{instantiate}(task)
