@@ -88,19 +88,19 @@
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \textit{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl} set \textit{lower} and \textit{upper} to define the tuning space. Use \textit{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
+							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \codeinline{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl} set \codeinline{lower} and \codeinline{upper} to define the tuning space. Use \codeinline{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
 							\\
 							\begin{codebox}
 								tune\_ps\$\textbf{add}(id, on, cond)
 							\end{codebox}
-							Adds dependency to the \codeinline{ParamSet}, so that \textit{id} depends on parameter \textit{on}.
-							\textit{cond} is an object of class \codeinline{Condition}.
+							Adds dependency to the \codeinline{ParamSet}, so that \codeinline{id} depends on parameter \codeinline{on}.
+							\codeinline{cond} is an object of class \codeinline{Condition}.
 							\\
 							\begin{codeboxmultiline}[width=26cm]
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
 								\hspace*{1ex}x\$id = -log(x\$id)\}
 							\end{codeboxmultiline}
-							Set a transformation for parameter \textit{id}.
+							Set a transformation for parameter \codeinline{id}.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -126,12 +126,12 @@
 							\begin{codebox}
 								terminator = \textbf{term}(.key, ...)
 							\end{codebox}
-							Get terminator by \textit{.key} and construct terminator with settings (...) in one go.
+							Get terminator by \codeinline{.key} and construct terminator with settings (...) in one go.
 							\\
 							\begin{codebox}
 								terminator = term("\textbf{combo}", terminators, any)
 							\end{codebox}
-							List of \textit{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
+							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance}
 							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
@@ -170,10 +170,10 @@
 							\begin{codebox}
 								tuner = \textbf{tnr}(.key, ...)
 							\end{codebox}
-							Get the tuner by \textit{.key} and construct the tuner with settings (...) in one go.
+							Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Triggering the tuning}
-							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{tune} method of \codeinline{Tuner}.
+							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
 							\\
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
@@ -186,7 +186,7 @@
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
-							Returns all resampling results together with the used hyperparameters. Use \textit{unnest} to display hyperparameter without (\textit{tune\_x}) or with (\textit{params}) trafo applied.
+							Returns all resampling results together with the used hyperparameters. Use \codeinline{unnest} to display hyperparameter without (\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
 							\begin{codebox}
 								instance\$\textbf{result}
@@ -221,12 +221,12 @@
 							\begin{codebox}
 								at\$\textbf{train}(task)
 							\end{codebox}
-							The automatic tuning is started by supplying \textit{task} to the \codeinline{train} method.
+							The automatic tuning is started by supplying \codeinline{task} to the \codeinline{train} method.
 							\\
 							\begin{codebox}
 								at\$\textbf{predict}(task, row\_ids)
 							\end{codebox}
-							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \textit{task} and \textit{row\_ids}.
+							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \codeinline{task} and \codeinline{row\_ids}.
 							\\
 						\end{myblock}
 						\vfill}
