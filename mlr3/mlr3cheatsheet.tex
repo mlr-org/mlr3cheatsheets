@@ -4,6 +4,7 @@
 \mode<presentation>{\usetheme{mlr}}
 
 \usepackage[sfdefault]{roboto}
+\usepackage{roboto-mono}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc} % UTF-8
 \usepackage[english]{babel} % Language
@@ -36,6 +37,7 @@
 	rightrule=0pt,
 	toprule=0pt,
 	bottomrule=0pt,
+	fontupper=\robotomono\small,
 	hbox}
 
 \newtcolorbox{codeboxmultiline}[1][]{%
@@ -44,6 +46,7 @@
 	rightrule=0pt,
 	toprule=0pt,
 	bottomrule=0pt,
+	fontupper=\robotomono\small,
 	#1}
 
 \newtcolorbox{codeboxinline}{%
@@ -54,6 +57,7 @@
 	bottomrule=0pt,
 	hbox,
 	nobeforeafter,
+	fontupper=\robotomono\small,
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
@@ -120,19 +124,6 @@
 							Get predefined task by \codeinline{key}.
 							\\
 							\begin{codebox}
-								task\$\textbf{data}()
-							\end{codebox}
-							Retrieves stored data.
-							\\
-							\begin{codebox}
-								task\$\textbf{set\_col\_role}(cols, new\_roles)
-							\end{codebox}
-							\begin{codebox}
-								task\$\textbf{set\_row\_role}(rows, new\_roles)
-							\end{codebox}
-							Assign role (\codeinline{new\_roles}) to \codeinline{cols} / \codeinline{rows}. These task methods change the view on the data and can be used to subset the task.
-							\\
-							\begin{codebox}
 								task\$\textbf{select}(cols)
 							\end{codebox}
 							Subsets the task based on feature names (\codeinline{cols}).
@@ -142,6 +133,19 @@
 							\end{codebox}
 							Subsets the task based on row ids (\codeinline{rows}).
 						\end{myblock}
+						\begin{myblock}{Learner}
+						Learner objects provide a unified interface to machine learning algorithms. The mlr3learners package (https://github.com/mlr-org/mlr3learners) and the mlr3learners organization (https://github.com/mlr3learners) provide additional learning algorithms for mlr3.
+						\\
+						\begin{codebox}
+							learner = \textbf{lrn}(key, ...)
+						\end{codebox}
+						Get learner by \codeinline{key} and construct the learner with specific hyperparameter and settings (...) in one go.
+						\\
+						\begin{codebox}
+							learner\$\textbf{param\_set}
+						\end{codebox}
+						Returns a description of hyperparameter settings.
+					\end{myblock}
 						\vfill
 					}
 				\end{minipage}
@@ -151,19 +155,6 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Learner}
-							Learner objects provide a unified interface to machine learning algorithms. The mlr3learners package (https://github.com/mlr-org/mlr3learners) and the mlr3learners organization (https://github.com/mlr3learners) provide additional learning algorithms for mlr3.
-							\\
-							\begin{codebox}
-								learner = \textbf{lrn}(key, ...)
-							\end{codebox}
-							Get learner by \codeinline{key} and construct the learner with specific hyperparameter and settings (...) in one go.
-							\\
-							\begin{codebox}
-								learner\$\textbf{param\_set}
-							\end{codebox}
-							Returns a description of hyperparameter settings.
-						\end{myblock}
 						\begin{myblock}{Train \& Predict}
 							Training fits a model to a given task.
 							\\
@@ -187,6 +178,28 @@
 							\end{codebox}
 							Access performance with \codeinline{measure}.
 						\end{myblock}
+						\begin{myblock}{Resampling}	
+						Resampling is used to assess the performance of a learning algorithm by randomly drawing samples from a data set. mlr3 entails 6 predefined resampling strategies:
+						\\
+						\begin{itemize}
+							\item Holdout-validation
+							\item Leave-one-out cross validation
+							\item Cross-validation
+							\item Repeated cross-validation
+							\item Out-of-bag bootstrap
+							\item Monte-Carlo cross-validation
+						\end{itemize}
+						\vspace{1cm}
+						\begin{codebox}
+							resampling = \textbf{rsmp}(key)
+						\end{codebox}
+						Get resampling strategy by \codeinline{key}.
+						\\
+						\begin{codebox}
+							resampling\$\textbf{instantiate}(task)
+						\end{codebox}
+						Apply resampling strategy on \codeinline{task}.
+					\end{myblock}
 					}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -195,30 +208,25 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Resampling}
-							Resampling is used to assess the performance of a learning algorithm.
-							\\
-							\begin{codebox}
-								resampling = \textbf{rsmp}(key)
-							\end{codebox}
-							Get resampling strategy by \codeinline{key}.
-							\\
-							\begin{codebox}
-								resampling\$\textbf{instantiate}(task)
-							\end{codebox}
-							Apply splitting on \codeinline{task}.
+						\begin{myblock}{Resample \& Benchmark}
+							In order to get the performance of a learning algorithm the \codeinline{resample} function is called.
 							\\
 							\begin{codebox}
 								rr = \textbf{resample}(task, learner, resampling)
 							\end{codebox}
-							Executes resampling.
+							Executes resampling and returns a \codeinline{ResampleResult} object.
 							\\
 							\begin{codebox}
-								rr\$\textbf{performance}(measure)
+								rr\$\textbf{aggregate}(measure)
 							\end{codebox}
-							Extract performance of individual resampling iterations with \codeinline{measure}.
-						\end{myblock}
-						\begin{myblock}{Benchmarking}
+							Calculate the average performance with \codeinline{measure}.
+							\\
+							\begin{codebox}
+								rr\$\textbf{score}(measure)
+							\end{codebox}
+							Extract the performance of individual resampling iterations with \codeinline{measure}.
+							\\
+							\\
 							Benchmarking is used to compare the performance of different learners on multiple task and/or different resampling schemes.
 							\\
 							\begin{codeboxmultiline}[width=21.95cm]
@@ -232,12 +240,65 @@
 							\begin{codebox}
 								bmr = \textbf{benchmark}(design)
 							\end{codebox}
-							Execute benchmark with \codeinline{design}.
+							Execute benchmark with \codeinline{design}. \\
+							
+							Returns a \codeinline{\robotomono{BenckmarkResult}} object:
 							\\
-							\begin{codebox}
-								bmr\$\textbf{aggregate}(measure)
-							\end{codebox}
-							Calculate and aggregate performance.
+							\begin{codeboxmultiline}[width=27cm]
+								\scriptsize{
+								<BenchmarkResult> of 404 rows with 8 resampling runs\\
+								nr task\_id \space\space\space\space learner\_id resampling\_id iters warnings errors\\
+								1 \space\space\space sonar \space classif.rpart 
+								\space\space\space\space\space\space holdout 
+								\space\space\space\space 1 
+								\space\space\space\space\space\space\space 0 
+								\space\space\space\space\space 0\\
+								2 \space\space\space sonar \space classif.rpart 
+								\space\space repeated\_cv 
+								\space\space 100
+								\space\space\space\space\space\space\space 0
+								\space\space\space\space\space 0\\
+								3 \space\space\space sonar classif.ranger
+								\space\space\space\space\space\space holdout
+								\space\space\space\space 1
+								\space\space\space\space\space\space\space 0
+								\space\space\space\space\space 0\\
+								4 \space\space\space sonar classif.ranger
+								\space\space repeated\_cv
+								\space\space 100
+								\space\space\space\space\space\space\space 0
+								\space\space\space\space\space 0\\
+								5 \space\space\space\space spam  
+								\space classif.rpart
+								\space\space\space\space\space\space holdout
+								\space\space\space\space 1
+								\space\space\space\space\space\space\space 0
+								\space\space\space\space\space 0\\
+								6 \space\space\space\space spam 
+								\space  classif.rpart
+								\space\space repeated\_cv
+								\space\space 100
+								\space\space\space\space\space\space\space 0
+								\space\space\space\space\space 0\\
+								7 \space\space\space\space spam 
+								classif.ranger
+								\space\space\space\space\space\space holdout
+								\space\space\space\space 1
+								\space\space\space\space\space\space\space 0 
+								\space\space\space\space\space 0\\
+								8 \space\space\space\space spam
+								classif.ranger
+								\space\space repeated\_cv
+								\space\space 100
+								\space\space\space\space\space\space\space 0
+								\space\space\space\space\space 0
+							}
+						\end{codeboxmultiline}
+					    \vspace{1cm}
+					    \begin{codebox}
+					    	bmr\$\textbf{aggregate}(measure)
+					    \end{codebox}
+					    Calculate and aggregate performance.
 						\end{myblock}\vfill
 					}
 				\end{minipage}
