@@ -3,6 +3,9 @@
 \usepackage[orientation=landscape,size=a0,scale=1.4,debug]{beamerposter}
 \mode<presentation>{\usetheme{mlr}}
 
+\usepackage[sfdefault]{roboto}
+\usepackage{roboto-mono}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc} % UTF-8
 \usepackage[english]{babel} % Language
 \usepackage{hyperref} % Hyperlinks
@@ -34,6 +37,7 @@
 	rightrule=0pt,
 	toprule=0pt,
 	bottomrule=0pt,
+	fontupper=\robotomono\small,
 	hbox}
 
 \newtcolorbox{codeboxmultiline}[1][]{%
@@ -42,6 +46,7 @@
 	rightrule=0pt,
 	toprule=0pt,
 	bottomrule=0pt,
+	fontupper=\robotomono\small,
 	#1}
 
 \newtcolorbox{codeboxinline}{%
@@ -52,6 +57,7 @@
 	bottomrule=0pt,
 	hbox,
 	nobeforeafter,
+	fontupper=\robotomono\small,
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
@@ -75,26 +81,26 @@
 						\begin{myblock}{ParamterSet}
 							The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space (1).
 							\\
-							\begin{codeboxmultiline}[width=19cm]
+							\begin{codeboxmultiline}[width=21cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
 								\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper),\\
 								\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper),\\
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \textit{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl} set \textit{lower} and \textit{upper} to define the tuning space. Use \textit{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
+							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \codeinline{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl}, set \codeinline{lower} and \codeinline{upper} to define the tuning space. Use \codeinline{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
 							\\
 							\begin{codebox}
 								tune\_ps\$\textbf{add}(id, on, cond)
 							\end{codebox}
-							Adds dependency to the \codeinline{ParamSet}, so that \textit{id} depends on parameter \textit{on}.
-							\textit{cond} is an object of class \codeinline{Condition}.
+							Adds dependency to the \codeinline{ParamSet}, so that \codeinline{id} depends on parameter \codeinline{on}.
+							\codeinline{cond} is an object of class \codeinline{Condition}.
 							\\
-							\begin{codeboxmultiline}[width=21cm]
+							\begin{codeboxmultiline}[width=26cm]
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
 								\hspace*{1ex}x\$id = -log(x\$id)\}
 							\end{codeboxmultiline}
-							Set a transformation for parameter \textit{id}.
+							Set a transformation for parameter \codeinline{id}.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -108,11 +114,11 @@
 							The \codeinline{Terminator} determines when to stop the tuning (2). The package provides four \codeinline{Terminator} classes:
 							\\
 							\begin{itemize}
-								\item \textit{clock\_time} After a given time.
-								\item \textit{evals} After a given amount of iterations.
-								\item \textit{model\_time} After a given model time.
-								\item \textit{perf\_reached} After a specific performance is reached.
-								\item \textit{stagnation} After the performance stagnates.
+								\item \codeinline{clock\_time} - After a given time.
+								\item \codeinline{evals} - After a given amount of iterations.
+								\item \codeinline{model\_time}  - After a given model time.
+								\item \codeinline{perf\_reached} - After a specific performance.
+								\item \codeinline{stagnation} - After the performance stagnates.
 							\end{itemize}
 							\vspace{0.5cm}
 							Keys to access the \codeinline{Terminator} subclasses.
@@ -120,17 +126,17 @@
 							\begin{codebox}
 								terminator = \textbf{term}(.key, ...)
 							\end{codebox}
-							Get terminator by \textit{.key} and construct terminator with settings (...) in one go.
+							Get terminator by \codeinline{.key} and construct terminator with settings (...) in one go.
 							\\
 							\begin{codebox}
 								terminator = term("\textbf{combo}", terminators, any)
 							\end{codebox}
-							List of \textit{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
+							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance}
 							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
 							\\
-							\begin{codeboxmultiline}[width=18cm]
+							\begin{codeboxmultiline}[width=20cm]
 								instance = \textbf{TuningInstance}\$new(\\
 								\hspace*{1ex}task,\\
 								\hspace*{1ex}learner,\\
@@ -150,12 +156,13 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner}
-							The \codeinline{Tuner} describes the tuning strategy. The package provides grid search, random search, generalized simulated annealing and additionally hyperparameter configurations fully specified by the user.
+							The \codeinline{Tuner} describes the tuning strategy. The package provides three tuning strategies and additionally hyperparameter configurations fully specified by the user:
+							\\
 							\begin{itemize}
-								\item \textit{grid\_search}
-								\item \textit{random\_search}
-								\item \textit{gensa}
-								\item \textit{design\_points}
+								\item \codeinline{grid\_search} - Grid search.
+								\item \codeinline{random\_search} - Random search.
+								\item \codeinline{gensa} - Generalized simulated annealing.
+								\item \codeinline{design\_points} - Specified by the user.
 							\end{itemize}
 							\vspace{0.5cm}
 							Keys to access the \codeinline{Tuner} subclasses.
@@ -163,10 +170,10 @@
 							\begin{codebox}
 								tuner = \textbf{tnr}(.key, ...)
 							\end{codebox}
-							Get the tuner by \textit{.key} and construct the tuner with settings (...) in one go.
+							Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Triggering the tuning}
-							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{tune} method of \codeinline{Tuner}.
+							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
 							\\
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
@@ -179,7 +186,7 @@
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
-							Returns all resampling results together with the used hyperparameters. Use \textit{unnest} to display hyperparameter without (\textit{tune\_x}) or with (\textit{params}) trafo applied.
+							Returns all resampling results together with the used hyperparameters. Use \codeinline{unnest} to display hyperparameter without (\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
 							\begin{codebox}
 								instance\$\textbf{result}
@@ -214,12 +221,12 @@
 							\begin{codebox}
 								at\$\textbf{train}(task)
 							\end{codebox}
-							The automatic tuning is started by supplying \textit{task} to the \codeinline{train} method.
+							The automatic tuning is started by supplying \codeinline{task} to the \codeinline{train} method.
 							\\
 							\begin{codebox}
 								at\$\textbf{predict}(task, row\_ids)
 							\end{codebox}
-							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \textit{task} and \textit{row\_ids}.
+							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \codeinline{task} and \codeinline{row\_ids}.
 							\\
 						\end{myblock}
 						\vfill}
