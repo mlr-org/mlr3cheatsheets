@@ -82,44 +82,48 @@
 							The \textbf{mlr3} package builds on R6 classes and provides the essential building
 							blocks of a machine learning workflow.
 						\end{myblock}
-						\begin{myblock}{Resources}
-							\begin{itemize}
-								\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book} (https://mlr3book.mlr-org.com)
-								\item \href{https://github.com/mlr-org}{mlr-org on GitHub} (https://github.com/mlr-org)
-							\end{itemize}
-						\end{myblock}
-						\begin{myblock}{Task}
-							Stores observation and columns (\codeinline{backend}) and additional
-							meta-data about the dataset.
-							\vspace{1em}
-							\\
-							\begin{codebox}
-								task = \textbf{TaskClassif}\$new(backend, target)
-							\end{codebox}
-							For classification, \codeinline{target} needs to be a character vector representing class labels.
-							\\
-							\begin{codebox}
-								task = \textbf{TaskRegr}\$new(backend, target)
-							\end{codebox}
-							For regression, \codeinline{target} needs to be a numeric vector.
-							\\
-							\begin{codebox}
-								task = \textbf{tsk}(.key)
-							\end{codebox}
-							Built-in tasks can be queried by \codeinline{.key}.
-							See \codeinline{mlr\_tasks} for a list of available tasks.
-							\vspace{1em}
-							\\
-							\begin{codebox}
-								task\$\textbf{select}(cols)
-							\end{codebox}
-							Subsets the task based on feature names.
-							\\
-							\begin{codebox}
-								task\$\textbf{filter}(rows)
-							\end{codebox}
-							Subsets the task based on row ids.
-						\end{myblock}
+						
+					}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+					\begin{myblock}{Task}
+						Stores observation and columns (\codeinline{backend}) and additional
+						meta-data about the dataset.
+						\vspace{1em}
+						\\
+						\begin{codebox}
+							task = \textbf{TaskClassif}\$new(backend, target)
+						\end{codebox}
+						For classification, \codeinline{target} needs to be a character vector representing class labels.
+						\\
+						\begin{codebox}
+							task = \textbf{TaskRegr}\$new(backend, target)
+						\end{codebox}
+						For regression, \codeinline{target} needs to be a numeric vector.
+						\\
+						\begin{codebox}
+							task = \textbf{tsk}(.key)
+						\end{codebox}
+						Built-in tasks can be queried by \codeinline{.key}.
+						See \codeinline{mlr\_tasks} for a list of available tasks.
+						\vspace{1em}
+						\\
+						\begin{codebox}
+							task\$\textbf{select}(cols)
+						\end{codebox}
+						Subsets the task based on feature names.
+						\\
+						\begin{codebox}
+							task\$\textbf{filter}(rows)
+						\end{codebox}
+						Subsets the task based on row ids.
+					\end{myblock}
+					\vfill
 					}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -132,8 +136,8 @@
 						Provides a unified interface for
 						learning algorithms in R. 
 						\\The \href{https://github.com/mlr-org/mlr3learners}{mlr3learners
-						package} and the \href{https://github.com/mlr3learners}{mlr3learners
-						organization} \\
+							package} and the \href{https://github.com/mlr3learners}{mlr3learners
+							organization} \\
 						- https://github.com/mlr-org/mlr3learners \\
 						- https://github.com/mlr3learners \\
 						hold all available learners for {mlr3}.
@@ -148,11 +152,9 @@
 						\begin{codebox}
 							learner\$\textbf{param\_set}
 						\end{codebox}
-						Returns a description of hyperparameter settings.
-						
-						
+						Returns a description of hyperparameter settings.	
 					\end{myblock}
-						\vfill
+					\vfill
 					}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -162,55 +164,70 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Train \& Predict}
-							Training: Train a model on a given task.
-							\vspace{1em}
-							\\
-							\begin{codebox}
-								learner\$\textbf{train}(task, row\_ids)
-							\end{codebox}
-							Train a model on the observations in \codeinline{task} given by \codeinline{row\_ids}.
-							\\
-							\begin{codebox}
-								prediction = learner\$\textbf{predict}(task, row\_ids)
-							\end{codebox}
-							Predict on the observations in \codeinline{task} given by \codeinline{row\_ids}.
-							\\
-							\vspace{1em}
-							\begin{codebox}
-								measure = \textbf{msr}(.key)
-							\end{codebox}
-							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
-							\\
-							\begin{codebox}
-								prediction\$\textbf{score}(measure)
-							\end{codebox}
-							Access performance with \codeinline{measure}.
-						\end{myblock}
-						\begin{myblock}{Resampling}
-						The \codeinline{Resampling} class defines how a task is
-						partitioned into a series of train and test sets. \{mlr3\}
-						entails six predefined resampling strategies:
+						Training: Train a model on a given task.
+						\vspace{1em}
 						\\
-						\begin{itemize}
-							\item \codeinline{bootstrap} - Out-of-bag bootstrap.
-							\item \codeinline{custom} - Manually provided indices.
-							\item \codeinline{cv} - k-fold cross-validation.
-							\item \codeinline{holdout} - Holdout-validation.
-							\item \codeinline{repeated\_cv} - Repeated k-fold cross-validation.
-							\item \codeinline{subsampling} - Monte-Carlo CV.
-						\end{itemize}
+						\begin{codebox}
+							learner\$\textbf{train}(task, row\_ids)
+						\end{codebox}
+						Train a model on the observations in \codeinline{task} given by \codeinline{row\_ids}.
+						\\
+						\begin{codebox}
+							prediction = learner\$\textbf{predict}(task, row\_ids)
+						\end{codebox}
+						Predict on the observations in \codeinline{task} given by \codeinline{row\_ids}.
+						\\
 						\vspace{1em}
 						\begin{codebox}
-							resampling = \textbf{rsmp}(.key)
+							measure = \textbf{msr}(.key)
 						\end{codebox}
-						Get resampling strategy by \codeinline{.key}.
+						Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
 						\\
 						\begin{codebox}
-							resampling\$\textbf{instantiate}(task)
+							prediction\$\textbf{score}(measure)
 						\end{codebox}
-						Apply resampling strategy on \codeinline{task} (perform
-						the actual splitting).
+						Access performance with \codeinline{measure}.
 					\end{myblock}
+					\vfill
+					}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+	\end{columns}
+\end{frame}
+\begin{withoutheader}
+\begin{frame}[fragile]{}
+	\begin{columns}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+							\begin{myblock}{Resampling}
+							The \codeinline{Resampling} class defines how a task is
+							partitioned into a series of train and test sets. \{mlr3\}
+							entails six predefined resampling strategies:
+							\\
+							\begin{itemize}
+								\item \codeinline{bootstrap} - Out-of-bag bootstrap.
+								\item \codeinline{custom} - Manually provided indices.
+								\item \codeinline{cv} - k-fold cross-validation.
+								\item \codeinline{holdout} - Holdout-validation.
+								\item \codeinline{repeated\_cv} - Repeated k-fold cross-validation.
+								\item \codeinline{subsampling} - Monte-Carlo CV.
+							\end{itemize}
+							\vspace{1em}
+							\begin{codebox}
+								resampling = \textbf{rsmp}(.key)
+							\end{codebox}
+							Get resampling strategy by \codeinline{.key}.
+							\\
+							\begin{codebox}
+								resampling\$\textbf{instantiate}(task)
+							\end{codebox}
+							Apply resampling strategy on \codeinline{task} (perform
+							the actual splitting).
+						\end{myblock}
+						\vfill
 					}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -219,7 +236,7 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Resample \& Benchmark}
+						\begin{myblock}{Resample}
 							The \codeinline{resample} function uses the series
 							of train and test set(s) defined by the
 							\codeinline{Resampling} object to estimate the
@@ -249,26 +266,35 @@
 								rr\$\textbf{score}(measure)
 							\end{codebox}
 							Returns the performances of the individual iterations using the given \codeinline{measure}.
-							\vspace{2em}
-							\\
-							The \codeinline{benchmark} function is used to compare different learners on multiple tasks and/or different resampling schemes.
-							\\
-							\begin{codeboxmultiline}[width=21.95cm]
-								design = \textbf{benchmark\_grid}(\\
-								\hspace*{1ex}task = tsks(.keys),\\
-								\hspace*{1ex}learner = lrns(.keys),\\
-								\hspace*{1ex}resampling = rsmps(.keys)\\
-								)
-							\end{codeboxmultiline}
-							\begin{codebox}
-								bmr = \textbf{benchmark}(design)
-							\end{codebox}
-							\codeinline{benchmark()} executes the benchmark call
-							using the matrix given via \codeinline{design} and
-							returns a \codeinline{\robotomono{BenckmarkResult}}
-							container.
-							\begin{codeboxmultiline}[width=27cm]
-								\scriptsize{
+						\end{myblock}
+						\vfill
+					}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+						\begin{myblock}{Benchmark}
+						The \codeinline{benchmark} function is used to compare different learners on multiple tasks and/or different resampling schemes.
+						\\
+						\begin{codeboxmultiline}[width=21.95cm]
+							design = \textbf{benchmark\_grid}(\\
+							\hspace*{1ex}task = tsks(.keys),\\
+							\hspace*{1ex}learner = lrns(.keys),\\
+							\hspace*{1ex}resampling = rsmps(.keys)\\
+							)
+						\end{codeboxmultiline}
+						\begin{codebox}
+							bmr = \textbf{benchmark}(design)
+						\end{codebox}
+						\codeinline{benchmark()} executes the benchmark call
+						using the matrix given via \codeinline{design} and
+						returns a \codeinline{\robotomono{BenckmarkResult}}
+						container.
+						\begin{codeboxmultiline}[width=27cm]
+							\scriptsize{
 								<BenchmarkResult> of 404 rows with 8 resampling runs\\
 								nr task\_id \space\space\space\space learner\_id resampling\_id iters warnings errors\\
 								1 \space\space\space sonar \space classif.rpart
@@ -317,11 +343,28 @@
 								\space\space\space\space\space 0
 							}
 						\end{codeboxmultiline}
-						\end{myblock}\vfill
+					\end{myblock}
+					\vfill
+					}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+						\begin{myblock}{Resources}
+							\begin{itemize}
+								\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book} (https://mlr3book.mlr-org.com)
+								\item \href{https://github.com/mlr-org}{mlr-org on GitHub} (https://github.com/mlr-org)
+							\end{itemize}
+						\end{myblock}
+						\vfill
 					}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
 	\end{columns}
 \end{frame}
+\end{withoutheader}
 \end{document}
