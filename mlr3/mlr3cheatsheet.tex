@@ -20,8 +20,17 @@
     morekeywords={TRUE,FALSE},
     deletekeywords={data,frame,length,as,character},
     keywordstyle=\color{blue},
-    commentstyle=\color{DarkGreen},
+    commentstyle=\color{DarkGreen}
 }
+\hypersetup{
+    hyperfootnotes=false,
+    colorlinks=true,
+	linktocpage=true,
+	pdfauthor={mlr-org team},
+    %linkcolor=[RGB]{3,99,142}, % mlr blue
+    urlcolor=[RGB]{231,138,69}
+}
+
 
 \title{mlr3 :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
 \newcommand{\packagedescription}{ % Package description in header
@@ -29,7 +38,7 @@
 }
 
 \newlength{\columnheight} % Adjust depending on header height
-\setlength{\columnheight}{84cm} 
+\setlength{\columnheight}{84cm}
 
 \newtcolorbox{codebox}{%
 	sharp corners,
@@ -87,15 +96,17 @@
 							\end{itemize}
 						\end{myblock}
 						\begin{myblock}{Intro \& Workflow}
-							The mlr3 package builds on R6 classes and provides the essential building
+							The \textbf{mlr3} package builds on R6 classes and provides the essential building
 							blocks of a machine learning workflow:
+							\vspace{1.5em}
 							\begin{enumerate}
-								\item \textbf{Task}: Encapsulates the data along with additional information, such as what the prediction target is.
-								\item \textbf{Learner}: Encapsulates one of R's many machine learning algorithms and allows to train models and make predictions. Most learners have hyperparameters.
-								\item \textbf{Measure}: Computes a numeric score based on predicted and ground-truth values and their difference.
-								\item \textbf{Resampling}: Specifies a series of train and test sets.
+								\item \textbf{Task}: Encapsulates the data along with additional information, such as the name of the prediction target.
+								\item \textbf{Learner}: Holds information about the selected algorithm and its hyperparameters which will be used for modeling.
+								\item \textbf{Measure}: Numeric value to evaluate a models performance during training and prediction.
+								\item \textbf{Resampling}: Strategy how to split the dataset in train and test subsets.
 							\end{enumerate}
-							\includegraphics[width=\textwidth]{img/ml_abstraction.png}
+							\vspace{1.5em}
+							\includegraphics[width=1.13\textwidth]{img/ml_abstraction.png}
 						\end{myblock}
 					}
 				\end{minipage}
@@ -106,41 +117,54 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Task}
-							Tasks objects store data (\codeinline{backend}) and additional meta-data for machine learning problems.
+							The \codeinline{Task} class stores observation and columns (\codeinline{backend}) and additional
+							meta-data about the dataset.
+							\vspace{1em}
 							\\
 							\begin{codebox}
 								task = \textbf{TaskClassif}\$new(backend, target)
 							\end{codebox}
-							For classification, \codeinline{target} is a character vector with representing class labels.
+							For classification, \codeinline{target} needs to be a character vector representing class labels.
 							\\
 							\begin{codebox}
 								task = \textbf{TaskRegr}\$new(backend, target)
 							\end{codebox}
-							For regression, \codeinline{target} is a numeric vector.
+							For regression, \codeinline{target} needs to be a numeric vector.
 							\\
 							\begin{codebox}
 								task = \textbf{tsk}(.key)
 							\end{codebox}
-							Get predefined task by \codeinline{.key}.
+							Built-in tasks can be queried by \codeinline{.key}.
+							See \codeinline{mlr\_tasks} for a list of available tasks.
+							\vspace{1em}
 							\\
 							\begin{codebox}
 								task\$\textbf{select}(cols)
 							\end{codebox}
-							Subsets the task based on feature names (\codeinline{cols}).
+							Subsets the task based on feature names.
 							\\
 							\begin{codebox}
 								task\$\textbf{filter}(rows)
 							\end{codebox}
-							Subsets the task based on row ids (\codeinline{rows}).
+							Subsets the task based on row ids.
 						\end{myblock}
 						\begin{myblock}{Learner}
-						Learner objects provide a unified interface to machine learning algorithms. The \href{https://github.com/mlr-org/mlr3learners}{mlr3learners package} (https://github.com/mlr-org/mlr3learners) and the \href{https://github.com/mlr3learners}{mlr3learners organization} (https://github.com/mlr3learners) provide additional learning algorithms for mlr3.
+						The \codeinline{Learner} class provides a unified interface for
+						learning algorithms in R. 
+						\\The \href{https://github.com/mlr-org/mlr3learners}{mlr3learners
+						package} and the \href{https://github.com/mlr3learners}{mlr3learners
+						organization} \\
+						- https://github.com/mlr-org/mlr3learners \\
+						- https://github.com/mlr3learners \\
+						hold all available learners for {mlr3}.
+						\vspace{1em}
 						\\
 						\begin{codebox}
 							learner = \textbf{lrn}(.key, ...)
 						\end{codebox}
-						Get learner by \codeinline{.key} and construct the learner with specific hyperparameter and settings (...) in one go.
+						Get learner by \codeinline{.key} (from \codeinline{mlr\_learners}) and construct the learner with specific hyperparameter and settings (...) in one go.
 						\\
+						\vspace{1em}
 						\begin{codebox}
 							learner\$\textbf{param\_set}
 						\end{codebox}
@@ -156,42 +180,44 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Train \& Predict}
-							Training fits a model to a given task.
+							Training: Train a model on a given task.
+							\vspace{1em}
 							\\
 							\begin{codebox}
 								learner\$\textbf{train}(task, row\_ids)
 							\end{codebox}
-							Train model on the observations in \codeinline{task} with \codeinline{row\_ids}.
+							Train a model on the observations in \codeinline{task} given by \codeinline{row\_ids}.
 							\\
 							\begin{codebox}
 								prediction = learner\$\textbf{predict}(task, row\_ids)
 							\end{codebox}
-							Predict on the observations in \codeinline{task} with \codeinline{row\_ids}.
+							Predict on the observations in \codeinline{task} given by \codeinline{row\_ids}.
 							\\
+							\vspace{1em}
 							\begin{codebox}
 								measure = \textbf{msr}(.key)
 							\end{codebox}
-							Get measure by \codeinline{.key}.
+							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
 							\\
 							\begin{codebox}
 								prediction\$\textbf{score}(measure)
 							\end{codebox}
 							Access performance with \codeinline{measure}.
 						\end{myblock}
-						\begin{myblock}{Resampling}	
-						Resampling objects define how a task is partitioned into a series of train and test sets. mlr3 entails six predefined resampling strategies:
+						\begin{myblock}{Resampling}
+						The \codeinline{Resampling} class defines how a task is
+						partitioned into a series of train and test sets. \{mlr3\}
+						entails six predefined resampling strategies:
 						\\
 						\begin{itemize}
-							\item \codeinline{holdout} - Holdout-validation.
-							\item Leave-one-out cross validation.
-							\item \codeinline{cv} - Cross-validation.
-							\item \codeinline{repeated\_cv} - Repeated cross-validation.
 							\item \codeinline{bootstrap} - Out-of-bag bootstrap.
-							\item Monte-Carlo cross-validation.
+							\item \codeinline{custom} - Manually provided indices.
+							\item \codeinline{cv} - k-fold cross-validation.
+							\item \codeinline{holdout} - Holdout-validation.
+							\item \codeinline{repeated\_cv} - Repeated k-fold cross-validation.
+							\item \codeinline{subsampling} - Monte-Carlo CV.
 						\end{itemize}
-						\vspace{0.5cm}
-						Keys to access resampling strategies.
-						\\
+						\vspace{1em}
 						\begin{codebox}
 							resampling = \textbf{rsmp}(.key)
 						\end{codebox}
@@ -200,7 +226,8 @@
 						\begin{codebox}
 							resampling\$\textbf{instantiate}(task)
 						\end{codebox}
-						Apply resampling strategy on \codeinline{task}.
+						Apply resampling strategy on \codeinline{task} (perform
+						the actual splitting).
 					\end{myblock}
 					}
 				\end{minipage}
@@ -211,52 +238,64 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Resample \& Benchmark}
-							The \codeinline{resample} function uses the series of train and test sets defined by the \codeinline{Resampling} object to estimate the performance of a learning algorithm. For this, a model is fitted on each train set (\codeinline{\$train}) and the performance is estimated on the corresponding test sets (\codeinline{\$predict}).
+							The \codeinline{resample} function uses the series
+							of train and test set(s) defined by the
+							\codeinline{Resampling} object to estimate the
+							performance of a learning algorithm. For this, a
+							model is fitted on each train set
+							(\codeinline{\$train()}) and the score is evaluated
+							on the corresponding test set(s)
+							(\codeinline{\$predict()}) using the given
+							\codeinline{Measure}.
+							\\
+							\\
+							\textbf{Careful: Resample $!=$ Resampling}
+							\vspace{1em}
 							\\
 							\begin{codebox}
 								rr = \textbf{resample}(task, learner, resampling)
 							\end{codebox}
-							Executes resampling and returns a \codeinline{ResampleResult} object.
+							Performs resampling and returns a \codeinline{ResampleResult} object.
 							\\
+							\vspace{1em}
 							\begin{codebox}
 								rr\$\textbf{aggregate}(measure)
 							\end{codebox}
-							Calculate the average performance with \codeinline{measure}.
+							Returns the aggregated performance using the given \codeinline{measure}.
 							\\
 							\begin{codebox}
 								rr\$\textbf{score}(measure)
 							\end{codebox}
-							Extract the performance of individual resampling iterations with \codeinline{measure}.
+							Returns the performances of the individual iterations using the given \codeinline{measure}.
+							\vspace{2em}
 							\\
-							\\
-							The \codeinline{benchmark} function is used to compare the performance of different learners on multiple task and/or different resampling schemes.
+							The \codeinline{benchmark} function is used to compare different learners on multiple tasks and/or different resampling schemes.
 							\\
 							\begin{codeboxmultiline}[width=21.95cm]
 								design = \textbf{benchmark\_grid}(\\
 								\hspace*{1ex}task = tsks(.keys),\\
 								\hspace*{1ex}learner = lrns(.keys),\\
-								\hspace*{1ex}resampling = rsmps(.keys)))
+								\hspace*{1ex}resampling = rsmps(.keys)\\
+								)
 							\end{codeboxmultiline}
-							\codeinline{benchmark\_grid} creates an exhaustive design and instantiates the resampling.
-							\\
 							\begin{codebox}
 								bmr = \textbf{benchmark}(design)
 							\end{codebox}
-							Execute benchmark with \codeinline{design}. \\
-							
-							Returns a \codeinline{\robotomono{BenckmarkResult}} object:
-							\\
+							\codeinline{benchmark()} executes the benchmark call
+							using the matrix given via \codeinline{design} and
+							returns a \codeinline{\robotomono{BenckmarkResult}}
+							container.
 							\begin{codeboxmultiline}[width=27cm]
 								\scriptsize{
 								<BenchmarkResult> of 404 rows with 8 resampling runs\\
 								nr task\_id \space\space\space\space learner\_id resampling\_id iters warnings errors\\
-								1 \space\space\space sonar \space classif.rpart 
-								\space\space\space\space\space\space holdout 
-								\space\space\space\space 1 
-								\space\space\space\space\space\space\space 0 
+								1 \space\space\space sonar \space classif.rpart
+								\space\space\space\space\space\space holdout
+								\space\space\space\space 1
+								\space\space\space\space\space\space\space 0
 								\space\space\space\space\space 0\\
-								2 \space\space\space sonar \space classif.rpart 
-								\space\space repeated\_cv 
+								2 \space\space\space sonar \space classif.rpart
+								\space\space repeated\_cv
 								\space\space 100
 								\space\space\space\space\space\space\space 0
 								\space\space\space\space\space 0\\
@@ -270,23 +309,23 @@
 								\space\space 100
 								\space\space\space\space\space\space\space 0
 								\space\space\space\space\space 0\\
-								5 \space\space\space\space spam  
+								5 \space\space\space\space spam
 								\space classif.rpart
 								\space\space\space\space\space\space holdout
 								\space\space\space\space 1
 								\space\space\space\space\space\space\space 0
 								\space\space\space\space\space 0\\
-								6 \space\space\space\space spam 
+								6 \space\space\space\space spam
 								\space  classif.rpart
 								\space\space repeated\_cv
 								\space\space 100
 								\space\space\space\space\space\space\space 0
 								\space\space\space\space\space 0\\
-								7 \space\space\space\space spam 
+								7 \space\space\space\space spam
 								classif.ranger
 								\space\space\space\space\space\space holdout
 								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0 
+								\space\space\space\space\space\space\space 0
 								\space\space\space\space\space 0\\
 								8 \space\space\space\space spam
 								classif.ranger
@@ -296,11 +335,6 @@
 								\space\space\space\space\space 0
 							}
 						\end{codeboxmultiline}
-					    \vspace{1cm}
-					    \begin{codebox}
-					    	bmr\$\textbf{aggregate}(measure)
-					    \end{codebox}
-					    Calculate and aggregate performance.
 						\end{myblock}\vfill
 					}
 				\end{minipage}
