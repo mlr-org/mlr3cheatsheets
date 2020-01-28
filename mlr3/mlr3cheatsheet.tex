@@ -173,7 +173,21 @@
 						Returns a description of hyperparameter settings.	
 						\\
 						\begin{codebox}
-							learner\$predict\_type = "prob"
+							learner\$param\_set\$\textbf{values} = list(id = value)
+						\end{codebox}
+						Change the current hyperparameter values by assigning a named \codeinline{list(id = value)} to the \codeinline{\$values} field.
+						This overwrites all previously set parameters.	
+						\\
+						\begin{codeboxmultiline}[width=27cm]
+							learner\$param\_set\$\textbf{values} = \\
+							\hspace*{1ex} \textbf{mlr3misc::insert\_named}(\\
+							\hspace*{2ex} learner\$param\_set\$values,\\
+							\hspace*{2ex} list(id = value))
+						\end{codeboxmultiline}
+						Update hyperparameters with named \codeinline{list(id = value)}.
+						\\
+						\begin{codebox}
+							learner\$\textbf{predict\_type} = "prob"
 						\end{codebox}
 						Changes the predict type to posterior probabilities. 
 						\codeinline{"response"} changes the predict type to class labels.
