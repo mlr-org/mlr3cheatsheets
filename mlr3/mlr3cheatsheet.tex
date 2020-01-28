@@ -288,13 +288,14 @@
 							\hspace*{1ex}resampling = rsmps(.keys)\\
 							)
 						\end{codeboxmultiline}
+						Generates a design by cross joining the entries.
 						\begin{codebox}
 							bmr = \textbf{benchmark}(design)
 						\end{codebox}
-						\codeinline{benchmark()} executes the benchmark call
+						Executes the benchmark call
 						using the matrix given via \codeinline{design} and
 						returns a \codeinline{\robotomono{BenckmarkResult}}
-						container.
+						container.\\
 						\begin{codeboxmultiline}[width=27cm]
 							\scriptsize{
 								<BenchmarkResult> of 404 rows with 8 resampling runs\\
