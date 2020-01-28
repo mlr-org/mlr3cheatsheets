@@ -78,33 +78,16 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
+						\begin{myblock}{Intro}
+							The \textbf{mlr3} package builds on R6 classes and provides the essential building
+							blocks of a machine learning workflow.
+						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
 								\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book} (https://mlr3book.mlr-org.com)
 								\item \href{https://github.com/mlr-org}{mlr-org on GitHub} (https://github.com/mlr-org)
 							\end{itemize}
 						\end{myblock}
-						\begin{myblock}{Intro \& Workflow}
-							The \textbf{mlr3} package builds on R6 classes and provides the essential building
-							blocks of a machine learning workflow:
-							\vspace{1.5em}
-							\begin{enumerate}
-								\item \textbf{Task}: Encapsulates the data along with additional information, such as the name of the prediction target.
-								\item \textbf{Learner}: Holds information about the selected algorithm and its hyperparameters which will be used for modeling.
-								\item \textbf{Measure}: Numeric value to evaluate a models performance during training and prediction.
-								\item \textbf{Resampling}: Strategy how to split the dataset in train and test subsets.
-							\end{enumerate}
-							\vspace{1.5em}
-							\includegraphics[width=1.13\textwidth]{img/ml_abstraction.png}
-						\end{myblock}
-					}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Task}
 							The \codeinline{Task} class stores observation and columns (\codeinline{backend}) and additional
 							meta-data about the dataset.
@@ -137,6 +120,15 @@
 							\end{codebox}
 							Subsets the task based on row ids.
 						\end{myblock}
+					}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+						
 						\begin{myblock}{Learner}
 						The \codeinline{Learner} class provides a unified interface for
 						learning algorithms in R. 
