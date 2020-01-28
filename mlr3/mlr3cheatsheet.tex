@@ -179,6 +179,13 @@
 							learner\$\textbf{param\_set}
 						\end{codebox}
 						Returns a description of hyperparameter settings.	
+						\\
+						\begin{codebox}
+							learner\$predict\_type = "prob"
+						\end{codebox}
+						Changes the predict type to posterior probabilities. 
+						\codeinline{"response"} changes the predict type to class labels.
+						For regression tasks, \codeinline{"se"} extracts the standard error.
 					\end{myblock}
 					\vfill
 					}
