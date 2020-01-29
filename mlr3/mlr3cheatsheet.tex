@@ -396,8 +396,12 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Technical Background}
-							Content
+						\begin{myblock}{Technical}
+							{mlr3} uses the \codeinline{future} backends for parallelization e.g. the parallelization of \codeinline{Resampling} iterations.\\
+							\begin{codebox}
+								future::plan("multiprocess")
+							\end{codebox}
+							Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
