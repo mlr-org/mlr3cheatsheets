@@ -399,9 +399,26 @@
 						\begin{myblock}{Technical}
 							{mlr3} uses the \codeinline{future} backends for parallelization e.g. the parallelization of \codeinline{Resampling} iterations.\\
 							\begin{codebox}
-								future::plan("multiprocess")
+								future::\textbf{plan}("multiprocess")
 							\end{codebox}
 							Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
+							\\
+							\\
+							{mlr3} uses the \codeinline{lgr} package for logging and progress output.
+							\\
+							\begin{codeboxmultiline}[width=23.1cm]
+								\textbf{getOption}("lgr.log\_levels")\\
+								\#\# fatal error  warn  info debug trace\\ 
+								\#\# 100 \space\space 200 \space\space 300 \space 400 \space 500 \space\space 600
+							\end{codeboxmultiline}
+							Gets threshold levels. For {mlr3} the default is 400. 
+							\\
+							\begin{codeboxmultiline}[width=25cm]
+								\footnotesize{
+								lgr::get\_logger("mlr3")\$set\_threshold("<level>")
+							}
+							\end{codeboxmultiline}
+							Changes the logging level for {mlr3}.
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
