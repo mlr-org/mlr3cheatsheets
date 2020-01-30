@@ -207,7 +207,7 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Train \& Predict}
 						Training: Train a model on a given task.
-						\vspace{1em}
+						\vspace{1em} % Group Train
 						\\
 						\begin{codebox}
 							learner\$\textbf{train}(task, row\_ids)
@@ -215,11 +215,16 @@
 						Train a model on the observations in \codeinline{task} given by \codeinline{row\_ids}.
 						\\
 						\begin{codebox}
+							learner\$\textbf{model}
+						\end{codebox}
+						Retrieves the fitted R model.
+						\\
+						\vspace{1em} % Group Predict
+						\begin{codebox}
 							prediction = learner\$\textbf{predict}(task, row\_ids)
 						\end{codebox}
 						Predict on the observations in \codeinline{task} given by \codeinline{row\_ids}.
 						\\
-						\vspace{1em}
 						\begin{codebox}
 							measure = \textbf{msr}(.key)
 						\end{codebox}
