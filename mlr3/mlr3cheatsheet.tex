@@ -352,12 +352,12 @@
 						\\
 						\begin{codeboxmultiline}[width=21.95cm]
 							design = \textbf{benchmark\_grid}(\\
-							\hspace*{1ex}task = tsks(.keys),\\
-							\hspace*{1ex}learner = lrns(.keys),\\
-							\hspace*{1ex}resampling = rsmps(.keys)\\
-							)
+							\hspace*{1ex}tasks),\\
+							\hspace*{1ex}learners,\\
+							\hspace*{1ex}resamplings)
 						\end{codeboxmultiline}
-						Generates a design by cross joining the entries.
+						Generates a design by cross joining tasks, learners and resamplings supplied as \codeinline{list()}s.
+						\\
 						\begin{codebox}
 							bmr = \textbf{benchmark}(design)
 						\end{codebox}
