@@ -288,6 +288,15 @@
 							\end{codebox}
 							Apply resampling strategy on \codeinline{task} (perform
 							the actual splitting).
+							\\
+							\vspace{1em} % Group custom resampling
+							\begin{codeboxmultiline}[width=27cm]
+							resampling = rsmp("\textbf{custom}")\\
+							resampling\$instantiate(task,\\
+							\hspace*{1ex} train = list(c(1:10, 51:60, 101:110)),\\
+							\hspace*{1ex} test = list(c(11:20, 61:70, 111:120)))
+							\end{codeboxmultiline}
+							Resampling with custom splits.
 						\end{myblock}
 						\vfill
 					}
