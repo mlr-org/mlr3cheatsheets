@@ -91,7 +91,7 @@
 							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \codeinline{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl}, set \codeinline{lower} and \codeinline{upper} to define the tuning space. Use \codeinline{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
 							\\
 							\begin{codebox}
-								tune\_ps\$\textbf{add}(id, on, cond)
+								tune\_ps\$\textbf{add\_dep}(id, on, cond)
 							\end{codebox}
 							Adds dependency to the \codeinline{ParamSet}, so that \codeinline{id} depends on parameter \codeinline{on}.
 							\codeinline{cond} is an object of class \codeinline{Condition}.
