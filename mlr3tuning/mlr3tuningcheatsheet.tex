@@ -49,6 +49,17 @@
 	fontupper=\robotomono\small,
 	#1}
 
+\newtcolorbox{codeboxexample}[1][]{%
+	sharp corners,
+	leftrule=0pt,
+	rightrule=0pt,
+	toprule=0pt,
+	bottomrule=0pt,
+	fontupper=\robotomono\small,
+	width=27cm,
+	adjusted title=Example,
+	fonttitle = \bfseries\Large}
+
 \newtcolorbox{codeboxinline}{%
 	sharp corners,
 	leftrule=0pt,
@@ -143,6 +154,24 @@
 								\hspace*{1ex}tune\_ps,\\
 								\hspace*{1ex}terminator)
 							\end{codeboxmultiline}
+						\vspace{1em}
+						\begin{codeboxexample}
+							\footnotesize{
+							tune\_ps = ParamSet\$new(list(\\
+							\hspace*{1ex} ParamDbl\$new("cp", lower = 0.001, upper = 0.1)))
+							evals20 = term("evals", n\_evals = 20)
+							\\
+							\\
+							instance = TuningInstance\$new(\\
+							\hspace*{1ex} task, learner, resampling, measures,\\
+							\hspace*{1ex} param\_set = tune\_ps, terminator = evals20)\\
+							tuner = tnr("grid\_search", resolution = 5)
+							\\
+							\\
+							tuner\$tune(instance)\\
+							instance\$result
+						    }
+						\end{codeboxexample}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
