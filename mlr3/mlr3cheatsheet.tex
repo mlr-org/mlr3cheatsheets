@@ -430,13 +430,14 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Technical}
-							{mlr3} uses the \codeinline{future} backends for parallelization e.g. the parallelization of \codeinline{Resampling} iterations.\\
+						\begin{myblock}{Technical} % Group Parallelization
+							{mlr3} uses the \codeinline{future} backends for parallelization e.g. the parallelization of \codeinline{Resampling} iterations.
+							\\
 							\begin{codebox}
 								future::\textbf{plan}("multiprocess")
 							\end{codebox}
 							Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
-							\\
+							\vspace{1em} % Group Logging
 							\\
 							{mlr3} uses the \codeinline{lgr} package for logging and progress output.
 							\\
@@ -453,6 +454,24 @@
 							}
 							\end{codeboxmultiline}
 							Changes the logging level for {mlr3}.
+							\vspace{1em} % Group Error Handling
+							\\
+							Machine learning algorithms raising errors is not uncommon as algorithms typically cannot process all possible data. {mlr3} provides encapsulation to cope with signaled conditions such as errors, warnings and messages.
+							\\
+							\begin{codeboxmultiline}[width=16cm]
+								learner\$encapsulate = c(\\
+								\hspace*{1ex} train = "evaluate", \\
+								\hspace*{1ex} predict = "evaluate")
+							\end{codeboxmultiline}
+							Encapsulates the execution of \codeinline{\$train} and \codeinline{\$predict} with the \codeinline{evaluate} package.
+							\\
+							Fallback learners allow to score results in cases where a learners is misbehaving in some sense.
+							\\
+							\begin{codeboxmultiline}[width=25cm]
+								\footnotesize{
+									learner\$fallback = lrn("classif.featureless")
+								}
+							\end{codeboxmultiline}
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
