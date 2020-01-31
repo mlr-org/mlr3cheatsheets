@@ -70,13 +70,10 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-							The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning.
+							The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning. The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
 							\\
 							\\
 							\includegraphics[width=\textwidth]{img/tuning_objects.png}
-							\\
-							\\
-							The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
 						\end{myblock}
 						\begin{myblock}{ParamterSet}
 							The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space (1).
@@ -100,7 +97,9 @@
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
 								\hspace*{1ex}x\$id = -log(x\$id)\}
 							\end{codeboxmultiline}
-							Set a transformation for parameter \codeinline{id}.
+							Set a transformation for parameter \codeinline{id}. 
+							The function transforms the hyperparameter configuration into another encoding 
+							before passing them to the \codeinline{Tuner}.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
