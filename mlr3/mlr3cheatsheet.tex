@@ -83,7 +83,8 @@
 							blocks of a machine learning workflow.
 						\end{myblock}
 						\begin{myblock}{Dictionary}
-							A key-value store for \codeinline{R6::R6} objects.\\
+							A key-value store for \codeinline{R6::R6} objects. 
+							\{mlr3\} objects are stored in five \codeinline{Dictionary}s: \\
 							\begin{itemize}
 								\item \codeinline{mlr\_task} - Machine learning tasks.
 								\item \codeinline{mlr\_learners} - Machine learning algorithms.
@@ -91,22 +92,22 @@
 								\item \codeinline{mlr\_resamplings} - Resampling strategies.
 								\item \codeinline{mlr\_task\_generators} - Task generators.
 							\end{itemize}
-							\vspace{1em}
+							\vspace{1em}		
 							\begin{codebox}
-								Dictionary\$keys(pattern = NULL)
+								Dictionary\$\textbf{keys}(pattern = NULL)
 							\end{codebox}
 							Returns all keys which match \codeinline{pattern}. 
 							If \codeinline{NULL}, all keys are returned. 
 							\\
 							\begin{codebox}
-								Dictionary\$get(key, ...)
+								Dictionary\$\textbf{get}(key, ...)
 							\end{codebox}
 							Retrieves object by \codeinline{key} and 
 							passes arguments \codeinline{...} to the construction of the objects.\\
 							\begin{codebox}
-								Dictionary\$mget(keys, ...)
+								Dictionary\$\textbf{mget}(keys, ...)
 							\end{codebox}
-							Retrieves objects by \codeinline{key} and 
+							Retrieves objects by \codeinline{keys} and 
 							passes named arguments \codeinline{...} to the construction of the objects. 
 						\end{myblock}
 					}
@@ -416,6 +417,11 @@
 							}
 						\end{codeboxmultiline}
 					\end{myblock}
+					\vspace{1em}
+					\begin{codebox}
+						bmr\$aggregate(measures)
+					\end{codebox}
+					Calculate and aggregate resampling result by \codeinline{measures}.
 					\vfill
 					}
 				\end{minipage}
