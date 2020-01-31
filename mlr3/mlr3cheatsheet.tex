@@ -415,12 +415,20 @@
 								\space\space\space\space\space 0
 							}
 						\end{codeboxmultiline}
+						\vspace{1em}
+						\begin{codebox}
+							bmr\$aggregate(measures)
+						\end{codebox}
+						Calculate and aggregate resampling result by \codeinline{measures}.
 					\end{myblock}
-					\vspace{1em}
-					\begin{codebox}
-						bmr\$aggregate(measures)
-					\end{codebox}
-					Calculate and aggregate resampling result by \codeinline{measures}.
+					\begin{myblock}{Parallelization}
+						{mlr3} uses the \codeinline{future} backends for parallelization e.g. the parallelization of \codeinline{Resampling} iterations.
+						\\
+						\begin{codebox}
+							future::\textbf{plan}("multiprocess")
+						\end{codebox}
+						Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
+					\end{myblock}
 					\vfill
 					}
 				\end{minipage}
@@ -430,33 +438,25 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Technical} % Group Parallelization
-							{mlr3} uses the \codeinline{future} backends for parallelization e.g. the parallelization of \codeinline{Resampling} iterations.
-							\\
-							\begin{codebox}
-								future::\textbf{plan}("multiprocess")
-							\end{codebox}
-							Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
-							\vspace{1em} % Group Logging
-							\\
-							{mlr3} uses the \codeinline{lgr} package for logging and progress output.
+						\begin{myblock}{Logging}
+							\{mlr3\} uses the \codeinline{lgr} package for logging and progress output.
 							\\
 							\begin{codeboxmultiline}[width=23.1cm]
 								\textbf{getOption}("lgr.log\_levels")\\
 								\#\# fatal error  warn  info debug trace\\ 
 								\#\# 100 \space\space 200 \space\space 300 \space 400 \space 500 \space\space 600
 							\end{codeboxmultiline}
-							Gets threshold levels. For {mlr3} the default is 400. 
+							Gets threshold levels. For \{mlr3\} the default is 400. 
 							\\
 							\begin{codeboxmultiline}[width=25cm]
 								\footnotesize{
 								lgr::get\_logger("mlr3")\$set\_threshold("<level>")
 							}
 							\end{codeboxmultiline}
-							Changes the logging level for {mlr3}.
-							\vspace{1em} % Group Error Handling
-							\\
-							Machine learning algorithms raising errors is not uncommon as algorithms typically cannot process all possible data. {mlr3} provides encapsulation to cope with signaled conditions such as errors, warnings and messages.
+							Changes the logging level for \{mlr3\}.
+						\end{myblock}
+						\begin{myblock}{Error Handling}
+							Machine learning algorithms raising errors is not uncommon as algorithms typically cannot process all possible data. \{mlr3\} provides encapsulation to cope with signaled conditions such as errors, warnings and messages.
 							\\
 							\begin{codeboxmultiline}[width=16cm]
 								learner\$encapsulate = c(\\
@@ -465,13 +465,20 @@
 							\end{codeboxmultiline}
 							Encapsulates the execution of \codeinline{\$train} and \codeinline{\$predict} with the \codeinline{evaluate} package.
 							\\
+							\begin{codebox}
+								learner\$\textbf{errors}
+							\end{codebox}
+							Access the recorded log via the field \codeinline{log}, \codeinline{warnings} and \codeinline{errors}. 
+							\vspace{1em}
+							\\
 							Fallback learners allow to score results in cases where a learners is misbehaving in some sense.
 							\\
 							\begin{codeboxmultiline}[width=25cm]
 								\footnotesize{
-									learner\$fallback = lrn("classif.featureless")
+									learner\$\textbf{fallback} = lrn(.key)
 								}
 							\end{codeboxmultiline}
+							Attaches fallback learner. Whenever the learner fails, \{mlr3\} falls back to the predictions of the attached fallback learner.
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
