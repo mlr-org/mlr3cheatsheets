@@ -134,7 +134,7 @@
 							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance}
-							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning).
+							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning)(3).
 							\\
 							\begin{codeboxmultiline}[width=20cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -144,8 +144,6 @@
 								\hspace*{1ex}tune\_ps,\\
 								\hspace*{1ex}terminator)
 							\end{codeboxmultiline}
-							Constructs the \codeinline{TuningInstance} (3).
-							\\
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -228,6 +226,24 @@
 							\end{codebox}
 							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \codeinline{task} and \codeinline{row\_ids}.
 							\\
+						\end{myblock}
+						\begin{myblock}{Nested Resampling}
+							In order to get unbiased performance estimates, 
+							\{mlr3\} supports nested resampling for complex operations such as tuning.
+							This can be achieved by passing a \codeinline{Resampling} strategy to
+							\codeinline{resample()} as an outer resampling instance and using the 
+							\codeinline{Resampling} strategy in \codeinline{AutoTuner} as an 
+							inner resampling instance.
+							\\
+							\begin{codeboxmultiline}[width=26.5cm]
+								resampling\_outer = rsmp("cv", folds = 3)
+								rr = resample(task, \textbf{at}, \textbf{resampling\_outer})
+							\end{codeboxmultiline}
+							\vspace{1em}
+							\begin{codebox}
+								rr\$\textbf{aggregate()}
+							\end{codebox}
+							Aggregates performance results.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
