@@ -170,7 +170,7 @@
 							Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Triggering the tuning}
-							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
+							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune()} method of \codeinline{Tuner}.
 							\\
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
@@ -221,7 +221,7 @@
 							\begin{codebox}
 								at\$\textbf{train}(task)
 							\end{codebox}
-							The automatic tuning is started by supplying \codeinline{task} to the \codeinline{train} method.
+							The automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
 							\\
 							\begin{codebox}
 								at\$\textbf{predict}(task, row\_ids)
