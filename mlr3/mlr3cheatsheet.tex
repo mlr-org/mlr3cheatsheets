@@ -84,7 +84,8 @@
 						\end{myblock}
 						\begin{myblock}{Dictionary}
 							A key-value store for \codeinline{R6::R6} objects. 
-							\{mlr3\} objects are stored in five \codeinline{Dictionary}s: \\
+							\{mlr3\} objects are stored in five \codeinline{Dictionary}s: 
+							\\
 							\begin{itemize}
 								\item \codeinline{mlr\_task} - Machine learning tasks.
 								\item \codeinline{mlr\_learners} - Machine learning algorithms.
@@ -121,7 +122,6 @@
 					\begin{myblock}{Task}
 						Stores observation and columns (\codeinline{backend}) and additional
 						meta-data about the dataset.
-						\vspace{1em}
 						\\
 						\begin{codebox}
 							task = \textbf{TaskClassif}\$new(backend, target)
@@ -136,7 +136,7 @@
 						\begin{codebox}
 							task = \textbf{tsk}(.key)
 						\end{codebox}
-						Built-in tasks can be queried by \codeinline{.key}.
+						Built-in tasks can be queried by \codeinline{.key} (from \codeinline{mlr\_task}).
 						\vspace{1em}
 						\\
 						\begin{codebox}
@@ -178,13 +178,14 @@
 						Change the current hyperparameter values by assigning a named \codeinline{list(id = value)} to the \codeinline{\$values} field.
 						This overwrites all previously set parameters.	
 						\\
-						\begin{codeboxmultiline}[width=27cm]
+						\begin{codeboxmultiline}[width=18cm]
 							learner\$param\_set\$\textbf{values} = \\
 							\hspace*{1ex} \textbf{mlr3misc::insert\_named}(\\
 							\hspace*{2ex} learner\$param\_set\$values,\\
 							\hspace*{2ex} list(id = value))
 						\end{codeboxmultiline}
 						Update hyperparameters with named \codeinline{list(id = value)}.
+						\vspace{1em}
 						\\
 						\begin{codebox}
 							learner\$\textbf{predict\_type} = "prob"
@@ -192,7 +193,7 @@
 						Changes the predict type to posterior probabilities. 
 						\codeinline{"response"} changes the predict type to class labels.
 						For regression tasks, \codeinline{"se"} extracts the standard error.
-						\\
+						\vspace{1em}
 						\\
 						Additional learning algorithms are available in the mlr3learners package and the mlr3learners organization (s. Resources).
 					\end{myblock}
@@ -207,7 +208,6 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Train \& Predict}
 						Training: Train a model on a given task.
-						\vspace{1em} % Group Train
 						\\
 						\begin{codebox}
 							learner\$\textbf{train}(task, row\_ids)
@@ -290,7 +290,7 @@
 							the actual splitting).
 							\\
 							\vspace{1em} % Group custom resampling
-							\begin{codeboxmultiline}[width=27cm]
+							\begin{codeboxmultiline}[width=26cm]
 							resampling = rsmp("\textbf{custom}")\\
 							resampling\$instantiate(task,\\
 							\hspace*{1ex} train = list(c(1:10, 51:60, 101:110)),\\
@@ -350,11 +350,9 @@
 						\begin{myblock}{Benchmark}
 						The \codeinline{benchmark} function is used to compare different learners on multiple tasks and/or different resampling schemes.
 						\\
-						\begin{codeboxmultiline}[width=21.95cm]
+						\begin{codeboxmultiline}[width=19.4cm]
 							design = \textbf{benchmark\_grid}(\\
-							\hspace*{1ex}tasks),\\
-							\hspace*{1ex}learners,\\
-							\hspace*{1ex}resamplings)
+							\hspace*{1ex}tasks, learners, resamplings)
 						\end{codeboxmultiline}
 						Generates a design by cross joining tasks, learners and resamplings supplied as \codeinline{list()}s.
 						\\
@@ -417,7 +415,7 @@
 						\end{codeboxmultiline}
 						\vspace{1em}
 						\begin{codebox}
-							bmr\$aggregate(measures)
+							bmr\$\textbf{aggregate}(measures)
 						\end{codebox}
 						Calculate and aggregate resampling result by \codeinline{measures}.
 					\end{myblock}
@@ -450,7 +448,7 @@
 							\\
 							\begin{codeboxmultiline}[width=25cm]
 								\footnotesize{
-								lgr::get\_logger("mlr3")\$set\_threshold("<level>")
+								lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")
 							}
 							\end{codeboxmultiline}
 							Changes the logging level for \{mlr3\}.
@@ -459,7 +457,7 @@
 							Machine learning algorithms raising errors is not uncommon as algorithms typically cannot process all possible data. \{mlr3\} provides encapsulation to cope with signaled conditions such as errors, warnings and messages.
 							\\
 							\begin{codeboxmultiline}[width=16cm]
-								learner\$encapsulate = c(\\
+								learner\$\textbf{encapsulate} = c(\\
 								\hspace*{1ex} train = "evaluate", \\
 								\hspace*{1ex} predict = "evaluate")
 							\end{codeboxmultiline}
@@ -473,20 +471,17 @@
 							\\
 							Fallback learners allow to score results in cases where a learners is misbehaving in some sense.
 							\\
-							\begin{codeboxmultiline}[width=25cm]
-								\footnotesize{
-									learner\$\textbf{fallback} = lrn(.key)
-								}
-							\end{codeboxmultiline}
+							\begin{codebox}
+								learner\$\textbf{fallback} = lrn(.key)
+							\end{codebox}
 							Attaches fallback learner. Whenever the learner fails, \{mlr3\} falls back to the predictions of the attached fallback learner.
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
-								\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book} (https://mlr3book.mlr-org.com)
-								\item \href{https://github.com/mlr-org}{mlr-org on GitHub} (https://github.com/mlr-org)
-								\item \href{https://github.com/mlr-org/mlr3learners}{mlr3learners} (https://github.com/mlr-org/mlr3learners)
-								\item \href{https://github.com/mlr3learners}{mlr3learners organization} (https://github.com/mlr3learners)
-								\vspace{1em}
+								\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book}\\ (https://mlr3book.mlr-org.com)
+								\item \href{https://github.com/mlr-org}{mlr-org on GitHub}\\ (https://github.com/mlr-org)
+								\item \href{https://github.com/mlr-org/mlr3learners}{mlr3learners package}\\ (https://github.com/mlr-org/mlr3learners)
+								\item \href{https://github.com/mlr3learners}{mlr3learners organization}\\ (https://github.com/mlr3learners)
 							\end{itemize}
 						\end{myblock}
 						\vfill
