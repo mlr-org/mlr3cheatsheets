@@ -178,7 +178,10 @@
 							Starts the tuning (4).
 							\\
 							\\
-							The \codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results use the following methods of \codeinline{TuningInstance}:
+							The \codeinline{Tuner} generates hyperparameter configurations 
+							and passes them to \codeinline{TuningInstance} by internally calling \codeinline{\$eval()} 
+							until the budget of \codeinline{Terminator} is exhausted (5). 
+							To access the results use the following methods of \codeinline{TuningInstance}:
 							\\
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
