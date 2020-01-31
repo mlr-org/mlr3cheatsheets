@@ -70,16 +70,17 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-							The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning.
+							% The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning.
 							\\
 							\\
 							\includegraphics[width=\textwidth]{img/tuning_objects.png}
 							\\
 							\\
-							The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
+							Main classes are \codeinline{TuningInstance} and \codeinline{Tuner}. 
+                            % The processes shown in the figure are referenced in the cheatsheet. 
 						\end{myblock}
-						\begin{myblock}{ParamterSet}
-							The \codeinline{ParamSet} defines the hyperparameter to tune and the tuning space (1).
+						\begin{myblock}{ParamSet}
+					        Hyperparameters and ranges for tuning (1).
 							\\
 							\begin{codeboxmultiline}[width=21cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
@@ -88,7 +89,9 @@
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-							Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. Set \codeinline{id} to one of the hyperparameter ids of the learner. For  \codeinline{ParamInt} and \codeinline{ParamDbl}, set \codeinline{lower} and \codeinline{upper} to define the tuning space. Use \codeinline{levels} in \codeinline{ParamFct} to define the factor levels to tune over.
+							% Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. 
+                            Set \codeinline{id} to param id in the learner. Use \codeinline{lower} and \codeinline{upper} for numerical ranges, \codeinline{levels} for categories. 
+                            % \codeinline{ParamFct} to define the factor levels to tune over.
 							\\
 							\begin{codebox}
 								tune\_ps\$\textbf{add}(id, on, cond)
@@ -111,7 +114,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Terminator}
-							The \codeinline{Terminator} determines when to stop the tuning (2). The package provides four \codeinline{Terminator} classes:
+							Stop criterion (2). Available are:
 							\\
 							\begin{itemize}
 								\item \codeinline{clock\_time} - After a given time.
@@ -172,26 +175,27 @@
 							\end{codebox}
 							Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
-						\begin{myblock}{Triggering the tuning}
-							To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
+						\begin{myblock}{Start the tuning}
+							% To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
 							\\
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
-							Starts the tuning (4).
+							% Starts the tuning (4).
 							\\
 							\\
-							The \codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results use the following methods of \codeinline{TuningInstance}:
+							\codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results: 
+                            % use the following methods of \codeinline{TuningInstance}:
 							\\
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
-							Returns all resampling results together with the used hyperparameters. Use \codeinline{unnest} to display hyperparameter without (\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
+							Returns all tried configurations and their resampling results. Use \codeinline{unnest} to display hyperparameters without (\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
 							\begin{codebox}
 								instance\$\textbf{result}
 							\end{codebox}
-							Returns a list with the optimal hyperparameter configuration and the estimated performance.
+							Returns list with optimal configuration and estimated performance.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -213,10 +217,10 @@
 								\hspace*{1ex}terminator,\\
 								\hspace*{1ex}tuner)
 							\end{codeboxmultiline}
-							Constructs the \codeinline{AutoTuner}.
+							% Constructs the \codeinline{AutoTuner}.
 							\\
 							\\
-							The \codeinline{AutoTuner} inherits from the \codeinline{Learner} class and therefore can be used like any other learner.
+							Inherits from \codeinline{Learner} class; can be used like it.
 							\\
 							\begin{codebox}
 								at\$\textbf{train}(task)
