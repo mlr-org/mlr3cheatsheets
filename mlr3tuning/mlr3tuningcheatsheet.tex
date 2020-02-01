@@ -115,6 +115,16 @@
 							Set a transformation for parameter \codeinline{id}. 
 							The function transforms the hyperparameter configuration into another encoding 
 							before passing them to the \codeinline{Learner}.
+							\\
+							\begin{codeboxexample}
+								\footnotesize{
+									ps = ParamSet\$new(list(\\
+									\hspace*{1ex}ParamLgl\$new("A"), ParamInt\$new("B")))
+									\vspace{1em}
+									\\
+									ps\$add\_dep("B", "A", CondEqual\$new(FALSE))
+								}
+							\end{codeboxexample}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -159,7 +169,7 @@
 							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance}
-							Defines search scenario. Evaluates configurations proposed by \codeinline{Tuner} and stores results. 
+							Defines search scenario (3). Evaluates configurations proposed by \codeinline{Tuner} and stores results.
                             % (s. Triggering the tuning)(3).
 							\\
 							\begin{codeboxmultiline}[width=20cm]
@@ -208,8 +218,9 @@
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
-							% Starts the tuning (4).
-							%\\
+							Starts the tuning (4).
+							\vspace{1em}
+							\\
 							% \codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results: 
                             % use the following methods of \codeinline{TuningInstance}:
 							% \\
@@ -261,7 +272,7 @@
 							\end{codeboxmultiline}
 							% Constructs the \codeinline{AutoTuner}.
 							\vspace{1em}
-                            Inherits from \codeinline{Learner} class; can be used like it. Training starts tuning on the training set, and after completion traisn the learner finally with this the optimal configuration on the full training set.
+                            Inherits from \codeinline{Learner} class; can be used like it. Training starts tuning on the training set, and after completion trains the learner finally with this the optimal configuration on the full training set.
 							% Automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
 							% \\
 							% \begin{codebox}
