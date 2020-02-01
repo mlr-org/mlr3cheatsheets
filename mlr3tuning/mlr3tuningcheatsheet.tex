@@ -23,7 +23,7 @@
     commentstyle=\color{DarkGreen},
 }
 
-\title{mlr3tuning :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
+\title{Hyperparameter Tuning with mlr3tuning :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
 \newcommand{\packagedescription}{ % Package description in header
 	The \textbf{mlr3tuning} package provides hyperparameter tuning for mlr3.
 }
@@ -81,10 +81,13 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
+
+							\codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). 
+
 						%The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning. The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
 						\includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\vspace{1em}
-						Main classes are \codeinline{TuningInstance} and \codeinline{Tuner}. 
+						% Main classes are \codeinline{TuningInstance} and \codeinline{Tuner}. 
 						\end{myblock}
 						\begin{myblock}{ParamSet}
 					        Hyperparameters and ranges for tuning (1).
@@ -123,7 +126,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Terminator}
-							Stop criterion (2). Available are:
+							Stop criterion (2). Create with \codeinline{\textbf{term}(.key, ...)}
 							\\
 							\begin{itemize}
 								\item \codeinline{clock\_time} - After a given time.
@@ -132,21 +135,23 @@
 								\item \codeinline{perf\_reached} - After a specific performance.
 								\item \codeinline{stagnation} - After the performance stagnates.
 							\end{itemize}
-							\vspace{0.5cm}
-							Keys to access the \codeinline{Terminator} subclasses.
-							\\
-							\begin{codebox}
-								terminator = \textbf{term}(.key, ...)
-							\end{codebox}
-							Get terminator by \codeinline{.key} and construct terminator with settings (...) in one go.
-							\\
+							% \vspace{0.5cm}
+							% Keys to access the \codeinline{Terminator} subclasses.
+							% \\
+							% \begin{codebox}
+								% terminator = \textbf{term}(.key, ...)
+							% \end{codebox}
+							% Get terminator by \codeinline{.key} and construct terminator with settings (...) in one go.
+							% \\
+							\vspace{1.0cm}
 							\begin{codebox}
 								terminator = term("\textbf{combo}", terminators, any)
 							\end{codebox}
 							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance}
-							The \codeinline{TuningInstance} specifies a general search scenario. It evaluates the hyperparameter configurations proposed by the \codeinline{Tuner} and stores the results (s. Triggering the tuning)(3).
+							Defines search scenario. Evaluates configurations proposed by \codeinline{Tuner} and stores results. 
+                            % (s. Triggering the tuning)(3).
 							\\
 							\begin{codeboxmultiline}[width=20cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -184,21 +189,23 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner}
-							The \codeinline{Tuner} describes the tuning strategy. The package provides three tuning strategies and additionally hyperparameter configurations fully specified by the user:
+							% The \codeinline{Tuner} describes the tuning strategy. 
+                            Tuning strategy. Create witth \codeinline{\textbf{tnr}(.key, ...)}
+                            % and additionally hyperparameter configurations fully specified by the user:
 							\\
 							\begin{itemize}
 								\item \codeinline{grid\_search} - Grid search.
 								\item \codeinline{random\_search} - Random search.
 								\item \codeinline{gensa} - Generalized simulated annealing.
-								\item \codeinline{design\_points} - Specified by the user.
+								\item \codeinline{design\_points} - All points user-specified.
 							\end{itemize}
 							\vspace{0.5cm}
-							Keys to access the \codeinline{Tuner} subclasses.
-							\\
-							\begin{codebox}
-								tuner = \textbf{tnr}(.key, ...)
-							\end{codebox}
-							Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
+							% Keys to access the \codeinline{Tuner} subclasses.
+							% \\
+							% \begin{codebox}
+								% tuner = \textbf{tnr}(.key, ...)
+							% \end{codebox}
+							% Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
 						\begin{myblock}{Start the tuning}
 							% To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
@@ -207,9 +214,10 @@
 							\end{codebox}
 							% Starts the tuning (4).
 							%\\
-							\codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results: 
+							% \codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results: 
                             % use the following methods of \codeinline{TuningInstance}:
-							\\
+							% \\
+                            To access the results: 
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
@@ -229,7 +237,8 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Automatic Tuning}
-							The \codeinline{AutoTuner} wraps a learner and augments it with an automatic tuning for a given set of hyperparameters.
+							Wraps learner and adds automatic tuning. 
+                            % for a given set of hyperparameters.
 							\\
 							\begin{codeboxmultiline}[width=13cm]
 								at = \textbf{AutoTuner}\$new(
@@ -242,18 +251,20 @@
 							\end{codeboxmultiline}
 							% Constructs the \codeinline{AutoTuner}.
 							\vspace{1em}
-							Inherits from \codeinline{Learner} class; can be used like it.
-							\\
-							\begin{codebox}
-								at\$\textbf{train}(task)
-							\end{codebox}
-							The automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
-							\\
-							\begin{codebox}
+                            Inherits from \codeinline{Learner} class; can be used like it. Training starts tuning on the training set, and after completion traisn the learner finally with this the optimal configuration on the full training set.
+							% Automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
+							% \\
+							% \begin{codebox}
+								% at\$\textbf{train}(task)
+							% \end{codebox}
+							% The automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
+							% \\
+							\begin{codeboxmultiline}
+								at\$\textbf{train}(task)\\
 								at\$\textbf{predict}(task, row\_ids)
-							\end{codebox}
-							Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \codeinline{task} and \codeinline{row\_ids}.
-							\\
+							\end{codeboxmultiline}
+							% Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \codeinline{task} and \codeinline{row\_ids}.
+							% \\
 						\end{myblock}
 						\begin{myblock}{Nested Resampling}
 							In order to get unbiased performance estimates, 
