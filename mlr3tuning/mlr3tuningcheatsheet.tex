@@ -155,11 +155,8 @@
 							\\
 							\begin{codeboxmultiline}[width=20cm]
 								instance = \textbf{TuningInstance}\$new(\\
-								\hspace*{1ex}task,\\
-								\hspace*{1ex}learner,\\
-								\hspace*{1ex}resampling,\\
-								\hspace*{1ex}tune\_ps,\\
-								\hspace*{1ex}terminator)
+								\hspace*{1ex}task, learner, resampling,\\
+								\hspace*{1ex}tune\_ps, terminator)
 							\end{codeboxmultiline}
 						\vspace{1em}
 						\begin{codeboxexample}
@@ -240,14 +237,10 @@
 							Wraps learner and adds automatic tuning. 
                             % for a given set of hyperparameters.
 							\\
-							\begin{codeboxmultiline}[width=13cm]
-								at = \textbf{AutoTuner}\$new(
-								\hspace*{1ex}learner,\\
-								\hspace*{1ex}resampling,\\
-								\hspace*{1ex}measures,\\
-								\hspace*{1ex}tune\_ps,\\
-								\hspace*{1ex}terminator,\\
-								\hspace*{1ex}tuner)
+							\begin{codeboxmultiline}[width=20cm]
+								at = \textbf{AutoTuner}\$new(\\
+								\hspace*{1ex}learner, resampling, measures, \\
+								\hspace*{1ex}tune\_ps, terminator, tuner)
 							\end{codeboxmultiline}
 							% Constructs the \codeinline{AutoTuner}.
 							\vspace{1em}
