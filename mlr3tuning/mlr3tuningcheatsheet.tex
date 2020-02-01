@@ -81,13 +81,12 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-
 							\codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). 
-
-						%The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning. The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
-						\includegraphics[width=\textwidth]{img/tuning_objects.png}
-						\vspace{1em}
-						% Main classes are \codeinline{TuningInstance} and \codeinline{Tuner}. 
+							\vspace{1em}
+							\\
+							%The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning. The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
+							\includegraphics[width=\textwidth]{img/tuning_objects.png}
+							% Main classes are \codeinline{TuningInstance} and \codeinline{Tuner}. 
 						\end{myblock}
 						\begin{myblock}{ParamSet}
 					        Hyperparameters and ranges for tuning (1).
@@ -168,24 +167,6 @@
 								\hspace*{1ex}task, learner, resampling,\\
 								\hspace*{1ex}tune\_ps, terminator)
 							\end{codeboxmultiline}
-						\vspace{1em}
-						\begin{codeboxexample}
-							\footnotesize{
-							tune\_ps = ParamSet\$new(list(\\
-							\hspace*{1ex} ParamDbl\$new("cp", lower = 0.001, upper = 0.1)))
-							evals20 = term("evals", n\_evals = 20)
-							\vspace{1em}
-							\\
-							instance = TuningInstance\$new(\\
-							\hspace*{1ex} task, learner, resampling, measures,\\
-							\hspace*{1ex} param\_set = tune\_ps, terminator = evals20)\\
-							tuner = tnr("grid\_search", resolution = 5)
-							\vspace{1em}
-							\\
-							tuner\$tune(instance)\\
-							instance\$result
-						    }
-						\end{codeboxexample}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -242,6 +223,24 @@
 								instance\$\textbf{result}
 							\end{codebox}
 							Returns list with optimal configuration and estimated performance.
+							\\
+							\begin{codeboxexample}
+								\footnotesize{
+									tune\_ps = ParamSet\$new(list(\\
+									\hspace*{1ex} ParamDbl\$new("cp", lower = 0.001, upper = 0.1)))
+									evals20 = term("evals", n\_evals = 20)
+									\vspace{1em}
+									\\
+									instance = TuningInstance\$new(\\
+									\hspace*{1ex} task, learner, resampling, measures,\\
+									\hspace*{1ex} param\_set = tune\_ps, terminator = evals20)\\
+									tuner = tnr("grid\_search", resolution = 5)
+									\vspace{1em}
+									\\
+									tuner\$tune(instance)\\
+									instance\$result
+								}
+							\end{codeboxexample}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
