@@ -284,10 +284,19 @@
 							\codeinline{Resampling} strategy in \codeinline{AutoTuner} as an 
 							inner resampling instance.
 							\\
-							\begin{codeboxmultiline}[width=26.5cm]
-								resampling\_outer = rsmp("cv", folds = 3)
-								rr = resample(task, \textbf{at}, \textbf{resampling\_outer})
-							\end{codeboxmultiline}
+							\begin{codeboxexample}
+								\footnotesize{
+									resampling\_inner = rsmp("holdout")
+									\vspace{1em}
+									\\
+									at = AutoTuner\$new(learner, resampling\_inner, \\
+									\hspace*{1ex}measures, tune\_ps, evals20, tuner)
+									\vspace{1em}
+									\\
+									resampling\_outer = rsmp("cv", folds = 3)\\
+									rr = resample(task, at, resampling\_outer)
+								}
+							\end{codeboxexample}
 							\vspace{1em}
 							\begin{codebox}
 								rr\$\textbf{aggregate()}
