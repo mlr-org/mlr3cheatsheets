@@ -129,11 +129,21 @@
 							Stop criterion (2). Create with \codeinline{\textbf{term}(.key, ...)}
 							\\
 							\begin{itemize}
-								\item \codeinline{clock\_time} - After a given time.
-								\item \codeinline{evals} - After a given amount of iterations.
-								\item \codeinline{model\_time}  - After a given model time.
-								\item \codeinline{perf\_reached} - After a specific performance.
-								\item \codeinline{stagnation} - After the performance stagnates.
+								\item \codeinline{clock\_time} 
+								(\codeinline{secs}, \codeinline{stop\_time})\\
+								After a given time.
+								\item \codeinline{evals}
+								(\codeinline{n\_evals})\\
+								After a given amount of iterations.
+								\item \codeinline{model\_time}
+								(\codeinline{secs })\\
+								After a given model time.
+								\item \codeinline{perf\_reached}
+								(\codeinline{level})\\
+								After a specific performance.
+								\item \codeinline{stagnation}
+								(\codeinline{iters}, \codeinline{threshold})\\
+								After the performance stagnates.
 							\end{itemize}
 							% \vspace{0.5cm}
 							% Keys to access the \codeinline{Terminator} subclasses.
@@ -191,10 +201,18 @@
                             % and additionally hyperparameter configurations fully specified by the user:
 							\\
 							\begin{itemize}
-								\item \codeinline{grid\_search} - Grid search.
-								\item \codeinline{random\_search} - Random search.
-								\item \codeinline{gensa} - Generalized simulated annealing.
-								\item \codeinline{design\_points} - All points user-specified.
+								\item \codeinline{grid\_search}
+								(\codeinline{resolution}, \codeinline{batch\_size})\\
+								Grid search.
+								\item \codeinline{random\_search}
+								(\codeinline{batch\_size})\\
+								Random search.
+								\item \codeinline{gensa}
+								(\codeinline{smooth}, \codeinline{temperature})\\
+								Generalized simulated annealing.
+								\item \codeinline{design\_points}
+								(\codeinline{batch\_size }, \codeinline{design})\\
+								All points user-specified.
 							\end{itemize}
 							\vspace{0.5cm}
 							% Keys to access the \codeinline{Tuner} subclasses.
