@@ -360,6 +360,27 @@
 								rr\$\textbf{score}(measure)
 							\end{codebox}
 							Returns the performances of the individual iterations using the given \codeinline{measure}.
+							\\
+							\begin{codeboxexample}
+								\footnotesize{
+									task = tsk("pima")\\
+									learner = lrn("classif.rpart", \\
+									\hspace*{1ex}predict\_type = "prob")\\
+									measure = msr("classif.ce")\\
+									\vspace{1em}
+									\\
+									resampling = rsmp("cv", folds = 3L)\\
+									resampling\$instantiate(task)\\
+									\vspace{1em}
+									\\
+									rr = resample(task, learner, resampling)\\
+									\vspace{1em}
+									\\
+									rr\$aggregate(measure)\\
+									\#\# classif.ce\\
+									\#\# \space\space\space\space 0.2643\\
+								}
+							\end{codeboxexample}
 						\end{myblock}
 						\vfill
 					}
