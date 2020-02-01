@@ -58,6 +58,17 @@
 	fontupper=\robotomono\small,
 	#1}
 
+\newtcolorbox{codeboxexample}[1][]{%
+	sharp corners,
+	leftrule=0pt,
+	rightrule=0pt,
+	toprule=0pt,
+	bottomrule=0pt,
+	fontupper=\robotomono\small,
+	width=27cm,
+	adjusted title=Example,
+	fonttitle = \bfseries\Large}
+
 \newtcolorbox{codeboxinline}{%
 	sharp corners,
 	leftrule=0pt,
@@ -181,7 +192,8 @@
 						\begin{codeboxmultiline}[width=18cm]
 							learner\$param\_set\$\textbf{values} = \\
 							\hspace*{1ex} \textbf{mlr3misc::insert\_named}(\\
-							\hspace*{2ex} learner\$param\_set\$values,\\
+							\hspace*{2ex} learner\$param\_set\$values,
+							\\
 							\hspace*{2ex} list(id = value))
 						\end{codeboxmultiline}
 						Update hyperparameters with named \codeinline{list(id = value)}.
@@ -260,12 +272,23 @@
 							entails six predefined resampling strategies:
 							\\
 							\begin{itemize}
-								\item \codeinline{bootstrap} - Out-of-bag bootstrap.
-								\item \codeinline{custom} - Manually provided indices.
-								\item \codeinline{cv} - k-fold cross-validation.
-								\item \codeinline{holdout} - Holdout-validation.
-								\item \codeinline{repeated\_cv} - Repeated k-fold cross-validation.
-								\item \codeinline{subsampling} - Monte-Carlo CV.
+								\item \codeinline{bootstrap}
+								(\codeinline{repeats}, \codeinline{ratio})\\
+								Out-of-bag bootstrap.
+								\item \codeinline{custom}\\
+								Manually provided indices.
+								\item \codeinline{cv}
+								(\codeinline{folds})\\
+								k-fold cross-validation.
+								\item \codeinline{holdout}
+								(\codeinline{ratio})\\
+								Holdout-validation.
+								\item \codeinline{repeated\_cv}
+								(\codeinline{folds}, \codeinline{repeats})\\
+								Repeated k-fold cross-validation.
+								\item \codeinline{subsampling}
+								(\codeinline{repeats}, \codeinline{ratio})\\
+								Monte-Carlo CV.
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
@@ -293,7 +316,7 @@
 							\begin{codeboxmultiline}[width=26cm]
 							resampling = rsmp("\textbf{custom}")\\
 							resampling\$instantiate(task,\\
-							\hspace*{1ex} train = list(c(1:10, 51:60, 101:110)),\\
+							v train = list(c(1:10, 51:60, 101:110)),\\
 							\hspace*{1ex} test = list(c(11:20, 61:70, 111:120)))
 							\end{codeboxmultiline}
 							Resampling with custom splits.
