@@ -87,6 +87,11 @@
 							\vspace{1em}
 							\\
                             \includegraphics[width=\textwidth]{img/tuning_objects.png}
+                            \\
+                            \begin{codebox}
+                            	{\scriptsize lgr::get\_logger("mlr3/mlr3tuning")\$set\_threshold(level)}
+                            \end{codebox}
+                            Change log-level only for mlr3tuning.
 						\end{myblock}
 						\begin{myblock}{ParamSet}
 					        Hyperparameters and ranges for tuning (1). 
@@ -245,11 +250,6 @@
 								future::\textbf{plan}(strategy)
 							\end{codebox}
 							Speed up tuning by using future backend.
-							\\
-							\begin{codebox}
-								{\scriptsize lgr::get\_logger("mlr3/mlr3tuning")\$set\_threshold(level)}
-							\end{codebox}
-							Change log-level only for mlr3tuning.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
