@@ -68,6 +68,7 @@
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+\newcommand{\sectionheading}[1]{{\color{mlrblue}\large\raggedright\textbf{#1}}\vspace{1em}}
 
 \begin{document}
 \begin{frame}[fragile]{}
@@ -108,7 +109,9 @@
                             \codeinline{id} is param name in learner. 
                             \codeinline{lower}/\codeinline{upper} define 
                             numerical range, \codeinline{levels} for categories.
+                            \vspace{1em}
                             \\ 
+                            \sectionheading{Trafo  \& Dependencies}
 							\begin{codeboxmultiline}[width=25.5cm]
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{\\
 								\hspace*{1ex}x\$id = -log(x\$id); return(x)\}      
