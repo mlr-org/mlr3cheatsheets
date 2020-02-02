@@ -296,23 +296,37 @@
 							% inner resampling instance.
 							\\
 							\begin{codeboxexample}
-								\footnotesize{
+								\scriptsize{
 									resampling\_inner = rsmp("holdout")
 									\vspace{1em}
 									\\
 									at = AutoTuner\$new(learner, resampling\_inner, \\
-									\hspace*{1ex}measures, tune\_ps, evals20, tuner)
+									\hspace*{1ex}measures, tune\_ps, evals20, tuner) \\
+									at\$store\_tuning\_instance = TRUE
 									\vspace{1em}
 									\\
-									resampling\_outer = rsmp("cv", folds = 3)\\
-									rr = resample(task, at, resampling\_outer)
-								}
+									resampling\_outer = rsmp("cv", folds = 2)\\
+									rr = resample(task, at, resampling\_outer, \\
+									\hspace*{1ex}store\_models = TRUE)
+									\vspace{1em}
+									\\
+									rr\$data
+									\vspace{1em}
+									\\
+									\phantom{n} \space\space\space\space\space learner \space\space\space\space resampling iteration prediction\\
+									 \#\# <AutoTuner> <ResamplingCV> \space\space\space\space\space\space\space\space 1 \space\space\space\space <list>\\
+									 \#\# <AutoTuner> <ResamplingCV> \space\space\space\space\space\space\space\space 2 \space\space\space\space <list>\\}
 							\end{codeboxexample}
 							\vspace{1em}
 							\begin{codebox}
 								rr\$\textbf{aggregate()}
 							\end{codebox}
-							Aggregates performance results.
+							Aggregates performance of outer results.
+							\\
+							\begin{codebox}
+								rr\$data\$learner[[1]]\$\textbf{tuning\_result}
+							\end{codebox}
+							Retrieve inner tuning results.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
