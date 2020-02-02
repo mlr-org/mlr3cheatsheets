@@ -162,7 +162,7 @@
 							\begin{codeboxmultiline}[width=23.7cm]
 								instance = \textbf{TuningInstance}\$new(\\
 								\hspace*{1ex}task, learner, resampling, measures,\\
-								\hspace*{1ex}tune\_ps, terminator)
+								\hspace*{1ex}tune\_ps, terminator, bm\_args)
 							\end{codeboxmultiline}
 							\vspace{1em}
 						\begin{codeboxexample}
@@ -174,7 +174,8 @@
 								\\
 								instance = TuningInstance\$new(\\
 								\hspace*{1ex} task, learner, resampling, measures,\\
-								\hspace*{1ex} param\_set = tune\_ps, terminator = evals20)\\
+								\hspace*{1ex} param\_set = tune\_ps, terminator = evals20,
+								\hspace*{1ex} bm\_args = list(store\_models = TRUE))\\
 								tuner = tnr("grid\_search", resolution = 5)
 								\vspace{1em}
 								\\
