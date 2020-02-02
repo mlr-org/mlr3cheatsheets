@@ -78,15 +78,16 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-							\codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). 
+							\codeinline{TuningInstance} is evaluator and container for resampled performances of hyperparameter configurations of a learner during tuning with a search algorithm. 
+                            \codeinline{Tuner} generates candidate configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted. 
+                            \\
 							\vspace{1em}
 							\\
-							%The mlr3tuning package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides R6 classes for hyperparameter tuning. The heart of mlr3tuning are the classes \codeinline{TuningInstance} and \codeinline{Tuner}. The processes shown in the figure are referenced in the cheatsheet. 
-							\includegraphics[width=\textwidth]{img/tuning_objects.png}
-							% Main classes are \codeinline{TuningInstance} and \codeinline{Tuner}. 
+                            \includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\end{myblock}
 						\begin{myblock}{ParamSet}
-					        Hyperparameters and ranges for tuning (1).
+					        Hyperparameters and ranges for tuning (1). Scalar doubles, integers, 
+                            factors, logicals are combined in a set to define the multivariate tuning space.
 							\\
 							\begin{codeboxmultiline}[width=21cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
@@ -95,23 +96,20 @@
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-							% Constructs \codeinline{ParamSet} with different types of \codeinline{Param}s. 
-                            Set \codeinline{id} to param id in the learner. Use \codeinline{lower} and \codeinline{upper} for numerical ranges, \codeinline{levels} for categories. 
-                            % \codeinline{ParamFct} to define the factor levels to tune over.
+                            \codeinline{id} is param name in learner. \codeinline{lower}/\codeinline{upper} define numerical range, \codeinline{levels} for categories. 
+							\begin{codeboxmultiline}[width=26cm]
+								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
+                                \hspace*{1ex}x\$id = -log(x\$id); return(x)\}
+							\end{codeboxmultiline}
+							Set a transformation for parameter \codeinline{id}. 
+							The function transforms the hyperparameter configuration into another encoding 
+							before passing them to the \codeinline{Learner}.
 							\\
 							\begin{codebox}
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
 							\end{codebox}
 							Adds dependency to the \codeinline{ParamSet}, so that \codeinline{id} depends on parameter \codeinline{on}.
 							\codeinline{cond} is \codeinline{CondEqual\$new(rhs)} or \codeinline{CondAnyOf\$new(rhs)}.
-							\\
-							\begin{codeboxmultiline}[width=26cm]
-								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
-								\hspace*{1ex}x\$id = -log(x\$id)\}
-							\end{codeboxmultiline}
-							Set a transformation for parameter \codeinline{id}. 
-							The function transforms the hyperparameter configuration into another encoding 
-							before passing them to the \codeinline{Learner}.
 							\\
 							\begin{codeboxexample}
 								\footnotesize{
@@ -132,43 +130,34 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Terminator}
+						\begin{myblock}{Terminator Class}
 							Stop criterion (2). Create with \codeinline{\textbf{term}(.key, ...)}
 							\\
 							\begin{itemize}
+                                \item \codeinline{evals}
+                                (\codeinline{n\_evals})\\
+                                After a given amount of iterations.
 								\item \codeinline{clock\_time} 
 								(\codeinline{secs}, \codeinline{stop\_time})\\
-								After a given time.
-								\item \codeinline{evals}
-								(\codeinline{n\_evals})\\
-								After a given amount of iterations.
+								After a given absolute time.
 								\item \codeinline{model\_time}
 								(\codeinline{secs })\\
 								After a given model time.
 								\item \codeinline{perf\_reached}
 								(\codeinline{level})\\
-								After a specific performance.
+								After a specific numerical performance was reached.
 								\item \codeinline{stagnation}
 								(\codeinline{iters}, \codeinline{threshold})\\
 								After the performance stagnates.
 							\end{itemize}
-							% \vspace{0.5cm}
-							% Keys to access the \codeinline{Terminator} subclasses.
-							% \\
-							% \begin{codebox}
-								% terminator = \textbf{term}(.key, ...)
-							% \end{codebox}
-							% Get terminator by \codeinline{.key} and construct terminator with settings (...) in one go.
-							% \\
 							\vspace{1.0cm}
 							\begin{codebox}
 								terminator = term("\textbf{combo}", terminators, any)
 							\end{codebox}
 							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
-						\begin{myblock}{TuningInstance}
+						\begin{myblock}{TuningInstance Class}
 							Defines search scenario (3). Evaluates configurations proposed by \codeinline{Tuner} and stores results.
-                            % (s. Triggering the tuning)(3).
 							\\
 							\begin{codeboxmultiline}[width=20cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -184,7 +173,7 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Tuner}
+						\begin{myblock}{Tuner Class}
 							% The \codeinline{Tuner} describes the tuning strategy. 
                             Tuning strategy. Create witth \codeinline{\textbf{tnr}(.key, ...)}
                             % and additionally hyperparameter configurations fully specified by the user:
@@ -211,7 +200,7 @@
 							% \end{codebox}
 							% Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
 						\end{myblock}
-						\begin{myblock}{Start the tuning}
+						\begin{myblock}{Starting the Tuning}
 							% To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
@@ -258,7 +247,7 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Automatic Tuning}
+						\begin{myblock}{AutoTuner Class}
 							Wraps learner and adds automatic tuning. 
                             % for a given set of hyperparameters.
 							\\
@@ -285,12 +274,13 @@
 							% \\
 						\end{myblock}
 						\begin{myblock}{Nested Resampling}
-							In order to get unbiased performance estimates, 
-							\{mlr3\} supports nested resampling for complex operations such as tuning.
-							This can be achieved by passing a \codeinline{Resampling} strategy to
-							\codeinline{resample()} as an outer resampling instance and using the 
-							\codeinline{Resampling} strategy in \codeinline{AutoTuner} as an 
-							inner resampling instance.
+							% In order to get unbiased performance estimates, 
+							% \{mlr3\} supports nested resampling for complex operations such as tuning.
+							Resampling the \codeinline{AutoTuner} achieves nested resampling with an inner and outer loop. 
+                            % This can be achieved by passing a \codeinline{Resampling} strategy to
+							% \codeinline{resample()} as an outer resampling instance and using the 
+							% \codeinline{Resampling} strategy in \codeinline{AutoTuner} as an 
+							% inner resampling instance.
 							\\
 							\begin{codeboxexample}
 								\footnotesize{
