@@ -103,7 +103,7 @@
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
 							\end{codebox}
 							Adds dependency to the \codeinline{ParamSet}, so that \codeinline{id} depends on parameter \codeinline{on}.
-							\codeinline{cond} is an object of class \codeinline{Condition}.
+							\codeinline{cond} is \codeinline{CondEqual\$new(rhs)} or \codeinline{CondAnyOf\$new(rhs)}.
 							\\
 							\begin{codeboxmultiline}[width=26cm]
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
@@ -116,10 +116,11 @@
 							\begin{codeboxexample}
 								\footnotesize{
 									ps = ParamSet\$new(list(\\
-									\hspace*{1ex}ParamLgl\$new("A"), ParamInt\$new("B")))
+									\hspace*{1ex}ParamDbl\$new("C", lower = -5, upper = 5)))
 									\vspace{1em}
 									\\
-									ps\$add\_dep("B", "A", CondEqual\$new(FALSE))
+									ps\$trafo = function(x, param\_set) \{\\
+									\hspace*{1ex} x\$C = 2\textasciicircum x\$C\}
 								}
 							\end{codeboxexample}
 						\end{myblock}
