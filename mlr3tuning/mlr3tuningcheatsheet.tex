@@ -11,16 +11,15 @@
 \usepackage{hyperref} % Hyperlinks
 \usepackage{ragged2e} % Text position
 \usepackage[export]{adjustbox} % Image position
-\usepackage[most]{tcolorbox}
-\usepackage{listings} % for R code
-\lstset{language=R,
-    basicstyle=\small\ttfamily,
-    stringstyle=\color{DarkGreen},
-    otherkeywords={0,1,2,3,4,5,6,7,8,9},
-    morekeywords={TRUE,FALSE},
-    deletekeywords={data,frame,length,as,character},
-    keywordstyle=\color{blue},
-    commentstyle=\color{DarkGreen},
+\usepackage[most]{tcolorbox} % Code boxes
+
+\hypersetup{
+	hyperfootnotes=false,
+	colorlinks=true,
+	linktocpage=true,
+	pdfauthor={mlr-org team},
+	%linkcolor=[RGB]{3,99,142}, % mlr blue
+	urlcolor=[RGB]{231,138,69}
 }
 
 \title{Hyperparameter Tuning with mlr3tuning :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
@@ -46,7 +45,7 @@
 	fontupper=\robotomono\small,
 	#1}
 
-\newtcolorbox{codeboxexample}[1][]{%
+\newtcolorbox{codeboxexample}{%
 	sharp corners,
 	leftrule=0pt,
 	rightrule=0pt,
@@ -69,6 +68,7 @@
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+\newcommand{\sectionheading}[1]{{\color{mlrblue}\large\raggedright\textbf{#1}}\vspace{1em}}
 
 \begin{document}
 \begin{frame}[fragile]{}
@@ -78,27 +78,42 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-							\codeinline{TuningInstance} is evaluator and container for resampled performances of hyperparameter configurations of a learner during tuning with a search algorithm. 
-                            \codeinline{Tuner} generates candidate configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted. 
-                            \\
+							\codeinline{TuningInstance} is evaluator 
+							and container for resampled performances 
+							of hyperparameter configurations of a learner 
+							during tuning with a search algorithm. 
+                            \codeinline{Tuner} generates candidate configurations 
+                            and passes them to \codeinline{TuningInstance} 
+                            until the budget of \codeinline{Terminator} is exhausted (5). 
 							\vspace{1em}
 							\\
                             \includegraphics[width=\textwidth]{img/tuning_objects.png}
+                            \\
+                            \begin{codebox}
+                            	{\scriptsize lgr::get\_logger("mlr3/mlr3tuning")\$set\_threshold(level)}
+                            \end{codebox}
+                            Change log-level only for mlr3tuning.
 						\end{myblock}
 						\begin{myblock}{ParamSet}
-					        Hyperparameters and ranges for tuning (1). Scalar doubles, integers, 
-                            factors, logicals are combined in a set to define the multivariate tuning space.
+					        Hyperparameters and ranges for tuning (1). 
+					        Scalar doubles, integers, factors, logicals are combined 
+					        in a set to define the multivariate tuning space.
 							\\
-							\begin{codeboxmultiline}[width=21cm]
+							\begin{codeboxmultiline}[width=20.75cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
 								\hspace*{1ex}\textbf{ParamInt}\$new(id, lower, upper),\\
 								\hspace*{1ex}\textbf{ParamDbl}\$new(id, lower, upper),\\
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-                            \codeinline{id} is param name in learner. \codeinline{lower}/\codeinline{upper} define numerical range, \codeinline{levels} for categories. 
-							\begin{codeboxmultiline}[width=26cm]
-								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{ \\
+                            \codeinline{id} is param name in learner. 
+                            \codeinline{lower}/\codeinline{upper} define 
+                            numerical range, \codeinline{levels} for categories.
+                            \vspace{1em}
+                            \\ 
+                            \sectionheading{Trafo  \& Dependencies}
+							\begin{codeboxmultiline}[width=25.5cm]
+								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{\\
 								\hspace*{1ex}x\$id = -log(x\$id); return(x)\}      
 							\end{codeboxmultiline}
 							Set a transformation for parameter \codeinline{id}. 
@@ -108,19 +123,9 @@
 							\begin{codebox}
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
 							\end{codebox}
-							Adds dependency to the \codeinline{ParamSet}, so that \codeinline{id} depends on parameter \codeinline{on}.
+							Adds dependency to the \codeinline{ParamSet}, 
+							so that \codeinline{id} depends on parameter \codeinline{on}.
 							\codeinline{cond} is \codeinline{CondEqual\$new(rhs)} or \codeinline{CondAnyOf\$new(rhs)}.
-							\\
-							\begin{codeboxexample}
-								\footnotesize{
-									ps = ParamSet\$new(list(\\
-									\hspace*{1ex}ParamDbl\$new("C", lower = -5, upper = 5)))
-									\vspace{1em}
-									\\
-									ps\$trafo = function(x, param\_set) \{\\
-									\hspace*{1ex} x\$C = 2\textasciicircum x\$C\}
-								}
-							\end{codeboxexample}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -150,38 +155,49 @@
 								(\codeinline{iters}, \codeinline{threshold})\\
 								After the performance stagnates.
 							\end{itemize}
-							\vspace{1.0cm}
+							\vspace{1em}
+							\begin{codebox}
+								mlr\_terminators\$\textbf{keys}(pattern = NULL)
+							\end{codebox}
+							Lists available \codeinline{Terminator} classes.
+							\\
 							\begin{codebox}
 								terminator = term("\textbf{combo}", terminators, any)
 							\end{codebox}
-							List of \codeinline{terminators} that terminate if any (\codeinline{any = TRUE}) or all (\codeinline{any = FALSE}) terminators are positive.
+							List of \codeinline{terminators} that terminate 
+							if any (\codeinline{any = TRUE}) 
+							or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
 						\begin{myblock}{TuningInstance Class}
-							Defines search scenario (3). Evaluates configurations proposed by \codeinline{Tuner} and stores results.
+							Defines search scenario (3). 
+							Evaluates configurations proposed by \codeinline{Tuner} and stores results.
 							\\
 							\begin{codeboxmultiline}[width=23.7cm]
 								instance = \textbf{TuningInstance}\$new(\\
 								\hspace*{1ex}task, learner, resampling, measures,\\
-								\hspace*{1ex}tune\_ps, terminator)
+								\hspace*{1ex}tune\_ps, terminator, bm\_args)
 							\end{codeboxmultiline}
 							\vspace{1em}
-						\begin{codeboxexample}
-							\footnotesize{
-								tune\_ps = ParamSet\$new(list(\\
-								\hspace*{1ex} ParamDbl\$new("cp", lower = 0.001, upper = 0.1)))
-								evals20 = term("evals", n\_evals = 20)
-								\vspace{1em}
-								\\
-								instance = TuningInstance\$new(\\
-								\hspace*{1ex} task, learner, resampling, measures,\\
-								\hspace*{1ex} param\_set = tune\_ps, terminator = evals20)\\
-								tuner = tnr("grid\_search", resolution = 5)
-								\vspace{1em}
-								\\
-								tuner\$tune(instance)\\
-								instance\$result
-							}
-						\end{codeboxexample}
+							\begin{codeboxexample}
+								{\footnotesize
+									tune\_ps = ParamSet\$new(list(\\
+									\hspace*{1ex} ParamDbl\$new("C", lower = -5, upper = 5)))
+									tune\_ps\$trafo = function(x, param\_set) \{\\
+									\hspace*{1ex} x\$C = 2\textasciicircum x\$C\\
+									\hspace*{1ex} x\}\\
+									evals20 = term("evals", n\_evals = 20)
+									\vspace{1em}
+									\\
+									instance = TuningInstance\$new(\\
+									\hspace*{1ex} task, learner, resampling, measures,\\
+									\hspace*{1ex} param\_set = tune\_ps, terminator = evals20,\\
+									\hspace*{1ex} bm\_args = list(store\_models = TRUE))\\
+									tuner = tnr("grid\_search", resolution = 5)
+									\vspace{1em}
+									\\
+									tuner\$tune(instance)\\
+									instance\$result}
+							\end{codeboxexample}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -192,9 +208,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner Class}
-							% The \codeinline{Tuner} describes the tuning strategy. 
                             Tuning strategy. Create witth \codeinline{\textbf{tnr}(.key, ...)}
-                            % and additionally hyperparameter configurations fully specified by the user:
 							\\
 							\begin{itemize}
 								\item \codeinline{grid\_search}
@@ -210,28 +224,24 @@
 								(\codeinline{batch\_size }, \codeinline{design})\\
 								All points user-specified.
 							\end{itemize}
-							% Keys to access the \codeinline{Tuner} subclasses.
-							% \\
-							% \begin{codebox}
-								% tuner = \textbf{tnr}(.key, ...)
-							% \end{codebox}
-							% Get the tuner by \codeinline{.key} and construct the tuner with settings (...) in one go.
+							\vspace{1em}
+							\begin{codebox}
+								mlr\_tuners\$\textbf{keys}(pattern = NULL)
+							\end{codebox}
+							Lists available \codeinline{Tuner} classes.
 						\end{myblock}
 						\begin{myblock}{Starting the Tuning}
-							% To start the tuning, \codeinline{TuningInstance} is passed to the \codeinline{\$tune} method of \codeinline{Tuner}.
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
 							Starts the tuning (4).
 							\\
-							% \codeinline{Tuner} generates hyperparameter configurations and passes them to \codeinline{TuningInstance} until the budget of \codeinline{Terminator} is exhausted (5). To access the results: 
-                            % use the following methods of \codeinline{TuningInstance}:
-							% \\
-                            % To access the results: 
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
 							\end{codebox}
-							Returns all tried configurations and their resampling results. Use \codeinline{unnest} to display hyperparameters without (\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
+							Returns all tried configurations and their resampling results. 
+							Use \codeinline{unnest} to display hyperparameters without
+							(\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
 							\begin{codeboxmultiline}[width=27cm]
 								{\scriptsize 
@@ -256,11 +266,6 @@
 								future::\textbf{plan}(strategy)
 							\end{codebox}
 							Speed up tuning by using future backend.
-							\\
-							\begin{codebox}
-								{\scriptsize lgr::get\_logger("mlr3/mlr3tuning")\$set\_threshold(level)}
-							\end{codebox}
-							Change log-level only for mlr3tuning.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -272,41 +277,28 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{AutoTuner Class}
 							Wraps learner and adds automatic tuning. 
-                            % for a given set of hyperparameters.
 							\\
 							\begin{codeboxmultiline}[width=20cm]
 								at = \textbf{AutoTuner}\$new(\\
 								\hspace*{1ex}learner, resampling, measures, \\
 								\hspace*{1ex}tune\_ps, terminator, tuner)
 							\end{codeboxmultiline}
-							% Constructs the \codeinline{AutoTuner}.
 							\vspace{1em}
-                            Inherits from \codeinline{Learner} class; can be used like it. Training starts tuning on the training set, and after completion trains the learner finally with this the optimal configuration on the full training set.
-							% Automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
-							% \\
-							% \begin{codebox}
-								% at\$\textbf{train}(task)
-							% \end{codebox}
-							% The automatic tuning is started by supplying \codeinline{task} to the \codeinline{\$train()} method.
-							% \\
+                            Inherits from \codeinline{Learner} class; can be used like it. 
+                            Training starts tuning on the training set,
+                            and after completion trains the learner finally with 
+                            this the optimal configuration on the full training set.
 							\begin{codeboxmultiline}[width=16.5cm]
 								at\$\textbf{train}(task)\\
 								at\$\textbf{predict}(task, row\_ids)
 							\end{codeboxmultiline}
-							% Use the tuned \codeinline{Learner} in \codeinline{AutoTuner} to create a new \codeinline{Prediction} by supplying \codeinline{task} and \codeinline{row\_ids}.
-							% \\
 						\end{myblock}
 						\begin{myblock}{Nested Resampling}
-							% In order to get unbiased performance estimates, 
-							% \{mlr3\} supports nested resampling for complex operations such as tuning.
-							Resampling the \codeinline{AutoTuner} achieves nested resampling with an inner and outer loop. 
-                            % This can be achieved by passing a \codeinline{Resampling} strategy to
-							% \codeinline{resample()} as an outer resampling instance and using the 
-							% \codeinline{Resampling} strategy in \codeinline{AutoTuner} as an 
-							% inner resampling instance.
+							Resampling the \codeinline{AutoTuner} achieves nested resampling 
+							with an inner and outer loop. 
 							\\
 							\begin{codeboxexample}
-								\scriptsize{
+								{\footnotesize
 									resampling\_inner = rsmp("holdout")
 									\vspace{1em}
 									\\
@@ -323,9 +315,14 @@
 									rr\$data
 									\vspace{1em}
 									\\
-									\phantom{n} \space\space\space\space\space learner \space\space\space\space resampling iteration prediction\\
-									 \#\# <AutoTuner> <ResamplingCV> \space\space\space\space\space\space\space\space 1 \space\space\space\space <list>\\
-									 \#\# <AutoTuner> <ResamplingCV> \space\space\space\space\space\space\space\space 2 \space\space\space\space <list>\\}
+									\phantom{n} \space\space\space\space\space learner
+									\space\space\space\space resampling iteration prediction\\
+									\#\# <AutoTuner> <ResamplingCV>
+									\space\space\space\space\space\space\space\space 1
+									\space\space\space\space <list>\\
+									\#\# <AutoTuner> <ResamplingCV>
+									\space\space\space\space\space\space\space\space 2
+									\space\space\space\space <list>}
 							\end{codeboxexample}
 							\vspace{1em}
 							\begin{codebox}
