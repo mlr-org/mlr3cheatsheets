@@ -200,14 +200,10 @@
 						Change the current hyperparameter values by assigning a named \codeinline{list(id = value)} to the \codeinline{\$values} field.
 						This overwrites all previously set parameters.	
 						\\
-						\begin{codeboxmultiline}[width=18cm]
-							learner\$param\_set\$\textbf{values} = \\
-							\hspace*{1ex} \textbf{mlr3misc::insert\_named}(\\
-							\hspace*{2ex} learner\$param\_set\$values,
-							\\
-							\hspace*{2ex} list(id = value))
-						\end{codeboxmultiline}
-						Update hyperparameters with named \codeinline{list(id = value)}.
+						\begin{codebox}
+							learner\$param\_set\$values\$<id> = <value>
+						\end{codebox}
+						Updates single hyperparameter.
 						\vspace{1em}
 						\\
 						\begin{codebox}
