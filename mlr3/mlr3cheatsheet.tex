@@ -138,18 +138,17 @@
                         Get example tasks with \codeinline{tsk(.key)}.
 						\vspace{1em}
 						\\
-						Roles affect the behavior of the task for different operations.
+						Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = <column\_name>}
 						\\
-						\begin{codebox}
-							task\$\textbf{col\_roles}\$<role> = <column\_name>
-						\end{codebox}
-						Changes role of columns.
-						\\
-						\begin{codebox}
-							task\$\textbf{row\_roles}\$<role> = <row\_ids>
-						\end{codebox}
-						Changes role of rows e.g. to \codeinline{use} or \codeinline{validation}.
-						\\
+						\begin{itemize}
+							\item \codeinline{feature} - Regular features
+							\item \codeinline{target} - Target variable
+							\item \codeinline{name} - Labels for plots
+							\item \codeinline{group} -  Groups for resampling
+							\item \codeinline{stratum} - Stratification variables
+							\item \codeinline{weight} - Observation weights
+						\end{itemize}
+						\vspace{1em}
 						\begin{codebox}
 							task\$\textbf{select}(cols)
 						\end{codebox}
