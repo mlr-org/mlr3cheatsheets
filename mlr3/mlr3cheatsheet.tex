@@ -160,26 +160,6 @@
 							task\$\textbf{filter}(rows)
 						\end{codebox}
 						Subsets the task based on row ids.
-						\\
-						\begin{codeboxexample}
-							{\footnotesize
-							task = tsk("sonar")\\
-							learner = lrn("classif.rpart")
-							\vspace{1em}
-							\\
-							train\_set = sample(task\$nrow, 0.8 * task\$nrow)\\
-							test\_set = setdiff(seq\_len(task\$nrow), train\_set)
-							\vspace{1em}
-							\\
-							learner\$train(task, row\_ids = train\_set)
-							\vspace{1em}
-							\\
-							prediction = learner\$predict(task,\\
-							\hspace*{1ex} row\_ids = test\_set)\\
-							prediction\$score()\\
-							\#\# classif.ce\\
-							\#\# \space 0.2619048}
-						\end{codeboxexample}
 					\end{myblock}
 					\vfill
 					}
@@ -271,6 +251,26 @@
 							prediction\$\textbf{data\$tab}
 						\end{codebox}
 						Returns predictions as \codeinline{data.table}.
+						\\
+						\begin{codeboxexample}
+						{\footnotesize
+							task = tsk("sonar")\\
+							learner = lrn("classif.rpart")
+							\vspace{1em}
+							\\
+							train\_set = sample(task\$nrow, 0.8 * task\$nrow)\\
+							test\_set = setdiff(seq\_len(task\$nrow), train\_set)
+							\vspace{1em}
+							\\
+							learner\$train(task, row\_ids = train\_set)
+							\vspace{1em}
+							\\
+							prediction = learner\$predict(task,\\
+							\hspace*{1ex} row\_ids = test\_set)\\
+							prediction\$score()\\
+							\#\# classif.ce\\
+							\#\# \space 0.2619048}
+					\end{codeboxexample}
 					\end{myblock}
 					\vfill
 					}
