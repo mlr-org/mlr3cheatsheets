@@ -75,27 +75,31 @@
               The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides so-called \codeinline{PipeOp}s (pipeline operators) which can then be connected with directed edges in a \codeinline{Graph}.
             \end{myblock}
 						\begin{myblock}{PipeOps}
-              A \codeinline{PipeOp} builds on R6 classes and represents transformative operations on input leading to output but behaves differently during a ``training phase'' and ``prediction phase''. While the training phase will typically generate a certain model that is saved as an internal state, the prediction phase will operate on the input data depending on the trained model.
+              A \codeinline{PipeOp} builds on R6 classes and represents transformative operations on input leading to output but behaves differently during a ``training phase'' and ``prediction phase''. %While the training phase will typically generate a certain model that is saved as an internal state, the prediction phase will operate on the input data depending on the trained model.
+              \ \\
               \ \\
               \includegraphics[width=\textwidth]{img/po_viz.png}
+              Important \codeinline{PipeOp}s:
+              \begin{itemize}
+                \item Data Transformer: \codeinline{PipeOpPCA}
+                \item Feature Selection: \codeinline{PipeOpFilter}
+                \item Repair Tasks: \codeinline{PipeOpRemoveConstants}
+                \item Factor Encoding: \codeinline{PipeOpEncode}
+                \item Imbalanced Data: \codeinline{PipeOpClassBalancing}
+                \item Missing Data: \codeinline{PipeOpImputeHist}
+                \item Any Learner: \codeinline{PipeOpLearner}
+                \item Ensembles: \codeinline{PipeOpLearnerCV}
+              \end{itemize}
               \ \\
-              \codeinline{PipeOp}s that are provided by mlr3pipelines:
-              \begin{codebox}
-                as.data.table(mlr\_pipeops)
-              \end{codebox}
+              Full list: \codeinline{as.data.table(mlr\_pipeops)} \\
               \ \\
-              Construction via a \codeinline{.key} (character, i.e., \codeinline{"pca"}):
-              \begin{codebox}
-                po = mlr\_pipeops\$get(.key)
-              \end{codebox}
+              Construction via a \codeinline{.key}: \codeinline{pca = po("pca")} \\
               \ \\
-              %\codeinline{PipeOp}s can have multiple inputs and outputs (see \codeinline{\$input} and \codeinline{\$output}). \\
-              %\ \\
               Important methods and slots:
               \begin{itemize}
-                \item \codeinline{\$train()} takes a list of input arguments and turns them into a list of outputs while saving a state in \codeinline{\$state}
-                \item \codeinline{\$predict()} takes a list of input arguments and turns them into a list of outputs relying on the saved \codeinline{\$state}
-                \item \codeinline{\$state} contains the ``model'' trained with \codeinline{\$train()} and utilized during \codeinline{\$predict()}
+                \item \codeinline{\$train()}
+                \item \codeinline{\$predict()}
+                \item \codeinline{\$state}
               \end{itemize}
 						\end{myblock}
 						\vfill}
@@ -110,21 +114,18 @@
               A \codeinline{Graph} is an instance of an R6 class, collecting \codeinline{PipeOp}s with edges mandating that data should be flowing along them. Edges always pass between \codeinline{PipeOp} \codeinline{channels}.
               \\
               \\
-              \includegraphics[width=\textwidth]{img/po_multi_viz.png}
-              Construction (empty \codeinline{Graph}):
-              \begin{codebox}
-                gr = Graph\$new()
-              \end{codebox}
+              %\includegraphics[width=\textwidth]{img/po_multi_viz.png}
+              Construction (empty): \codeinline{gr = Graph\$new()} \\
               \ \\
               Adding \codeinline{PipeOp}s:
-              \begin{codeboxmultiline}[width=25cm]
-                gr\$add\_pipeop(mlr\_pipeops\$get(.key1))\\
-                gr\$add\_pipeop(mlr\_pipeops\$get(.key2))
+              \begin{codeboxmultiline}[width=20cm]
+                gr\$add\_pipeop(pca)\\
+                gr\$add\_pipeop(lrn("classif.rpart"))
               \end{codeboxmultiline}
               \ \\
               Connecting the \codeinline{PipeOp}s:
               \begin{codebox}
-                gr\$add\_edge(.key1, .key2)
+                gr\$add\_edge("pca", "classif.rpart")
               \end{codebox}
               \ \\
               Printing and plotting the \codeinline{Graph}:
@@ -133,12 +134,22 @@
                 gr\$plot(html = TRUE)
               \end{codeboxmultiline}
               \ \\
-              Assessing the \codeinline{PipeOp}s of a \codeinline{Graph}:
+              Assessing the \codeinline{PipeOp}s: \codeinline{gr\$pipeops} \\
+              \ \\
+              A \codeinline{Graph} itself has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
+              \ \\
+              Building a linear \codeinline{Graph} like above is much easier using the \codeinline{\%>>\%} operator.
+						\end{myblock}
+            \begin{myblock}{Syntactic Sugar}
+              \codeinline{\%>>\%} takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all outputs of its left-hand side to the inputs of its right-hand side:
               \begin{codebox}
-                gr\$pipeops
+                gr = pca \%>>\% lrn("classif.rpart")
               \end{codebox}
               \ \\
-              A \codeinline{Graph} itself has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} output channels that are not connected to other \codeinline{PipeOp}s.\\
+              \codeinline{gunion()} arranges them next to each other in a disjoint graph union:
+              \begin{codeboxmultiline}[width=19cm]
+                gunion(list(po(.key1), po(.key2)))
+              \end{codeboxmultiline}
 						\end{myblock}
 						\vfill}
 				\end{minipage}
