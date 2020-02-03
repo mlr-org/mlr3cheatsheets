@@ -138,6 +138,18 @@
                         Get example tasks with \codeinline{tsk(.key)}.
 						\vspace{1em}
 						\\
+						Roles affect the behavior of the task for different operations.
+						\\
+						\begin{codebox}
+							task\$\textbf{col\_roles}\$<role> = <column\_name>
+						\end{codebox}
+						Changes role of columns.
+						\\
+						\begin{codebox}
+							task\$\textbf{row\_roles}\$<role> = <row\_ids>
+						\end{codebox}
+						Changes role of rows e.g. to \codeinline{use} or \codeinline{validation}.
+						\\
 						\begin{codebox}
 							task\$\textbf{select}(cols)
 						\end{codebox}
