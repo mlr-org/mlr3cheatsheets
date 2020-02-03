@@ -242,7 +242,26 @@
 							prediction = learner\$\textbf{predict}(task, row\_ids)
 						\end{codebox}
                         Predict (selected) observations.
-						\\
+                        \\
+                        \begin{codeboxmultiline}[width=23cm]
+							{\footnotesize prediction\\
+							\#\# <PredictionClassif> for 42 observations:\\
+							\#\# row\_id truth response\\
+							\#\# \space\space\space\space\space 2
+							\space\space\space\space R \space\space\space\space\space\space\space M\\
+							\#\# \space\space\space\space\space 3
+							\space\space\space\space R \space\space\space\space\space\space\space M\\
+							\#\# \space\space\space\space\space 5
+							\space\space\space\space R \space\space\space\space\space\space\space M\\
+							\#\# - - -\\
+							\#\# \space\space\space 198
+							\space\space\space\space M \space\space\space\space\space\space\space M\\
+							\#\# \space\space\space 200
+							\space\space\space\space M \space\space\space\space\space\space\space M\\
+							\#\# \space\space\space 207
+							\space\space\space\space M \space\space\space\space\space\space\space M}
+                        \end{codeboxmultiline}
+                        \vspace{1em}
 						\begin{codebox}
 							measure = \textbf{msr}(.key)
 						\end{codebox}
