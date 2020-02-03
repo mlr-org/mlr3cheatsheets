@@ -128,13 +128,15 @@
 						For classification, \codeinline{target} needs to be a character vector representing class labels.
 						\\
 						\begin{codebox}
+							task\$\textbf{positive} = <positive\_class>
+						\end{codebox}
+						Set positive class for binary classification.
+						\\
+						\begin{codebox}
 							task = \textbf{TaskRegr}\$new(backend, target)
 						\end{codebox}
 						For regression, \codeinline{target} needs to be a numeric vector.
 						\\
-						% \begin{codebox}
-							% task = \textbf{tsk}(.key)
-						% \end{codebox}
                         Get example tasks with \codeinline{tsk(.key)}.
 						\vspace{1em}
 						\\
