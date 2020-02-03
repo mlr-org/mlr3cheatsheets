@@ -356,9 +356,8 @@
 									\#\# \space\space\space\space 0.2643\\
 								}
 							\end{codeboxexample}
-						\end{myblock}
-						\vfill
-					}
+							\end{myblock}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -445,6 +444,21 @@
 							future::\textbf{plan}("multiprocess")
 						\end{codebox}
 						Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
+					\end{myblock}
+					\begin{myblock}{mlr3viz}
+						Provides visualization for mlr3 objects.
+						Create with \codeinline{mlr3viz::autoplot(object, type)}
+						\\
+						\begin{itemize}
+							\item \codeinline{BenchmarkResult} (\codeinline{boxplot}, \codeinline{roc}, \codeinline{prc})
+							\item \codeinline{Filter} (\codeinline{barplot})
+							\item \codeinline{PredictionClassif} (\codeinline{stacked}, \codeinline{roc}, \codeinline{prc})
+							\item \codeinline{PredictionRegr} (\codeinline{xy}, \codeinline{histogram})
+							\item \codeinline{ResampleResult} (\codeinline{boxplot}, \codeinline{histogram}, \codeinline{roc}, \codeinline{prc})
+							\item \codeinline{TaskClassif} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
+							\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
+							\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
+						\end{itemize}
 					\end{myblock}
 					\vfill
 					}
