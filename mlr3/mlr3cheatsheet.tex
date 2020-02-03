@@ -213,8 +213,25 @@
                         \codeinline{"response"} means class labels, \codeinline{"prob"} means posterior probabilities. For regression, \codeinline{"response"} means numeric response, 
                         \codeinline{"se"} extracts the standard error 
 						\vspace{1em}
-						% \\
-						% Additional learning algorithms are available in the mlr3learners package and the mlr3learners organization (s. Resources).
+						\begin{codeboxexample}
+							{\footnotesize
+								task = tsk("sonar")\\
+								learner = lrn("classif.rpart")
+								\vspace{1em}
+								\\
+								train\_set = sample(task\$nrow, 0.8 * task\$nrow)\\
+								test\_set = setdiff(seq\_len(task\$nrow), train\_set)
+								\vspace{1em}
+								\\
+								learner\$train(task, row\_ids = train\_set)
+								\vspace{1em}
+								\\
+								prediction = learner\$predict(task,\\
+								\hspace*{1ex} row\_ids = test\_set)\\
+								prediction\$score()\\
+								\#\# classif.ce\\
+								\#\# \space 0.2619048}
+						\end{codeboxexample}
 					\end{myblock}
 					\vfill
 					}
@@ -261,41 +278,22 @@
 							\#\# \space\space\space 207
 							\space\space\space\space M \space\space\space\space\space\space\space M}
                         \end{codeboxmultiline}
-                        \vspace{1em}
-						\begin{codebox}
-							measure = \textbf{msr}(.key)
-						\end{codebox}
-						Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
-						\\
-						\begin{codebox}
-							prediction\$\textbf{score}(measure)
-						\end{codebox}
-						Access performance with \codeinline{measure}.
-						\\
+						\vspace{1em}
 						\begin{codebox}
 							prediction\$\textbf{data\$tab}
 						\end{codebox}
 						Returns predictions as \codeinline{data.table}.
-						\\
-						\begin{codeboxexample}
-						{\footnotesize
-							task = tsk("sonar")\\
-							learner = lrn("classif.rpart")
-							\vspace{1em}
+                       \end{myblock}
+                       \begin{myblock}{Measures \& Scoring}
+							\begin{codebox}
+								measure = \textbf{msr}(.key)
+							\end{codebox}
+							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
 							\\
-							train\_set = sample(task\$nrow, 0.8 * task\$nrow)\\
-							test\_set = setdiff(seq\_len(task\$nrow), train\_set)
-							\vspace{1em}
-							\\
-							learner\$train(task, row\_ids = train\_set)
-							\vspace{1em}
-							\\
-							prediction = learner\$predict(task,\\
-							\hspace*{1ex} row\_ids = test\_set)\\
-							prediction\$score()\\
-							\#\# classif.ce\\
-							\#\# \space 0.2619048}
-					\end{codeboxexample}
+							\begin{codebox}
+								prediction\$\textbf{score}(measure)
+							\end{codebox}
+							Access performance with \codeinline{measure}.
 					\end{myblock}
 					\vfill
 					}
