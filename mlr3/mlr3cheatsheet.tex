@@ -504,12 +504,11 @@
 					\end{myblock}
 					\begin{myblock}{Parallelization}
 						\codeinline{future} is used as backend for parallelization.
-                        % e.g. the parallelization of \codeinline{Resampling} iterations.
 						\\
 						\begin{codebox}
-							future::\textbf{plan}("multiprocess")
+							future::\textbf{plan}(strategy)
 						\end{codebox}
-						Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
+						Selects the parallelization strategy. All operations building on top of the \codeinline{resample()} function such as resampling, benchmarking, tuning and feature selection are executed in parallel.
 					\end{myblock}
 					\begin{myblock}{mlr3viz}
 						Provides visualization for mlr3 objects.
