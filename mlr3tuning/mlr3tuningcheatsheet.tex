@@ -12,6 +12,7 @@
 \usepackage{ragged2e} % Text position
 \usepackage[export]{adjustbox} % Image position
 \usepackage[most]{tcolorbox} % Code boxes
+\usepackage{multido}
 
 \hypersetup{
 	hyperfootnotes=false,
@@ -70,6 +71,7 @@
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
 \newcommand{\sectionheading}[1]{{\color{mlrblue}\large\raggedright\textbf{#1}}\vspace{1em}}
+\newcommand{\monospace}[1]{\multido{}{#1}{\space}}
 
 \begin{document}
 \begin{frame}[fragile]{}
@@ -245,12 +247,17 @@
 							(\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
 							\begin{codeboxmultiline}[width=27cm]
-								{\scriptsize 
-									nr \space batch\_nr \space resample\_result  iters params tune\_x classif.ce\\
-									\phantom{n}1 \space\space\space\space\space\space 1 \space\space <ResampleResult> \space\space\space\space 5 <list> <list> \space 0.2825482\\
-									\phantom{n}2 \space\space\space\space\space\space 1 \space\space <ResampleResult> \space\space\space\space 5 <list> <list> \space 0.2825482
-									\phantom{n}3 \space\space\space\space\space\space 2 \space\space <ResampleResult> \space\space\space\space 5 <list> <list> \space 0.2696206\\
-									\phantom{n}4 \space\space\space\space\space\space 2 \space\space <ResampleResult> \space\space\space\space 5 <list> <list> \space 0.2721586}
+								{\tiny
+									instance\$archive()\\
+									\#\# nr batch\_nr ... resample\_result\monospace{2}iters params tune\_x classif.ce\\
+									\#\#\monospace{2}1\monospace{8}1 ...\monospace{1}<ResampleResult> 
+									\monospace{4}5 <list> <list>\monospace{2}0.2825482\\
+									\#\#\monospace{2}2\monospace{8}1 ...\monospace{1}<ResampleResult>
+									\monospace{4}5 <list> <list>\monospace{2}0.2825482\\
+									\#\#\monospace{2}3\monospace{8}2 ...\monospace{1}<ResampleResult>
+									\monospace{4}5 <list> <list>\monospace{2}0.2696206\\
+									\#\#\monospace{2}4\monospace{8}2 ...\monospace{1}<ResampleResult>
+									\monospace{4}5 <list> <list>\monospace{2}0.2721586}
 							\end{codeboxmultiline}
 							\vspace{1em}
 							\begin{codebox}
@@ -299,7 +306,7 @@
 							with an inner and outer loop. 
 							\\
 							\begin{codeboxexample}
-								{\footnotesize
+								{\scriptsize
 									resampling\_inner = rsmp("holdout")
 									\vspace{1em}
 									\\
@@ -313,17 +320,11 @@
 									\hspace*{1ex}store\_models = TRUE)
 									\vspace{1em}
 									\\
-									rr\$data
-									\vspace{1em}
-									\\
-									\phantom{n} \space\space\space\space\space learner
-									\space\space\space\space resampling iteration prediction\\
-									\#\# <AutoTuner> <ResamplingCV>
-									\space\space\space\space\space\space\space\space 1
-									\space\space\space\space <list>\\
-									\#\# <AutoTuner> <ResamplingCV>
-									\space\space\space\space\space\space\space\space 2
-									\space\space\space\space <list>}
+									rr\$data\\
+									\#\# ...\monospace{3}learner\monospace{5}resampling iteration
+									prediction\\
+									\#\# ... <AutoTuner> <ResamplingCV>\monospace{9}1\monospace{5}<list>\\
+									\#\# ... <AutoTuner> <ResamplingCV>\monospace{9}2\monospace{5}<list>}
 							\end{codeboxexample}
 							\vspace{1em}
 							\begin{codebox}
