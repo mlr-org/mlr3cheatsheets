@@ -157,9 +157,9 @@
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
-								mlr\_terminators\$\textbf{keys}(pattern = NULL)
+								as.data.table(mlr\_terminators)
 							\end{codebox}
-							Lists available \codeinline{Terminator} classes.
+							Lists terminator dictionary.
 							\\
 							\begin{codebox}
 								terminator = term("\textbf{combo}", terminators, any)
@@ -226,9 +226,9 @@
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
-								mlr\_tuners\$\textbf{keys}(pattern = NULL)
+								as.data.table(mlr\_tuners)
 							\end{codebox}
-							Lists available \codeinline{Tuner} classes.
+							Lists tuner dictionary.
 						\end{myblock}
 						\begin{myblock}{Starting the Tuning}
 							\begin{codebox}
