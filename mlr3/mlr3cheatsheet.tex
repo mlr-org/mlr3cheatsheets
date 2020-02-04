@@ -14,6 +14,7 @@
 \usepackage[most]{tcolorbox} % Code boxes
 \usepackage{multido}
 
+
 \hypersetup{
     hyperfootnotes=false,
     colorlinks=true,
@@ -72,7 +73,6 @@
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
 \newcommand{\monospace}[1]{\multido{}{#1}{\space}}
 
-
 \begin{document}
 \begin{frame}[fragile]{}
 	\begin{columns}
@@ -94,9 +94,10 @@
 								\item \codeinline{mlr\_measures} - Performance measures.
 								\item \codeinline{mlr\_resamplings} - Resampling strategies.
 							\end{itemize}
+							\vspace{0.5em}
                             They can be extended and other dicts can be added by extension packages.
-                            \codeinline{mlr\_learners} is populated by loading \textbf{mlr3learners} and other learner packages.
-							\vspace{1em}		
+                            \codeinline{mlr\_learners} is populated by loading \textbf{mlr3learners} and other learner packages. Syntactic sugar functions retrieve objects from dicts, set hyperparameters and assign to fields in one go e.g. \codeinline{lrn(.key, ...)}.
+							\\
 							\begin{codebox}
 								Dictionary\$\textbf{keys}(pattern = NULL)
 							\end{codebox}
