@@ -93,7 +93,8 @@
                             \includegraphics[width=\textwidth]{img/tuning_objects.png}
                             \\
                             \begin{codebox}
-                            	{\scriptsize lgr::get\_logger("mlr3/mlr3tuning")\$set\_threshold(level)}
+                            	{\scriptsize
+                            		lgr::get\_logger("\textbf{mlr3/mlr3tuning}")\$set\_threshold(level)}
                             \end{codebox}
                             Change log-level only for mlr3tuning.
 						\end{myblock}
@@ -266,7 +267,7 @@
 							Returns list with optimal configuration and estimated performance.
 							\\
 							\begin{codebox}
-								{\footnotesize learner\$param\_set\$values = instance\$result\$params}
+								{\footnotesize learner\$param\_set\$\textbf{values} = instance\$result\$\textbf{params}}
 							\end{codebox}
 							Set optimized hyperparameters in \codeinline{Learner}.
 							\\
