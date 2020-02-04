@@ -408,7 +408,7 @@
 							\begin{codeboxexample}
 								\scriptsize{
 									task = tsk("pima")\\
-									learner = lrn("classif.rpart", predict\_type = "prob"),\\
+									learner = lrn("classif.rpart", predict\_type = "prob")\\
 									measure = msr("classif.ce")
 									\vspace{1em}
 									\\
@@ -420,15 +420,15 @@
 									\vspace{1em}
 									\\
 									rr\$data\\
-									\#\#\monospace{5}resampling iteration prediction\\
-									\#\# <ResamplingCV>\monospace{9}1\monospace{5}<list>\\
-									\#\# <ResamplingCV>\monospace{9}2\monospace{5}<list>\\
-									\#\# <ResamplingCV>\monospace{9}3\monospace{5}<list>
+									\#\# ...\monospace{3}resampling iteration prediction\\
+									\#\# ... <ResamplingCV>\monospace{9}1\monospace{5}<list>\\
+									\#\# ... <ResamplingCV>\monospace{9}2\monospace{5}<list>\\
+									\#\# ... <ResamplingCV>\monospace{9}3\monospace{5}<list>
 									\vspace{1em}
 									\\
 									rr\$aggregate(measure)\\
 									\#\# classif.ce\\
-									\#\# \monospace{4}0.2643\\
+									\#\# \monospace{4}0.2643
 									\vspace{1em}
 									\\
 									learners = lrns(c("classif.rpart", "classif.ranger"))\\
@@ -440,7 +440,7 @@
 									\vspace{1em}
 									\\
 									bmr = benchmark(design)\\
-									bmr
+									bmr\\
 									\#\# <BenchmarkResult> of 12 rows with 4 resampling runs\\
 									\#\# nr task\_id\monospace{5}learner\_id resampling\_id iters ...\\
 									\#\#\monospace{2}1\monospace{3}sonar\monospace{2}classif.rpart
@@ -453,11 +453,11 @@
 									\vspace{1em}
 									\\
 									bmr\$aggregate()\\
-									\#\#\monospace{2}resample\_result ... classif.ce\\
-									\#\# <ResampleResult> ... 0.26928916\\
-									\#\# <ResampleResult> ... 0.17798482\\
-									\#\# <ResampleResult> ... 0.10106500\\
-									\#\# <ResampleResult> ... 0.10106500
+									\#\# nr \monospace{2}resample\_result ... classif.ce\\
+									\#\#\monospace{2}1\monospace{2}<ResampleResult> ... 0.26928916\\
+									\#\#\monospace{2}2\monospace{2}<ResampleResult> ... 0.17798482\\
+									\#\#\monospace{2}3\monospace{2}<ResampleResult> ... 0.10106500\\
+									\#\#\monospace{2}4\monospace{2}<ResampleResult> ... 0.10106500
 								}
 							\end{codeboxexample}
 							\end{myblock}
