@@ -409,22 +409,22 @@
 								\footnotesize{
 									task = tsk("pima")\\
 									learner = lrn("classif.rpart", \\
-									\hspace*{1ex}predict\_type = "prob")\\
-									measure = msr("classif.ce")\\
+									\hspace*{1ex}predict\_type = "prob"),\\
+									measure = msr("classif.ce")
 									\vspace{1em}
 									\\
 									resampling = rsmp("cv", folds = 3L)\\
-									resampling\$instantiate(task)\\
+									resampling\$instantiate(task)
 									\vspace{1em}
 									\\
-									rr = resample(task, learner, resampling)\\
+									rr = resample(task, learner, resampling)
 									\vspace{1em}
 									\\
 									rr\$data\\
 									\#\#\monospace{5}resampling iteration prediction\\
 									\#\# <ResamplingCV>\monospace{9}1\monospace{5}<list>\\
 									\#\# <ResamplingCV>\monospace{9}2\monospace{5}<list>\\
-									\#\# <ResamplingCV>\monospace{9}3\monospace{5}<list>\\
+									\#\# <ResamplingCV>\monospace{9}3\monospace{5}<list>
 									\vspace{1em}
 									\\
 									rr\$aggregate(measure)\\
