@@ -406,10 +406,9 @@
 						    Get aggregated performance scores as vector.
 							\\
 							\begin{codeboxexample}
-								\footnotesize{
+								\scriptsize{
 									task = tsk("pima")\\
-									learner = lrn("classif.rpart", \\
-									\hspace*{1ex}predict\_type = "prob"),\\
+									learner = lrn("classif.rpart", predict\_type = "prob"),\\
 									measure = msr("classif.ce")
 									\vspace{1em}
 									\\
@@ -430,6 +429,26 @@
 									rr\$aggregate(measure)\\
 									\#\# classif.ce\\
 									\#\# \monospace{4}0.2643\\
+									\vspace{1em}
+									\\
+									learners = lrns(c("classif.rpart", "classif.ranger"))\\
+									tasks = tsks(c("sonar", "spam"))\\
+									resampling = rsmp("cv", folds = 3L)
+									\vspace{1em}
+									\\
+									design = benchmark\_grid(tasks, learners,resampling)
+									\vspace{1em}
+									\\
+									benchmark(design)\\
+									\#\# <BenchmarkResult> of 12 rows with 4 resampling runs\\
+									\#\# nr task\_id\monospace{5}learner\_id resampling\_id iters\\
+									\#\#\monospace{2}1\monospace{3}sonar\monospace{2}classif.rpart
+									\monospace{12}cv\monospace{4}3\\
+									\#\#\monospace{2}2\monospace{3}sonar classif.ranger
+									\monospace{12}cv\monospace{4}3\\
+									\#\#\monospace{2}3\monospace{4}spam\monospace{2}classif.rpart           \monospace{12}cv\monospace{4}3\\
+									\#\#\monospace{2}4\monospace{4}spam classif.ranger
+									\monospace{12}cv\monospace{4}3\\
 								}
 							\end{codeboxexample}
 							\end{myblock}
@@ -455,58 +474,8 @@
 							bmr = \textbf{benchmark}(design)
 						\end{codebox}
 						Returns a \codeinline{\robotomono{BenckmarkResult}}
-						container.\\
-						\begin{codeboxmultiline}[width=27cm]
-							\scriptsize{
-								<BenchmarkResult> of 404 rows with 8 resampling runs\\
-								nr task\_id \space\space\space\space learner\_id resampling\_id iters warnings errors\\
-								1 \space\space\space sonar \space classif.rpart
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								2 \space\space\space sonar \space classif.rpart
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								3 \space\space\space sonar classif.ranger
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								4 \space\space\space sonar classif.ranger
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								5 \space\space\space\space spam
-								\space classif.rpart
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								6 \space\space\space\space spam
-								\space  classif.rpart
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								7 \space\space\space\space spam
-								classif.ranger
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								8 \space\space\space\space spam
-								classif.ranger
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0
-							}
-						\end{codeboxmultiline}
-						\vspace{1em}
+						container.
+						\\
 						\begin{codebox}
 							bmr\$\textbf{aggregate}(measures)
 						\end{codebox}
