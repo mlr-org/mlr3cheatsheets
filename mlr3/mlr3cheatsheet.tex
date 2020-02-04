@@ -12,6 +12,7 @@
 \usepackage{ragged2e} % Text position
 \usepackage[export]{adjustbox} % Image position
 \usepackage[most]{tcolorbox} % Code boxes
+\usepackage{multido}
 
 \hypersetup{
     hyperfootnotes=false,
@@ -68,6 +69,8 @@
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+\newcommand{\monospace}[1]{\multido{}{#1}{\space}}
+
 
 \begin{document}
 \begin{frame}[fragile]{}
@@ -417,9 +420,16 @@
 									rr = resample(task, learner, resampling)\\
 									\vspace{1em}
 									\\
+									rr\$data\\
+									\#\#\monospace{5}resampling iteration prediction\\
+									\#\# <ResamplingCV>\monospace{9}1\monospace{5}<list>\\
+									\#\# <ResamplingCV>\monospace{9}2\monospace{5}<list>\\
+									\#\# <ResamplingCV>\monospace{9}3\monospace{5}<list>\\
+									\vspace{1em}
+									\\
 									rr\$aggregate(measure)\\
 									\#\# classif.ce\\
-									\#\# \space\space\space\space 0.2643\\
+									\#\# \monospace{4}0.2643\\
 								}
 							\end{codeboxexample}
 							\end{myblock}
