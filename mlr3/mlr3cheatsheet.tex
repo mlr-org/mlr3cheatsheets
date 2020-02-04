@@ -439,16 +439,25 @@
 									design = benchmark\_grid(tasks, learners,resampling)
 									\vspace{1em}
 									\\
-									benchmark(design)\\
+									bmr = benchmark(design)\\
+									bmr
 									\#\# <BenchmarkResult> of 12 rows with 4 resampling runs\\
-									\#\# nr task\_id\monospace{5}learner\_id resampling\_id iters\\
+									\#\# nr task\_id\monospace{5}learner\_id resampling\_id iters ...\\
 									\#\#\monospace{2}1\monospace{3}sonar\monospace{2}classif.rpart
-									\monospace{12}cv\monospace{4}3\\
+									\monospace{12}cv\monospace{4}3 ...\\
 									\#\#\monospace{2}2\monospace{3}sonar classif.ranger
-									\monospace{12}cv\monospace{4}3\\
-									\#\#\monospace{2}3\monospace{4}spam\monospace{2}classif.rpart           \monospace{12}cv\monospace{4}3\\
+									\monospace{12}cv\monospace{4}3 ...\\
+									\#\#\monospace{2}3\monospace{4}spam\monospace{2}classif.rpart           \monospace{12}cv\monospace{4}3 ...\\
 									\#\#\monospace{2}4\monospace{4}spam classif.ranger
-									\monospace{12}cv\monospace{4}3\\
+									\monospace{12}cv\monospace{4}3 ...
+									\vspace{1em}
+									\\
+									bmr\$aggregate()\\
+									\#\#\monospace{2}resample\_result ... classif.ce\\
+									\#\# <ResampleResult> ... 0.26928916\\
+									\#\# <ResampleResult> ... 0.17798482\\
+									\#\# <ResampleResult> ... 0.10106500\\
+									\#\# <ResampleResult> ... 0.10106500
 								}
 							\end{codeboxexample}
 							\end{myblock}
