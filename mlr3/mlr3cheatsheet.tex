@@ -552,7 +552,7 @@
 							Change log-level, you can also do this for other mlr3 packages analogously.
 						\end{myblock}
 						\begin{myblock}{Error Handling and Encapsulation}
-							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to cope with errors, warnings and crashes.
+							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to prevent the program flow from stopping in case of errors, warnings and crashes.
 							\\
 							\begin{codeboxmultiline}[width=16cm]
 								learner\$\textbf{encapsulate} = c(\\
