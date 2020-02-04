@@ -350,9 +350,19 @@
 							Sets folds to 10.
 							\\
 							\begin{codebox}
+								task\$col\_roles\$\textbf{stratum} = "<column\_names>"
+							\end{codebox}
+							Set stratification variables.
+							\\
+							\begin{codebox}
+								task\$col\_roles\$\textbf{group} = "<column\_name>"
+							\end{codebox}
+							Set group variable.
+							\\
+							\begin{codebox}
 								resampling\$\textbf{instantiate}(task)
 							\end{codebox}
-                            Perform splitting and define index sets. \codeinline{}  will later 
+                            Perform splitting and define index sets.
 							\\
 						\end{myblock}
 						\vfill
