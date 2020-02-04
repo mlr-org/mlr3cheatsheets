@@ -501,6 +501,22 @@
 							bmr\$\textbf{aggregate}(measures)
 						\end{codebox}
 						Datatable of ResampleResults with scores.
+						\\
+						\begin{codebox}
+							bmr\$\textbf{score}(measures)
+						\end{codebox}
+						Datatable of resampling iterations with scores. 
+						\\
+						\begin{codeboxmultiline}[width=21.5cm]
+							bmr\$\textbf{filter}(task\_ids, learner\_ids,\\ 
+							\hspace*{1ex}resampling\_ids)
+						\end{codeboxmultiline}
+						Filter by task, learner and resampling. 
+						\\
+						\begin{codebox}
+							bmr\$\textbf{combine}(bmr)
+						\end{codebox}
+						Fuse a second \codeinline{BenchmarkResult}. 
 					\end{myblock}
 					\begin{myblock}{Parallelization}
 						\codeinline{future} is used as backend for parallelization.
