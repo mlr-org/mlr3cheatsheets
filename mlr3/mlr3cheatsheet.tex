@@ -223,7 +223,7 @@
                         \codeinline{"se"} extracts the standard error 
 						\vspace{1em}
 						\begin{codeboxexample}
-							{\footnotesize
+							{\scriptsize
 								task = tsk("sonar")\\
 								learner = lrn("classif.rpart")
 								\vspace{1em}
@@ -235,8 +235,7 @@
 								learner\$train(task, row\_ids = train\_set)
 								\vspace{1em}
 								\\
-								prediction = learner\$predict(task,\\
-								\hspace*{1ex} row\_ids = test\_set)\\
+								prediction = learner\$predict(task, row\_ids = test\_set)\\
 								prediction\$score()\\
 								\#\# classif.ce\\
 								\#\# \space 0.2619048}
