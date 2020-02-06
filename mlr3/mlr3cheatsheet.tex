@@ -95,7 +95,11 @@
 							\end{itemize}
 							\vspace{0.5em}
                             They can be extended and other dicts can be added by extension packages.
-                            \codeinline{mlr\_learners} is populated by loading \textbf{mlr3learners} and other learner packages. Syntactic sugar functions retrieve objects from dicts, set hyperparameters and assign to fields in one go e.g. \codeinline{lrn(.key, ...)}.
+                            \codeinline{mlr\_learners} is populated by loading \textbf{mlr3learners} and other learner packages.
+                            \vspace{1em}
+                            \\
+                            Syntactic sugar functions retrieve objects from dicts, set hyperparameters and assign to fields in one go e.g.
+                            \codeinline{lrn("classif.rpart", cp = 0.1)}.
 							\\
 							\begin{codebox}
 								Dictionary\$\textbf{keys}(pattern = NULL)
@@ -376,10 +380,6 @@
 								resampling\$\textbf{instantiate}(task)
 							\end{codebox}
                             Perform splitting and define index sets.
-                            \vspace{1em}
-							\\
-							\includegraphics[width=\textwidth]{img/ml_abstraction.png}
-							\\
 						\end{myblock}
 					\vfill}
 				\end{minipage}
