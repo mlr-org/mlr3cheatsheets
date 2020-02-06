@@ -177,21 +177,21 @@
 							\end{codeboxmultiline}
 							\vspace{1em}
 							\begin{codeboxexample}
-								{\footnotesize
+								{\scriptsize
+									learner = lrn("classif.svm", type = "C-classification")\\
 									tune\_ps = ParamSet\$new(list(\\
-									\hspace*{1ex} ParamDbl\$new("cost", lower = -5, upper = 5)))
+									\hspace*{1ex} ParamDbl\$new("cost", lower = -5, upper = 5)))\\
 									tune\_ps\$trafo = function(x, param\_set) \{\\
 									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost\\
 									\hspace*{1ex} x\}\\
 									evals20 = term("evals", n\_evals = 20)
-									\vspace{1em}
+									\vspace{0.5em}
 									\\
 									instance = TuningInstance\$new(\\
-									\hspace*{1ex} task, learner, resampling, measures,\\
-									\hspace*{1ex} param\_set = tune\_ps, terminator = evals20,\\
-									\hspace*{1ex} bm\_args = list(store\_models = TRUE))\\
+									\hspace*{1ex} task, learner, resampling, measures, param\_set = tune\_ps,\\
+									\hspace*{1ex} terminator = evals20, bm\_args = list(store\_models = TRUE))\\
 									tuner = tnr("grid\_search", resolution = 5)
-									\vspace{1em}
+									\vspace{0.5em}
 									\\
 									tuner\$tune(instance)\\
 									instance\$result}
