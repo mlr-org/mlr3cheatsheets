@@ -185,13 +185,13 @@
 									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost\\
 									\hspace*{1ex} x\}\\
 									evals20 = term("evals", n\_evals = 20)
-									\vspace{0.5em}
+									\vspace{1em}
 									\\
 									instance = TuningInstance\$new(\\
 									\hspace*{1ex} task, learner, resampling, measures, param\_set = tune\_ps,\\
 									\hspace*{1ex} terminator = evals20, bm\_args = list(store\_models = TRUE))\\
 									tuner = tnr("grid\_search", resolution = 5)
-									\vspace{0.5em}
+									\vspace{1em}
 									\\
 									tuner\$tune(instance)\\
 									instance\$result}
