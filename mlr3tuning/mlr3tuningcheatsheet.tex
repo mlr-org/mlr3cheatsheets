@@ -80,16 +80,8 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Intro}
-							\codeinline{TuningInstance} is evaluator 
-							and container for resampled performances 
-							of hyperparameter configurations of a learner 
-							during tuning with a search algorithm. 
-                            \codeinline{Tuner} generates candidate configurations 
-                            and passes them to \codeinline{TuningInstance} 
-                            until the budget of \codeinline{Terminator} is exhausted (5). 
+						\begin{myblock}{Class Diagramm}
 							\vspace{1em}
-							\\
                             \includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\end{myblock}
 						\begin{myblock}{ParamSet}
@@ -109,15 +101,17 @@
                             numerical range, \codeinline{levels} for categories.
                             \vspace{1em}
                             \\ 
-                            \sectionheading{Trafo  \& Dependencies}
+                            \sectionheading{Transformations for Rescaling}
 							\begin{codeboxmultiline}[width=25.5cm]
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{\\
 								\hspace*{1ex}x\$id = -log(x\$id); return(x)\}      
 							\end{codeboxmultiline}
-							Set a transformation for parameter \codeinline{id}. 
-							The function transforms the hyperparameter configuration into another encoding 
-							before passing them to the \codeinline{Learner}.
+							Set a transformation for param \codeinline{id} which  
+                            allows the rescalingof (parts of) the configuration 
+							before passing it to the \codeinline{Learner}.
+                            \vspace{1em}
 							\\
+                            \sectionheading{Dependencies}
 							\begin{codebox}
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
 							\end{codebox}
@@ -168,7 +162,9 @@
 						\end{myblock}
 						\begin{myblock}{TuningInstance Class}
 							Defines search scenario (3). 
-							Evaluates configurations proposed by \codeinline{Tuner} and stores results.
+							Evaluator 
+							and container for resampled performances 
+							of hyperparameter configurations duing tuning. 
 							\\
 							\begin{codeboxmultiline}[width=23.7cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -206,7 +202,9 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner Class}
-                            Tuning strategy. Create witth \codeinline{\textbf{tnr}(.key, ...)}
+                            Tuning strategy. Generates candidate configurations 
+                            and passes them to \codeinline{TuningInstance} for evaluation (5) until termination. 
+                            Create witth \codeinline{\textbf{tnr}(.key, ...)}
 							\\
 							\begin{itemize}
 								\item \codeinline{grid\_search}
@@ -228,7 +226,7 @@
 							\end{codebox}
 							Lists tuner dictionary.
 						\end{myblock}
-						\begin{myblock}{Starting the Tuning}
+						\begin{myblock}{Running the Tuning}
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
@@ -264,13 +262,6 @@
 								{\footnotesize learner\$param\_set\$\textbf{values} = instance\$result\$\textbf{params}}
 							\end{codebox}
 							Set optimized hyperparameters in \codeinline{Learner}.
-						\end{myblock}
-						\begin{myblock}{Parallelization}
-							\begin{codebox}
-								future::\textbf{plan}(strategy)
-							\end{codebox}
-							Selects the parallelization strategy.
-							Speeds up the tuning by running resample iterations in parallel.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -334,12 +325,17 @@
 							\end{codebox}
 							Retrieve inner tuning results.
 						\end{myblock}
-						\begin{myblock}{Logging}
+						\begin{myblock}{Logging and Parallelization}
 							\begin{codebox}
 								{\scriptsize
 									lgr::get\_logger("\textbf{mlr3/mlr3tuning}")\$set\_threshold("<level>")}
 							\end{codebox}
 							Change log-level only for mlr3tuning.
+							\begin{codebox}
+								future::\textbf{plan}(strategy)
+							\end{codebox}
+							Selects the parallelization strategy.
+							Speeds up the tuning by running resample iterations in parallel.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
