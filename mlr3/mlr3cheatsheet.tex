@@ -85,7 +85,7 @@
 						\end{myblock}
 						\begin{myblock}{mlr3 Dictionaries}
                             Key-value store for sets of mlr objects. These are provided by mlr3: 
-							\\
+							\vspace{0.5em}
 							\begin{itemize}
 								\item \codeinline{mlr\_tasks} - ML example tasks.
 								\item \codeinline{mlr\_task\_generators} - Example generators.
@@ -146,11 +146,12 @@
 								task = \textbf{TaskRegr}\$new(backend, target)
 							\end{codebox}
 							For regression, \codeinline{target} needs to be a numeric vector.
+							\vspace{1em}
 							\\
 	                        Get example tasks with \codeinline{tsk(.key)}.
 							\vspace{1em}
 							\\
-							Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}
+							Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
 							\\
 							\begin{itemize}
 								\item \codeinline{feature} - Regular features
@@ -324,7 +325,7 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Resampling Class}
 							Define later partitioning of task into series of train and test sets. \\ 
-							Create with \codeinline{resampling = \textbf{rsmp}(.key, ...)}
+							Create with \codeinline{resampling = \textbf{rsmp}(.key, ...)}:
 							\\
 							\begin{itemize}
                                 \item \codeinline{holdout}
@@ -364,12 +365,12 @@
 							\begin{codebox}
 								task\$col\_roles\$\textbf{stratum} = "<column\_names>"
 							\end{codebox}
-							Set stratification variables.
+							Sets stratification variables.
 							\\
 							\begin{codebox}
 								task\$col\_roles\$\textbf{group} = "<column\_name>"
 							\end{codebox}
-							Set group variable.
+							Sets group variable.
 							\\
 							\begin{codebox}
 								resampling\$\textbf{instantiate}(task)
@@ -409,7 +410,7 @@
 							\begin{codebox}
 								rr\$\textbf{filter}(iters)
 							\end{codebox}
-							Reduce to iterations.
+							Reduces to iterations.
 							\\
 							\begin{codeboxexample}
 								\scriptsize{
