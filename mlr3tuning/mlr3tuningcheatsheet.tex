@@ -91,12 +91,6 @@
 							\vspace{1em}
 							\\
                             \includegraphics[width=\textwidth]{img/tuning_objects.png}
-                            \\
-                            \begin{codebox}
-                            	{\scriptsize
-                            		lgr::get\_logger("\textbf{mlr3/mlr3tuning}")\$set\_threshold("<level>")}
-                            \end{codebox}
-                            Change log-level only for mlr3tuning.
 						\end{myblock}
 						\begin{myblock}{ParamSet}
 					        Hyperparameters and ranges for tuning (1). 
@@ -270,11 +264,13 @@
 								{\footnotesize learner\$param\_set\$\textbf{values} = instance\$result\$\textbf{params}}
 							\end{codebox}
 							Set optimized hyperparameters in \codeinline{Learner}.
-							\\
+						\end{myblock}
+						\begin{myblock}{Parallelization}
 							\begin{codebox}
 								future::\textbf{plan}(strategy)
 							\end{codebox}
-							Speed up tuning by using future backend.
+							Selects the parallelization strategy.
+							Speeds up the tuning by running resample iterations in parallel.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -337,6 +333,13 @@
 								rr\$data\$learner[[1]]\$\textbf{tuning\_result}
 							\end{codebox}
 							Retrieve inner tuning results.
+						\end{myblock}
+						\begin{myblock}{Logging}
+							\begin{codebox}
+								{\scriptsize
+									lgr::get\_logger("\textbf{mlr3/mlr3tuning}")\$set\_threshold("<level>")}
+							\end{codebox}
+							Change log-level only for mlr3tuning.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
