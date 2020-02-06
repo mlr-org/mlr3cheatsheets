@@ -178,8 +178,7 @@
 						    {\footnotesize
                   pr = po("subsample") \%>>\% po(lrn("classif.rpart")) \\
                   bagging = greplicate(pr, n = 10) \%>>\%\\
-                  \hspace*{1ex} po("classifavg", innum = 10)\\
-                  bagging\$plot(html = TRUE)}
+                  \hspace*{1ex} po("classifavg", innum = 10)}
 					    \end{codeboxexample}
             \end{myblock}
 						\vfill}
