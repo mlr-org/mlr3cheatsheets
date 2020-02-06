@@ -12,6 +12,7 @@
 \usepackage{ragged2e} % Text position
 \usepackage[export]{adjustbox} % Image position
 \usepackage[most]{tcolorbox} % Code boxes
+\usepackage{multido}
 
 \hypersetup{
     hyperfootnotes=false,
@@ -54,7 +55,8 @@
 	fontupper=\robotomono\small,
 	width=27cm,
 	adjusted title=Example,
-	fonttitle = \bfseries\Large}
+	fonttitle = \bfseries\Large,
+	top = 0.5em}
 
 \newtcolorbox{codeboxinline}{%
 	sharp corners,
@@ -68,6 +70,7 @@
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+\newcommand{\monospace}[1]{\multido{}{#1}{\space}}
 
 \begin{document}
 \begin{frame}[fragile]{}
@@ -82,17 +85,22 @@
 						\end{myblock}
 						\begin{myblock}{mlr3 Dictionaries}
                             Key-value store for sets of mlr objects. These are provided by mlr3: 
-							\\
+							\vspace{0.5em}
 							\begin{itemize}
-								\item \codeinline{mlr\_task} - ML example tasks.
+								\item \codeinline{mlr\_tasks} - ML example tasks.
 								\item \codeinline{mlr\_task\_generators} - Example generators.
                                 \item \codeinline{mlr\_learners} - ML algorithms. 
 								\item \codeinline{mlr\_measures} - Performance measures.
 								\item \codeinline{mlr\_resamplings} - Resampling strategies.
 							\end{itemize}
+							\vspace{0.5em}
                             They can be extended and other dicts can be added by extension packages.
                             \codeinline{mlr\_learners} is populated by loading \textbf{mlr3learners} and other learner packages.
-							\vspace{1em}		
+                            \vspace{1em}
+                            \\
+                            Syntactic sugar functions retrieve objects from dicts, set hyperparameters and assign to fields in one go e.g.
+                            \codeinline{lrn("classif.rpart", cp = 0.1)}.
+							\\
 							\begin{codebox}
 								Dictionary\$\textbf{keys}(pattern = NULL)
 							\end{codebox}
@@ -103,14 +111,20 @@
 								Dictionary\$\textbf{get}(key, ...)
 							\end{codebox}
 							Retrieves object by \codeinline{key} and 
-							passes arguments \codeinline{...} to the construction of the objects.\\
+							passes arguments \codeinline{...} to the construction of the objects.
+							\\
 							\begin{codebox}
 								Dictionary\$\textbf{mget}(keys, ...)
 							\end{codebox}
 							Retrieves objects by \codeinline{keys} and 
 							passes named arguments \codeinline{...} to the construction of the objects. 
+							\\
+							\begin{codebox}
+								as.data.table(Dictionary)
+							\end{codebox}
+							Lists objects with meta-data.
 						\end{myblock}
-					}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -118,58 +132,66 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-					\begin{myblock}{Task Class}
-						Stores observation and columns (\codeinline{backend}) and additional
-						meta-data about the dataset.
-						\\
-						\begin{codebox}
-							task = \textbf{TaskClassif}\$new(backend, target)
-						\end{codebox}
-						For classification, \codeinline{target} needs to be a character vector representing class labels.
-						\\
-						\begin{codebox}
-							task = \textbf{TaskRegr}\$new(backend, target)
-						\end{codebox}
-						For regression, \codeinline{target} needs to be a numeric vector.
-						\\
-						% \begin{codebox}
-							% task = \textbf{tsk}(.key)
-						% \end{codebox}
-                        Get example tasks with \codeinline{tsk(.key)}.
-						\vspace{1em}
-						\\
-						\begin{codebox}
-							task\$\textbf{select}(cols)
-						\end{codebox}
-						Subsets the task based on feature names.
-						\\
-						\begin{codebox}
-							task\$\textbf{filter}(rows)
-						\end{codebox}
-						Subsets the task based on row ids.
-						\\
-						\begin{codeboxexample}
-							{\footnotesize
-							task = tsk("sonar")\\
-							learner = lrn("classif.rpart")
+						\begin{myblock}{Task Class}
+							Stores observation and columns (\codeinline{backend}) and additional
+							meta-data about the dataset.
+							\\
+							\begin{codebox}
+								task = \textbf{TaskClassif}\$new(backend, target)
+							\end{codebox}
+							For classification, \codeinline{target} needs to be a character vector representing class labels.
+							\\
+							\begin{codebox}
+								task\$\textbf{positive} = "<positive\_class>"
+							\end{codebox}
+							Set positive class for binary classification.
+							\\
+							\begin{codebox}
+								task = \textbf{TaskRegr}\$new(backend, target)
+							\end{codebox}
+							For regression, \codeinline{target} needs to be a numeric vector.
 							\vspace{1em}
 							\\
-							train\_set = sample(task\$nrow, 0.8 * task\$nrow)\\
-							test\_set = setdiff(seq\_len(task\$nrow), train\_set)
+	                        Get example tasks with \codeinline{tsk(.key)}.
 							\vspace{1em}
 							\\
-							learner\$train(task, row\_ids = train\_set)
-							\vspace{1em}
+							Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
 							\\
-							prediction = learner\$predict(task,\\
-							\hspace*{1ex} row\_ids = test\_set)\\
-							prediction\$score()\\
-							\#\# classif.ce\\
-							\#\# \space 0.2619048}
-						\end{codeboxexample}
-					\end{myblock}
-					\vfill
-					}
+							\begin{itemize}
+								\item \codeinline{feature} - Regular features
+								\item \codeinline{target} - Target variable
+								\item \codeinline{name} - Labels for plots
+								\item \codeinline{group} -  Groups for block resampling
+								\item \codeinline{stratum} - Stratification variables
+								\item \codeinline{weight} - Observation weights
+							\end{itemize}
+							\vspace{1em}
+							\begin{codebox}
+								task\$\textbf{select}(cols)
+							\end{codebox}
+							Subsets the task based on feature names.
+							\\
+							\begin{codebox}
+								task\$\textbf{filter}(rows)
+							\end{codebox}
+							Subsets the task based on row ids.
+							\\
+							\begin{codebox}
+								task\$\textbf{cbind}(data)
+							\end{codebox}
+							Adds additional columns.
+							\\
+							\begin{codebox}
+								task\$\textbf{rbind}(data)
+							\end{codebox}
+							Adds additional rows.
+							\\
+							\begin{codebox}
+								task\$\textbf{rename}(from, to)
+							\end{codebox}
+							Rename columns.
+						\end{myblock}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -178,47 +200,60 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Learner Class}
-						Wraps learners from R with a unified interface.
-						\\
-						\begin{codebox}
-							learner = \textbf{lrn}(.key, ...)
-						\end{codebox}
-						Get learner by \codeinline{.key} (from \codeinline{mlr\_learners}) and construct the learner with specific hyperparameters and settings (...) in one go.
-						\\
-						\vspace{1em}
-						\begin{codebox}
-							learner\$\textbf{param\_set}
-						\end{codebox}
-						Returns description of hyperparameters.	
-						\\
-						\begin{codebox}
-							learner\$param\_set\$\textbf{values} = list(id = value)
-						\end{codebox}
-						Change the current hyperparameter values by assigning a named \codeinline{list(id = value)} to the \codeinline{\$values} field.
-						This overwrites all previously set parameters.	
-						\\
-						\begin{codeboxmultiline}[width=18cm]
-							learner\$param\_set\$\textbf{values} = \\
-							\hspace*{1ex} \textbf{mlr3misc::insert\_named}(\\
-							\hspace*{2ex} learner\$param\_set\$values,
+							Wraps learners from R with a unified interface.
 							\\
-							\hspace*{2ex} list(id = value))
-						\end{codeboxmultiline}
-						Update hyperparameters with named \codeinline{list(id = value)}.
-						\vspace{1em}
-						\\
-						\begin{codebox}
-							learner\$\textbf{predict\_type} = "<type>"
-						\end{codebox}
-						Changes what is technically output during prediction. For classification, 
-                        \codeinline{"response"} means class labels, \codeinline{"prob"} means posterior probabilities. For regression, \codeinline{"response"} means numeric response, 
-                        \codeinline{"se"} extracts the standard error 
-						\vspace{1em}
-						% \\
-						% Additional learning algorithms are available in the mlr3learners package and the mlr3learners organization (s. Resources).
-					\end{myblock}
-					\vfill
-					}
+							\begin{codebox}
+								learner = \textbf{lrn}(.key, ...)
+							\end{codebox}
+							Get learner by \codeinline{.key} (from \codeinline{mlr\_learners}) 
+							and construct the learner with specific hyperparameters and settings (...) in one go.
+							\\
+							\vspace{1em}
+							\begin{codebox}
+								learner\$\textbf{param\_set}
+							\end{codebox}
+							Returns description of hyperparameters.	
+							\\
+							\begin{codebox}
+								learner\$param\_set\$\textbf{values} = list(id = value)
+							\end{codebox}
+							Change the current hyperparameter values by assigning a named \codeinline{list(id = value)} to the \codeinline{\$values} field.
+							This overwrites all previously set parameters.	
+							\\
+							\begin{codebox}
+								learner\$param\_set\$\textbf{values}\$<id> = <value>
+							\end{codebox}
+							Updates single hyperparameter.
+							\vspace{1em}
+							\\
+							\begin{codebox}
+								learner\$\textbf{predict\_type} = "<type>"
+							\end{codebox}
+							Changes what is technically output during prediction. For classification, 
+	                        \codeinline{"response"} means class labels, \codeinline{"prob"} means posterior probabilities.
+	                        For regression, \codeinline{"response"} means numeric response, 
+	                        \codeinline{"se"} extracts the standard error.
+							\vspace{1em}
+							\begin{codeboxexample}
+								{\scriptsize
+									task = tsk("sonar")\\
+									learner = lrn("classif.rpart")
+									\vspace{1em}
+									\\
+									train\_set = sample(task\$nrow, 0.8 * task\$nrow)\\
+									test\_set = setdiff(seq\_len(task\$nrow), train\_set)
+									\vspace{1em}
+									\\
+									learner\$train(task, row\_ids = train\_set)
+									\vspace{1em}
+									\\
+									prediction = learner\$predict(task, row\_ids = test\_set)\\
+									prediction\$score()\\
+									\#\# classif.ce\\
+									\#\# \space 0.2619048}
+							\end{codeboxexample}
+						\end{myblock}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -227,40 +262,58 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Train \& Predict}
-						\begin{codebox}
-							learner\$\textbf{train}(task, row\_ids)
-						\end{codebox}
-                        Train on (selected) observations. 
-                        % Model is stored / changed in-place in learner.
-						\\
-						\begin{codebox}
-							learner\$\textbf{model}
-						\end{codebox}
-						Retrieves the fitted R model.
-						\\
-						\vspace{1em} % Group Predict
-						\begin{codebox}
-							prediction = learner\$\textbf{predict}(task, row\_ids)
-						\end{codebox}
-                        Predict (selected) observations.
-						\\
-						\begin{codebox}
-							measure = \textbf{msr}(.key)
-						\end{codebox}
-						Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
-						\\
-						\begin{codebox}
-							prediction\$\textbf{score}(measure)
-						\end{codebox}
-						Access performance with \codeinline{measure}.
-						\\
-						\begin{codebox}
-							prediction\$\textbf{data\$tab}
-						\end{codebox}
-						Returns predictions as \codeinline{data.table}.
-					\end{myblock}
-					\vfill
-					}
+							\begin{codebox}
+								learner\$\textbf{train}(task, row\_ids)
+							\end{codebox}
+	                        Train on (selected) observations. 
+	   						\\
+							\begin{codebox}
+								learner\$\textbf{model}
+							\end{codebox}
+							The resulting R model is stored in \codeinline{\$model}/ changed in place in the learner.
+							\\
+							\vspace{1em} % Group Predict
+							\begin{codebox}
+								prediction = learner\$\textbf{predict}(task, row\_ids)
+							\end{codebox}
+	                        Predict (selected) observations.
+	                        \\
+	                        \begin{codeboxmultiline}[width=23cm]
+								{\footnotesize prediction\\
+								\#\# <PredictionClassif> for 42 observations:\\
+								\#\# row\_id truth response\\
+								\#\# \space\space\space\space\space 2
+								\space\space\space\space R \space\space\space\space\space\space\space M\\
+								\#\# \space\space\space\space\space 3
+								\space\space\space\space R \space\space\space\space\space\space\space M\\
+								\#\# \space\space\space\space\space 5
+								\space\space\space\space R \space\space\space\space\space\space\space M\\
+								\#\# - - -\\
+								\#\# \space\space\space 198
+								\space\space\space\space M \space\space\space\space\space\space\space M\\
+								\#\# \space\space\space 200
+								\space\space\space\space M \space\space\space\space\space\space\space M\\
+								\#\# \space\space\space 207
+								\space\space\space\space M \space\space\space\space\space\space\space M}
+	                        \end{codeboxmultiline}
+							\vspace{1em}
+							\begin{codebox}
+								prediction\$\textbf{data\$tab}
+							\end{codebox}
+							Returns predictions as \codeinline{data.table}.
+	                    \end{myblock}
+	                    \begin{myblock}{Measures \& Scoring}
+							\begin{codebox}
+								measure = \textbf{msr}(.key)
+							\end{codebox}
+							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
+							\\
+							\begin{codebox}
+								prediction\$\textbf{score}(measures)
+							\end{codebox}
+							Calculate performance with one or more measures.
+						\end{myblock}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -273,9 +326,9 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-							\begin{myblock}{Resampling Class}
+						\begin{myblock}{Resampling Class}
 							Define later partitioning of task into series of train and test sets. \\ 
-							Create with \codeinline{resampling = \textbf{rsmp}(.key, ...)}
+							Create with \codeinline{resampling = \textbf{rsmp}(.key, ...)}:
 							\\
 							\begin{itemize}
                                 \item \codeinline{holdout}
@@ -294,7 +347,6 @@
 								(\codeinline{repeats}, \codeinline{ratio})\\
 								Out-of-bag bootstrap.
 								\item Custom splits \\
-								% Manually provided indices.
 							\begin{codeboxmultiline}[width=26cm]
 							resampling = rsmp("\textbf{custom}")\\
 							resampling\$instantiate(task,\\
@@ -309,18 +361,26 @@
 							Returns a description of parameter settings.
 							\\
 							\begin{codebox}
-								resampling\$param\_set\$\textbf{values}(folds = 10)
+								{\footnotesize resampling\$param\_set\$\textbf{values} = list(folds = 10)}
 							\end{codebox}
 							Sets folds to 10.
 							\\
 							\begin{codebox}
+								task\$col\_roles\$\textbf{stratum} = "<column\_names>"
+							\end{codebox}
+							Sets stratification variables.
+							\\
+							\begin{codebox}
+								task\$col\_roles\$\textbf{group} = "<column\_name>"
+							\end{codebox}
+							Sets group variable.
+							\\
+							\begin{codebox}
 								resampling\$\textbf{instantiate}(task)
 							\end{codebox}
-                            Perform splitting and define index sets. \codeinline{}  will later 
-							\\
+                            Perform splitting and define index sets.
 						\end{myblock}
-						\vfill
-					}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -329,23 +389,13 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Resample}
-							% Uses the \codeinline{Resampling} to estimate the
-							% performance of a learning algorithm. 
                             Train-Predict-Score learner for each train/test set.
-							% (\codeinline{\$train()}) and the score is evaluated
-							% on the corresponding test set(s)
-							% (\codeinline{\$predict()}) using the given
-							% \codeinline{Measure}.
-							% \\
-							% \textbf{Careful: Resample $!=$ Resampling}
-							% \vspace{1em}
 							\\
 							\begin{codebox}
 								rr = \textbf{resample}(task, learner, resampling)
 							\end{codebox}
 							Returns a \codeinline{ResampleResult} container object.
 							\\
-							\vspace{1em}
 							\begin{codebox}
 								rr\$\textbf{score}(measures)
 							\end{codebox}
@@ -356,27 +406,70 @@
 							\end{codebox}
 						    Get aggregated performance scores as vector.
 							\\
+							\begin{codebox}
+								rr\$\textbf{filter}(iters)
+							\end{codebox}
+							Reduces to iterations.
+							\\
 							\begin{codeboxexample}
-								\footnotesize{
+								\scriptsize{
 									task = tsk("pima")\\
-									learner = lrn("classif.rpart", \\
-									\hspace*{1ex}predict\_type = "prob")\\
-									measure = msr("classif.ce")\\
+									learner = lrn("classif.rpart", predict\_type = "prob")\\
+									measure = msr("classif.ce")
 									\vspace{1em}
 									\\
 									resampling = rsmp("cv", folds = 3L)\\
-									resampling\$instantiate(task)\\
+									resampling\$instantiate(task)
 									\vspace{1em}
 									\\
-									rr = resample(task, learner, resampling)\\
+									rr = resample(task, learner, resampling)
+									\vspace{1em}
+									\\
+									rr\$data\\
+									\#\# ...\monospace{3}resampling iteration prediction\\
+									\#\# ... <ResamplingCV>\monospace{9}1\monospace{5}<list>\\
+									\#\# ... <ResamplingCV>\monospace{9}2\monospace{5}<list>\\
+									\#\# ... <ResamplingCV>\monospace{9}3\monospace{5}<list>
 									\vspace{1em}
 									\\
 									rr\$aggregate(measure)\\
 									\#\# classif.ce\\
-									\#\# \space\space\space\space 0.2643\\
-								}
+									\#\# \monospace{4}0.2643
+									\vspace{1em}
+									\\
+									learners = lrns(c("classif.rpart", "classif.ranger"))\\
+									tasks = tsks(c("sonar", "spam"))\\
+									resampling = rsmp("cv", folds = 3L)
+									\vspace{1em}
+									\\
+									design = benchmark\_grid(tasks, learners,resampling)
+									\vspace{1em}
+									\\
+									bmr = benchmark(design)\\
+									bmr\\
+									\#\# <BenchmarkResult> of 12 rows with 4 resampling runs\\
+									\#\# nr task\_id\monospace{5}learner\_id resampling\_id iters ...\\
+									\#\#\monospace{2}1\monospace{3}sonar\monospace{2}classif.rpart
+									\monospace{12}cv\monospace{4}3 ...\\
+									\#\#\monospace{2}2\monospace{3}sonar classif.ranger
+									\monospace{12}cv\monospace{4}3 ...\\
+									\#\#\monospace{2}3\monospace{4}spam\monospace{2}classif.rpart
+									\monospace{12}cv\monospace{4}3 ...\\
+									\#\#\monospace{2}4\monospace{4}spam classif.ranger
+									\monospace{12}cv\monospace{4}3 ...
+									\vspace{1em}
+									\\
+									bmr\$aggregate()\\
+									\#\# nr \monospace{2}resample\_result task\_id ... classif.ce\\
+									\#\#\monospace{2}1\monospace{2}<ResampleResult>\monospace{3}sonar ... 0.26928916\\
+									\#\#\monospace{2}2\monospace{2}<ResampleResult>\monospace{3}sonar ... 0.17798482\\
+									\#\#\monospace{2}3\monospace{2}<ResampleResult>\monospace{4}spam ... 0.10106500\\
+									\#\#\monospace{2}4\monospace{2}<ResampleResult>\monospace{4}spam ... 0.10106500}
 							\end{codeboxexample}
-							\end{myblock}
+							Results are presented in datatables.
+							\codeinline{BenchmarkResult} contains a \codeinline{ResampleResult} for each task-learner-resampling combination
+							which in turn contain a \codeinline{Prediction} for each resampling iteration.
+						\end{myblock}
 					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -387,101 +480,66 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Benchmark}
                             Compare learner(s) on task(s) with resampling(s).
-						\\
-						\begin{codeboxmultiline}[width=19.4cm]
-							design = \textbf{benchmark\_grid}(\\
-							\hspace*{1ex}tasks, learners, resamplings)
-						\end{codeboxmultiline}
-						Creates a cross-join datatable with list-cols, you can also manually define this for full control.
-                        % ss joining tasks, learners and resamplings supplied as \codeinline{list()}s.
-						\\
-						\begin{codebox}
-							bmr = \textbf{benchmark}(design)
-						\end{codebox}
-						Returns a \codeinline{\robotomono{BenckmarkResult}}
-						container.\\
-						\begin{codeboxmultiline}[width=27cm]
-							\scriptsize{
-								<BenchmarkResult> of 404 rows with 8 resampling runs\\
-								nr task\_id \space\space\space\space learner\_id resampling\_id iters warnings errors\\
-								1 \space\space\space sonar \space classif.rpart
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								2 \space\space\space sonar \space classif.rpart
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								3 \space\space\space sonar classif.ranger
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								4 \space\space\space sonar classif.ranger
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								5 \space\space\space\space spam
-								\space classif.rpart
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								6 \space\space\space\space spam
-								\space  classif.rpart
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								7 \space\space\space\space spam
-								classif.ranger
-								\space\space\space\space\space\space holdout
-								\space\space\space\space 1
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0\\
-								8 \space\space\space\space spam
-								classif.ranger
-								\space\space repeated\_cv
-								\space\space 100
-								\space\space\space\space\space\space\space 0
-								\space\space\space\space\space 0
-							}
-						\end{codeboxmultiline}
-						\vspace{1em}
-						\begin{codebox}
-							bmr\$\textbf{aggregate}(measures)
-						\end{codebox}
-						Datatable of ResampleResults with scores.
-					\end{myblock}
-					\begin{myblock}{Parallelization}
-						\codeinline{future} is used as backend for parallelization.
-                        % e.g. the parallelization of \codeinline{Resampling} iterations.
-						\\
-						\begin{codebox}
-							future::\textbf{plan}("multiprocess")
-						\end{codebox}
-						Selects the \codeinline{multiprocess} backend. The \codeinline{resample} function is automatically executed in parallel.
-					\end{myblock}
-					\begin{myblock}{mlr3viz}
-						Provides visualization for mlr3 objects.
-						Create with \codeinline{mlr3viz::autoplot(object, type)}
-						\\
-						\begin{itemize}
-							\item \codeinline{BenchmarkResult} (\codeinline{boxplot}, \codeinline{roc}, \codeinline{prc})
-							\item \codeinline{Filter} (\codeinline{barplot})
-							\item \codeinline{PredictionClassif} (\codeinline{stacked}, \codeinline{roc}, \codeinline{prc})
-							\item \codeinline{PredictionRegr} (\codeinline{xy}, \codeinline{histogram})
-							\item \codeinline{ResampleResult} (\codeinline{boxplot}, \codeinline{histogram}, \codeinline{roc}, \codeinline{prc})
-							\item \codeinline{TaskClassif} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
-							\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
-							\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
-						\end{itemize}
-					\end{myblock}
-					\vfill
-					}
+							\\
+							\begin{codeboxmultiline}[width=19.4cm]
+								design = \textbf{benchmark\_grid}(\\
+								\hspace*{1ex}tasks, learners, resamplings)
+							\end{codeboxmultiline}
+							Creates a cross-join datatable with list-cols, you can also manually define this for full control.
+							\\
+							\begin{codebox}
+								bmr = \textbf{benchmark}(design)
+							\end{codebox}
+							Returns a \codeinline{\robotomono{BenckmarkResult}}
+							container.
+							\\
+							\begin{codebox}
+								bmr\$\textbf{aggregate}(measures)
+							\end{codebox}
+							Datatable of ResampleResults with scores.
+							\\
+							\begin{codebox}
+								bmr\$\textbf{score}(measures)
+							\end{codebox}
+							Datatable of resampling iterations with scores. 
+							\\
+							\begin{codeboxmultiline}[width=21.5cm]
+								bmr\$\textbf{filter}(task\_ids, learner\_ids,\\ 
+								\hspace*{1ex}resampling\_ids)
+							\end{codeboxmultiline}
+							Filter by task, learner and resampling. 
+							\\
+							\begin{codebox}
+								bmr\$\textbf{combine}(bmr)
+							\end{codebox}
+							Fuse a second \codeinline{BenchmarkResult}. 
+						\end{myblock}
+						\begin{myblock}{Parallelization}
+							\codeinline{future} is used as backend for parallelization.
+							\\
+							\begin{codebox}
+								future::\textbf{plan}(strategy)
+							\end{codebox}
+							Selects the parallelization strategy. 
+							All operations building on top of the \codeinline{resample()} function 
+							such as resampling, benchmarking, tuning and feature selection are executed in parallel.
+						\end{myblock}
+						\begin{myblock}{mlr3viz}
+							Provides visualization for mlr3 objects.
+							Create with \codeinline{mlr3viz::autoplot(object, type)}
+							\\
+							\begin{itemize}
+								\item \codeinline{BenchmarkResult} (\codeinline{boxplot}, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{Filter} (\codeinline{barplot})
+								\item \codeinline{PredictionClassif} (\codeinline{stacked}, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{PredictionRegr} (\codeinline{xy}, \codeinline{histogram})
+								\item \codeinline{ResampleResult} (\codeinline{boxplot}, \codeinline{histogram}, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{TaskClassif} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
+								\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
+								\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
+							\end{itemize}
+						\end{myblock}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -495,42 +553,35 @@
 							\begin{codeboxmultiline}[width=23.1cm]
 								\textbf{getOption}("lgr.log\_levels")\\
 								\#\# fatal error  warn  info debug trace\\ 
-								\#\# 100 \space\space 200 \space\space 300 \space 400 \space 500 \space\space 600
+								\#\# 100\monospace{3}200\monospace{3}300\monospace{2}400\monospace{2}500\monospace{3}600
 							\end{codeboxmultiline}
 							Gets threshold levels. The default is 400. 
 							\\
 							\begin{codeboxmultiline}[width=25cm]
 								\footnotesize{
-								lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")
-							}
+								lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")}
 							\end{codeboxmultiline}
 							Change log-level, you can also do this for other mlr3 packages analogously.
 						\end{myblock}
 						\begin{myblock}{Error Handling and Encapsulation}
-							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to cope with errors, warnings and crashes.
+							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to prevent the program flow from stopping in case of errors, warnings and crashes.
 							\\
 							\begin{codeboxmultiline}[width=16cm]
 								learner\$\textbf{encapsulate} = c(\\
 								\hspace*{1ex} train = "evaluate", \\
 								\hspace*{1ex} predict = "evaluate")
 							\end{codeboxmultiline}
-							% Encapsulates the execution of \codeinline{\$train} and \codeinline{\$predict} with the \codeinline{evaluate} package.
-							% \\
+							\vspace{1em}
 							\begin{codebox}
 								learner\$\textbf{errors}
 							\end{codebox}
 							Access the recorded log of errors.
-                            % via the field \codeinline{log}, \codeinline{warnings} and \codeinline{errors}. 
-							\vspace{1em}
-							% \\
-							% Fallback learners allow to score results in cases where a learners is misbehaving in some sense.
 							\\
 							\begin{codebox}
 								learner\$\textbf{fallback} = lrn(.key)
 							\end{codebox}
 							If learner fails, fallback is used to generate predictions. 
                             Use robust fallback, e.g. "featureless"! Can ease pain in complex benchmarks when learners fail in edge-cases.
-                            % k to the predictions of the attached fallback learner.
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
@@ -540,8 +591,7 @@
 								\item \href{https://github.com/mlr3learners}{mlr3learners organization}\\ (https://github.com/mlr3learners)
 							\end{itemize}
 						\end{myblock}
-						\vfill
-					}
+					\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
