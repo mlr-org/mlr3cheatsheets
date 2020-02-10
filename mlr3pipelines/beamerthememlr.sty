@@ -41,13 +41,13 @@
 		\def\insertblocktitle{\color{mlrblue}\LARGE\raggedright#1}%
 		\par%
 		\usebeamertemplate{block begin}\leftskip=14pt\rightskip=14pt\vspace{10pt}}
-	{\par\vspace{1em}\usebeamertemplate{block end}
+	{\usebeamertemplate{block end}
 \end{actionenv}}
 
 % Frame without header
 \newenvironment{withoutheader}{%	
 	\setbeamertemplate{headline}[default]
-	\def\beamer@entrycode{\vspace*{-\headheight}}
+	\def\beamer@entrycode{\vspace*{-\headheight\vspace{1em}}}
 }{}
 
 % Header
@@ -82,7 +82,7 @@
 	\end{beamercolorbox}
 	\leavevmode%
 	\begin{beamercolorbox}[ht=4ex,leftskip=1cm,rightskip=1cm]{author in head/foot}%
-		\href{https://mlr-org.com/}{www.mlr-org.com}
+		\href{https://mlr-org.com}{https://mlr-org.com}
 		\hfill
 		\vskip1ex
 	\end{beamercolorbox}
