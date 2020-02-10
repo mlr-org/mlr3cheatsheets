@@ -81,7 +81,6 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Class Diagramm}
-							\vspace{1em}
                             \includegraphics[width=\textwidth]{img/tuning_objects.png}
 						\end{myblock}
 						\begin{myblock}{ParamSet}
@@ -279,7 +278,7 @@
 								\hspace*{1ex}learner, resampling, measures, \\
 								\hspace*{1ex}tune\_ps, terminator, tuner, bm\_args)
 							\end{codeboxmultiline}
-							\vspace{1em}
+							\vspace{0.5em}
                             Inherits from \codeinline{Learner} class; can be used like it. 
                             Training starts tuning on the training set,
                             and after completion trains the learner finally with 
@@ -330,7 +329,7 @@
 								{\scriptsize
 									lgr::get\_logger("\textbf{mlr3/mlr3tuning}")\$set\_threshold("<level>")}
 							\end{codebox}
-							Change log-level only for mlr3tuning.
+							Change log-level only for mlr3tuning.\\
 							\begin{codebox}
 								future::\textbf{plan}(strategy)
 							\end{codebox}
