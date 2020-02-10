@@ -262,6 +262,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Train \& Predict}
+							\vspace{0.25em}
 							\begin{codebox}
 								learner\$\textbf{train}(task, row\_ids)
 							\end{codebox}
@@ -503,9 +504,8 @@
 							\end{codebox}
 							Datatable of resampling iterations with scores. 
 							\\
-							\begin{codeboxmultiline}[width=21.5cm]
-								bmr\$\textbf{filter}(task\_ids, learner\_ids,\\ 
-								\hspace*{1ex}resampling\_ids)
+							\begin{codeboxmultiline}[width=26cm]
+								{\footnotesize bmr\$\textbf{filter}(task\_ids, learner\_ids, resampling\_ids)}
 							\end{codeboxmultiline}
 							Filter by task, learner and resampling. 
 							\\
