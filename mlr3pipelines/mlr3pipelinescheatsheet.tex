@@ -90,11 +90,8 @@
                 \includegraphics[width=0.75\textwidth]{img/po.png}
               \end{center}
               \ \\
-              Construction via a \codeinline{.key}, e.g.: \codeinline{pca = \textbf{po}("pca")}\\
-              \ \\
-              Important methods and slots:\\
-              \codeinline{\$\textbf{train}()}, \codeinline{\$\textbf{predict}()}, \codeinline{\$\textbf{state}}
-						\end{myblock}
+              Construction via a \codeinline{.key}, e.g.: \codeinline{pca = \textbf{po}("pca")}
+  			\end{myblock}
             \begin{myblock}{Important PipeOps}
               \begin{itemize}
                 \item Data Transformer: \codeinline{PipeOpPCA}
@@ -208,11 +205,11 @@
               mlr3pipelines relies on the paradox package to provide parameters that can modify a \codeinline{PipeOp}'s behavior. To inspect the parameters see the \codeinline{\$param\_set}, e.g., \codeinline{po("pca")\$\textbf{param\_set}}.\\
               \ \\
               Access the \codeinline{\$param\_set\$values} slot to set or retrieve a parameter, or specify \codeinline{param\_vals} during construction:
-              \begin{codeboxmultiline}[width=25cm]
-                pca = po("pca") \\
+              \begin{codeboxmultiline}[width=23.5cm]
+                {\footnotesize pca = po("pca") \\
                 pca\$param\_set\$\textbf{values} = list(scale. = TRUE) \\
                 \# alternatively:\\
-                po("pca", \textbf{param\_vals} = list(scale. = TRUE))
+                po("pca", \textbf{param\_vals} = list(scale. = TRUE))}
               \end{codeboxmultiline}
               \ \\
               In a \codeinline{Graph}, the parameters of all \codeinline{PipeOp}s are collected. Both \codeinline{PipeOpLearner} and \codeinline{GraphLearner} preserve parameters of the objects they encapsulate.
