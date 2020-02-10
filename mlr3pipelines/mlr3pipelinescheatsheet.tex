@@ -78,7 +78,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-              The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the $\%>>\%$ operator.
+              The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the \%>{}>\% operator.
             \end{myblock}
 						\begin{myblock}{PipeOps}
               A \codeinline{PipeOp} represents transformative operations on its input leading to its output but behaves differently during ``training'' and ``prediction''. During training, the \codeinline{PipeOp} stores the transformation applied to the training data as a state. This state is then used during the prediction.
@@ -118,9 +118,9 @@
               \begin{center}
                 \includegraphics[width=0.75\textwidth]{img/po_multi_viz.png}
               \end{center}
-              The \codeinline{$\%>>\%$} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs:
+              The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs:
               \begin{codeboxmultiline}[width=19cm]
-                gr = po("pca") \textbf{$\%>>\%$}\\
+                gr = po("pca") \textbf{\%>{}>\%}\\
                 \hspace*{1ex}po("learner", lrn("classif.rpart"))
               \end{codeboxmultiline}
               \begin{itemize}
@@ -161,8 +161,8 @@
               \begin{codeboxexample}
 						    {\footnotesize
                   choices = c("pca", "scale")\\
-                  gr = po("branch", options = choices) $\%>>\%$\\
-                  \hspace*{1ex} gunion(list(po("pca"), po("scale"))) $\%>>\%$\\
+                  gr = po("branch", options = choices) \%>{}>\%\\
+                  \hspace*{1ex} gunion(list(po("pca"), po("scale"))) \%>{}>\%\\
                   \hspace*{1ex} po("unbranch", options = choices)\\
                   gr\$plot(html = TRUE)\\
                   \# set the "pca" path active:\\
@@ -173,8 +173,8 @@
               \begin{codeboxexample}
 						    {\footnotesize
                   %task = tsk("iris")\\
-                  gr = po("copy", outnum = 2) $\%>>\%$\\
-                  \hspace*{1ex} gunion(list(po("nop"), po("pca"))) $\%>>\%$\\
+                  gr = po("copy", outnum = 2) \%>{}>\%\\
+                  \hspace*{1ex} gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
                   \hspace*{1ex} po("featureunion")}
                   %gr\$train(task)}
               \end{codeboxexample}
@@ -186,9 +186,9 @@
               Together with \codeinline{PipeOpSubsample} this straightforward allows for, e.g., \textbf{bagging}:
               \begin{codeboxexample}
 						    {\footnotesize
-                  pr = po("subsample") $\%>>\%$\\
+                  pr = po("subsample") \%>{}>\%\\
                   \hspace*{1ex} po("learner", lrn("classif.rpart"))\\
-                  bagging = greplicate(pr, n = 10) $\%>>\%$\\
+                  bagging = greplicate(pr, n = 10) \%>{}>\%\\
                   \hspace*{1ex} po("classifavg", innum = 10)}
 					    \end{codeboxexample}
             \end{myblock}
@@ -218,7 +218,7 @@
               \begin{codeboxexample}
 						  {\footnotesize
                 task = tsk("iris")\\
-                gr = po("pca") $\%>>\%$\\
+                gr = po("pca") \%>{}>\%\\
                 \hspace*{1ex} po("learner", lrn("classif.rpart"))\\
                 grl = GraphLearner\$new(gr)\\
                 \ \\
