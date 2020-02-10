@@ -28,7 +28,7 @@
 \title{Dataflow programming with mlr3pipelines :\,: CHEAT SHEET} % Package title in header, \, adds thin space between ::
 
 \newlength{\columnheight} % Adjust depending on header height
-\setlength{\columnheight}{84cm} 
+\setlength{\columnheight}{84cm}
 
 \newtcolorbox{codebox}{%
 	sharp corners,
@@ -36,6 +36,7 @@
 	rightrule=0pt,
 	toprule=0pt,
 	bottomrule=0pt,
+	fontupper=\robotomono\small,
 	hbox}
 
 \newtcolorbox{codeboxmultiline}[1][]{%
@@ -44,6 +45,7 @@
 	rightrule=0pt,
 	toprule=0pt,
 	bottomrule=0pt,
+	fontupper=\robotomono\small,
 	#1}
 
 \newtcolorbox{codeboxexample}{%
@@ -66,9 +68,11 @@
 	bottomrule=0pt,
 	hbox,
 	nobeforeafter,
+	fontupper=\robotomono\small,
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+\newcommand{\monospace}[1]{\multido{}{#1}{\space}}
 
 \begin{document}
 \begin{frame}[fragile]{}
