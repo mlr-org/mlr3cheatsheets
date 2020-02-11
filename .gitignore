@@ -22,7 +22,7 @@
 # *.pdf
 
 ## PDF files
-*.pdf
+mlr3*.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
@@ -129,6 +129,7 @@ acs-*.bib
 
 # listings
 *.lol
+*.listing
 
 # makeidx
 *.idx
@@ -217,6 +218,7 @@ TSWLatexianTemp*
 ## Editors:
 # WinEdt
 *.bak
+*.bak0
 *.sav
 
 # Texpad
