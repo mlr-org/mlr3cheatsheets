@@ -232,7 +232,9 @@
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
-							Starts the tuning (4).
+							Starts the tuning (4). \codeinline{Tuner} generates candidate configurations
+							and passes them to the \codeinline{\$eval()} method of \codeinline{TuningInstance}
+							until the budget of \codeinline{Terminator} is exhausted (5).
 							\\
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest)
