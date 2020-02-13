@@ -87,7 +87,7 @@
                 \includegraphics[width=0.7\textwidth]{img/po.pdf}
               \end{center}
               \ \\
-              Construction via a \codeinline{.key}, e.g.: \codeinline{pca = \textbf{po}("pca")} \\
+              Construction via a \codeinline{key}, e.g.: \codeinline{pca = \textbf{po}("pca")} \\
               \ \\
               Important methods and slots:
               \begin{itemize}
@@ -100,16 +100,16 @@
             \begin{myblock}{Important PipeOps}
               \begin{footnotesize}
                 \begin{centering}
-                  \begin{tabular}{l c r}
-                    \textbf{Type} & & \textbf{PipeOp (.key)} \\ \hline
-                    Data Transformer & & PipeOpPCA ("pca")\\
-                    Feature Selection & & PipeOpFilter ("filter")\\
-                    Repair Tasks & & PipeOpRemoveConstants ("removeconstants")\\
-                    Factor Encoding & & PipeOpEncode ("encode")\\
-                    Imbalanced Data & & PipeOpClassBalancing ("classbalancing")\\
-                    Missing Data & & PipeOpImputeHist ("imputehist")\\
-                    Any Learner & & PipeOpLearner ("learner")\\
-                    Ensembles & & PipeOpLearnerCV ("learner\_cv")\\ \hline
+                  \begin{tabular}{l l l}
+                    \textbf{Class} & \textbf{Key} & \textbf{Operation} \\ \hline
+                    PipeOpPCA & "pca" & Data Transformer\\
+                    PipeOpFilter & "filter" & Feature Selection\\
+                    PipeOpRemoveConstants & "removeconstants" & Repair Tasks\\
+                    PipeOpEncode & "encode" & Factor Encoding\\
+                    PipeOpClassBalancing & "classbalancing" & Imbalanced Data\\
+                    PipeOpImputeHist & "imputehist" & Missing Data\\
+                    PipeOpLearner & "learner" & Any Learner\\
+                    PipeOpLearnerCV & "learner\_cv" & Ensembles\\ \hline
                   \end{tabular}
                 \end{centering}
               \end{footnotesize}
