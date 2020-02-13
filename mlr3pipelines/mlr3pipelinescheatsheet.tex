@@ -79,10 +79,12 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-              The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the \%>{}>\% operator.
+              Combine ML operations to flexible pipelines and processing graphs, 
+              which can be configured trained, resampled, tuned as any regular learner.
+                            % The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the \%>{}>\% operator.
             \end{myblock}
 						\begin{myblock}{PipeOps}
-              A \codeinline{PipeOp} represents transformative operations on its input leading to its output but behaves differently during ``training'' and ``prediction''. During training, the \codeinline{PipeOp} stores the transformation applied to the training data as a state. This state is then used during the prediction.
+              Flow operation with train and predict step. During train, transforms input and learns a state. During predict, applies transforms input with stored state.
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/po.pdf}
               \end{center}
@@ -91,9 +93,10 @@
               \ \\
               Important methods and slots:
               \begin{itemize}
-                \item \codeinline{\textbf{\$train}(input)} train on \codeinline{input} (named list)
-                \item \codeinline{\textbf{\$predict}(input)} predict on new \codeinline{input} (named list)
-                \item \codeinline{\textbf{\$state}} obtained during training and usually required for prediction
+                \item \codeinline{\textbf{\$train}(input)}: arg is named list
+                \item \codeinline{\textbf{\$predict}(input)}: arg is named list
+                \item \codeinline{\textbf{\$state}} 
+                    % obtained during training and usually required for prediction
                 \item \codeinline{\textbf{\$param\_set}} see Hyperparameters
               \end{itemize}
   			\end{myblock}
@@ -127,7 +130,12 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Graphs}
-              A \codeinline{Graph} connects \codeinline{PipeOp}s with edges mandating how data should be flowing along them. A \codeinline{Graph} itself has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
+              Connects \codeinline{PipeOp}s with edges to control data flow during training and prediction.
+              Input is sent to sources (no incoming edges), output is read from sinks (no outoing edges) 
+              of the graph.
+              % The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
+
+              % trained and predicted \codeinline{Graph} has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
               \ \\
               The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs:
               \begin{codeboxmultiline}[width=24cm]
@@ -219,7 +227,8 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
             \begin{myblock}{Hyperparameters}
-              mlr3pipelines relies on the paradox package to provide parameters that can modify a \codeinline{PipeOp}'s or \codeinline{Graph}'s behavior. To inspect the parameters see the \codeinline{\$param\_set}, e.g., \codeinline{po("pca")\$\textbf{param\_set}}.\\
+              % mlr3pipelines relies on the paradox package to provide parameters that can modify a \codeinline{PipeOp}'s or \codeinline{Graph}'s behavior. 
+              To inspect the parameters see the \codeinline{\$param\_set}, e.g., \codeinline{po("pca")\$\textbf{param\_set}}.\\
               \ \\
               Access the \codeinline{\$param\_set\$values} slot to set or retrieve a parameter, or specify \codeinline{param\_vals} during construction:
               \begin{codeboxmultiline}[width=24cm]
