@@ -116,7 +116,7 @@
 							\\
                             \sectionheading{Dependencies}
                             \\
-                            Dependencies prevent HP configurations that are not usable by the learner.
+                            Dependencies prevent configurations during tuning which are invalid in the learner.
                             \\
 							\begin{codebox}
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
@@ -170,6 +170,9 @@
 							Evaluator 
 							and container for resampled performances 
 							of HP configurations duing tuning. 
+                            Its main (internal) function \codeinline{eval\_batch(dt)} calls \codeinline{benchmark()} to evaluate a table of HP configurations. 
+                            % If the available budget is exhausted, an exception is raised, and no further evaluations can be performed from this point on. 
+                            Also stores archive of all evaluated experiments and the final result.
 							\\
 							\begin{codeboxmultiline}[width=23.7cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -236,7 +239,7 @@
 							until the budget of \codeinline{Terminator} is exhausted.
 							\\
 							\begin{codebox}
-								instance\$\textbf{archive}(unnest = TRUE)
+								instance\$\textbf{archive}(unnest = "no")
 							\end{codebox}
 							Returns all tried configurations and their resampling results. 
 							Use \codeinline{unnest} to display HP without
