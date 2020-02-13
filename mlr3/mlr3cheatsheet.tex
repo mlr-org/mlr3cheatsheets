@@ -471,11 +471,15 @@
 									\vspace{1em}
 									\\
 									bmr\$aggregate()\\
-									\#\# nr \monospace{2}resample\_result task\_id ... classif.ce\\
-									\#\#\monospace{2}1\monospace{2}<ResampleResult>\monospace{3}sonar ... 0.26928916\\
-									\#\#\monospace{2}2\monospace{2}<ResampleResult>\monospace{3}sonar ... 0.17798482\\
-									\#\#\monospace{2}3\monospace{2}<ResampleResult>\monospace{4}spam ... 0.10106500\\
-									\#\#\monospace{2}4\monospace{2}<ResampleResult>\monospace{4}spam ... 0.10106500}
+									\#\# nr \monospace{2}res\_result task\_id\monospace{5}learner\_id ... classif.ce\\
+									\#\#\monospace{2}1\monospace{2}<ResResult>\monospace{3}sonar
+									\monospace{1}classif.rpart ... 0.26928916\\
+									\#\#\monospace{2}2\monospace{2}<ResResult>\monospace{3}sonar
+									classif.ranger ... 0.17798482\\
+									\#\#\monospace{2}3\monospace{2}<ResResult>\monospace{4}spam
+									\monospace{1}classif.rpart ... 0.10106500\\
+									\#\#\monospace{2}4\monospace{2}<ResResult>\monospace{4}spam
+									classif.ranger ... 0.10106500}
 							\end{codeboxexample}
 							Results are presented in datatables.
 							\codeinline{BenchmarkResult} contains a \codeinline{ResampleResult} for each task-learner-resampling combination
