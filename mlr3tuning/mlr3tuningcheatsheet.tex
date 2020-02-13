@@ -80,13 +80,17 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Class Diagramm}
+						\begin{myblock}{Overview of Classes}
+                            The package provides a set of classes which allow to (a) define general 
+                            hyperparameter (HP) tuning problems and (b) search algorithms which act on these. (a) is called a TuningInstance, which defines a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.\\
+                            \\
+                            \vspace{1em}
                             \includegraphics[width=\textwidth]{img/class_diagram.pdf}
 						\end{myblock}
-						\begin{myblock}{ParamSet}
-					        Hyperparameters and ranges for tuning (1). 
-					        Scalar doubles, integers, factors, logicals are combined 
-					        in a set to define the multivariate tuning space.
+						\begin{myblock}{ParamSet - Params and Ranges}
+					        % Hyperparameters and ranges for tuning (1). 
+					        Scalar doubles, ints, factors, logicals are combined 
+					        in set to define multivariate tuning space.
 							\\
 							\begin{codeboxmultiline}[width=20.75cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
@@ -106,13 +110,13 @@
 								\hspace*{1ex}x\$id = -log(x\$id); return(x)\}      
 							\end{codeboxmultiline}
 							Set a transformation for param \codeinline{id} which  
-                            allows the rescalingof (parts of) the configuration 
+                            allows the rescaling of (parts of) the configuration 
 							before passing it to the \codeinline{Learner}.
                             \vspace{1em}
 							\\
                             \sectionheading{Dependencies}
                             \\
-                            Dependencies prevent hyperparameter configurations that are not usable by the learner.
+                            Dependencies prevent configurations during tuning which are invalid in the learner.
                             \\
 							\begin{codebox}
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
@@ -129,8 +133,8 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Terminator Class}
-							Stop criterion (2). Create with \codeinline{\textbf{term}(.key, ...)}
+                        \begin{myblock}{Terminators - When to stop}
+							Create with \codeinline{\textbf{term}(.key, ...)}
 							\\
 							\begin{itemize}
                                 \item \codeinline{evals}
@@ -162,11 +166,13 @@
 							if any (\codeinline{any = TRUE}) 
 							or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
-						\begin{myblock}{TuningInstance Class}
-							Defines search scenario (3). 
+                        \begin{myblock}{TuningInstance - Search Scenario}
 							Evaluator 
 							and container for resampled performances 
-							of hyperparameter configurations duing tuning. 
+							of HP configurations duing tuning. 
+                            Its main (internal) function \codeinline{eval\_batch(dt)} calls \codeinline{benchmark()} to evaluate a table of HP configurations. 
+                            % If the available budget is exhausted, an exception is raised, and no further evaluations can be performed from this point on. 
+                            Also stores archive of all evaluated experiments and the final result.
 							\\
 							\begin{codeboxmultiline}[width=23.7cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -176,24 +182,17 @@
 							\vspace{1em}
 							\begin{codeboxexample}
 								{\tiny
-									learner = lrn("classif.svm", type = "C-classification",\\
-									\hspace*{1ex} kernel = "radial")\\
+                                    \# optimize hyperpar of RBF SVM on logscale\\
+									learner = lrn("classif.svm", kernel = "radial")\\
 									tune\_ps = ParamSet\$new(list(\\
-									\hspace*{1ex} ParamDbl\$new("cost", lower = -5, upper = 5),\\
-									\hspace*{1ex} ParamDbl\$new("gamma", lower = -1, upper = 1)))\\
+									\hspace*{1ex} ParamDbl\$new("cost", lower = -8, upper = 8),\\
+									\hspace*{1ex} ParamDbl\$new("gamma", lower = -8, upper = 8)))\\
 									tune\_ps\$trafo = function(x, param\_set) \{\\
-									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost\\
-									\hspace*{1ex} x\$gamma = 2\textasciicircum x\$gamma\\
-									\hspace*{1ex} x\}\\
-									evals20 = term("evals", n\_evals = 20)
-									\vspace{1em}
-									\\
+									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost; x\$gamma = 2\textasciicircum x\$gamma; x\}\\
+									evals20 = term("evals", n\_evals = 20)\\
 									instance = TuningInstance\$new(\\
-									\hspace*{1ex} task, learner, resampling, measures, param\_set = tune\_ps,\\
-									\hspace*{1ex} terminator = evals20, bm\_args = list(store\_models = TRUE))\\
-									tuner = tnr("grid\_search", resolution = 5)
-									\vspace{1em}
-									\\
+									\hspace*{1ex} task, learner, resampling, measures, tune\_ps, evals20)\\
+									tuner = tnr("random\_search")\\
 									tuner\$tune(instance)\\
 									instance\$result}
 							\end{codeboxexample}
@@ -206,9 +205,9 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Tuner Class}
+						\begin{myblock}{Tuner - Search Strategy}
                             Tuning strategy. Generates candidate configurations 
-                            and passes them to \codeinline{TuningInstance} for evaluation (5) until termination. 
+                            and passes them to \codeinline{TuningInstance} for evaluation until termination. 
                             Create witth \codeinline{\textbf{tnr}(.key, ...)}
 							\\
 							\begin{itemize}
@@ -235,15 +234,15 @@
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
-							Starts the tuning (4). \codeinline{Tuner} generates candidate configurations
+							Starts the tuning. \codeinline{Tuner} generates candidate configurations
 							and passes them to the \codeinline{\$eval()} method of \codeinline{TuningInstance}
-							until the budget of \codeinline{Terminator} is exhausted (5).
+							until the budget of \codeinline{Terminator} is exhausted.
 							\\
 							\begin{codebox}
-								instance\$\textbf{archive}(unnest)
+								instance\$\textbf{archive}(unnest = "no")
 							\end{codebox}
 							Returns all tried configurations and their resampling results. 
-							Use \codeinline{unnest} to display hyperparameters without
+							Use \codeinline{unnest} to display HP without
 							(\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
 							\begin{codeboxmultiline}[width=24.75cm]
@@ -268,7 +267,7 @@
 							\begin{codebox}
 								{\footnotesize learner\$param\_set\$\textbf{values} = instance\$result\$\textbf{params}}
 							\end{codebox}
-							Set optimized hyperparameters in \codeinline{Learner}.
+							Set optimized HP in \codeinline{Learner}.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -278,7 +277,7 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{AutoTuner Class}
+						\begin{myblock}{AutoTuner - Tune before Train}
 							Wraps learner and adds automatic tuning. 
 							\\
 							\begin{codeboxmultiline}[width=23.75cm]
