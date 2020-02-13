@@ -86,7 +86,6 @@
 						\end{myblock}
 						\begin{myblock}{mlr3 Dictionaries}
                             Key-value store for sets of mlr objects. These are provided by mlr3: 
-							\vspace{0.5em}
 							\begin{itemize}
 								\item \codeinline{mlr\_tasks} - ML example tasks.
 								\item \codeinline{mlr\_task\_generators} - Example generators.
@@ -149,12 +148,11 @@
                                 task = tsk(.key)
 							\end{codebox}
                             Sugar to get example task from \codeinline{mlr\_tasks}:
-                            \\
                             \begin{itemize}
 								\item \codeinline{german\_credit}, \codeinline{pima}, \codeinline{sonar},
-								\codeinline{spam}
-								\item \codeinline{iris}, \codeinline{wine}, \codeinline{zoo}
-								\item \codeinline{boston\_housing}, \codeinline{mtcars}
+								\codeinline{spam} - Twoclass.
+								\item \codeinline{iris}, \codeinline{wine}, \codeinline{zoo} - Multiclass.
+								\item \codeinline{boston\_housing}, \codeinline{mtcars} - Regression.
                             \end{itemize}
 							\vspace{1em}
 							\begin{codebox}
@@ -165,15 +163,15 @@
 							\\
                             \sectionheading{Column Roles}
                             \\
-							Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
-							\\
+							Column roles affect the behavior of the task for different operations. 
+							Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
 							\begin{itemize}
-								\item \codeinline{feature} - Regular features
-								\item \codeinline{target} - Target variable
-								\item \codeinline{name} - Labels for plots
-								\item \codeinline{group} -  Groups for block resampling
-								\item \codeinline{stratum} - Stratification variables
-								\item \codeinline{weight} - Observation weights
+								\item \codeinline{feature} - Regular features.
+								\item \codeinline{target} - Target variable.
+								\item \codeinline{name} - Labels for plots.
+								\item \codeinline{group} -  Groups for block resampling.
+								\item \codeinline{stratum} - Stratification variables.
+								\item \codeinline{weight} - Observation weights.
 							\end{itemize}
 							\vspace{1em}
                             \sectionheading{Data Operations}
@@ -319,9 +317,9 @@
 							\end{codebox}
 							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}:
 							\begin{itemize}
-								\item \codeinline{classif.ce} - Classification error\\
-								\item \codeinline{classif.auc} - AUROC\\
-								\item \codeinline{regr.rmse} - Root mean square error\\
+								\item \codeinline{classif.ce} - Classification error.
+								\item \codeinline{classif.auc} - AUROC.
+								\item \codeinline{regr.rmse} - Root mean square error.
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
@@ -568,8 +566,7 @@
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{mlr3viz}
 							Provides visualization for mlr3 objects.
-							Create with \codeinline{mlr3viz::autoplot(object, type)}
-							\\
+							Create with \codeinline{mlr3viz::autoplot(object, type)}:
 							\begin{itemize}
 								\item \codeinline{BenchmarkResult} (\codeinline{boxplot} of performance measures, \codeinline{roc}, \codeinline{prc})\\
 								\item \codeinline{Filter} (\codeinline{barplot} of filter scores)\\
