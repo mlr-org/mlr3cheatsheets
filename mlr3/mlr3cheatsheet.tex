@@ -538,29 +538,6 @@
 							All operations building on top of the \codeinline{resample()} function 
 							such as resampling, benchmarking, tuning and feature selection are executed in parallel.
 						\end{myblock}
-						\begin{myblock}{mlr3viz}
-							Provides visualization for mlr3 objects.
-							Create with \codeinline{mlr3viz::autoplot(object, type)}
-							\\
-							\begin{itemize}
-								\item \codeinline{BenchmarkResult} (\codeinline{boxplot}, \codeinline{roc}, \codeinline{prc})
-								\item \codeinline{Filter} (\codeinline{barplot})
-								\item \codeinline{PredictionClassif} (\codeinline{stacked}, \codeinline{roc}, \codeinline{prc})
-								\item \codeinline{PredictionRegr} (\codeinline{xy}, \codeinline{histogram})
-								\item \codeinline{ResampleResult} (\codeinline{boxplot}, \codeinline{histogram}, \codeinline{roc}, \codeinline{prc})
-								\item \codeinline{TaskClassif} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
-								\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
-								\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
-							\end{itemize}
-						\end{myblock}
-					\vfill}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Logging}
 							\codeinline{lgr} is used for logging and progress output.
 							\\
@@ -573,9 +550,32 @@
 							\\
 							\begin{codeboxmultiline}[width=25cm]
 								\footnotesize{
-								lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")}
+									lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")}
 							\end{codeboxmultiline}
 							Change log-level, you can also do this for other mlr3 packages analogously.
+						\end{myblock}
+					\vfill}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+						\begin{myblock}{mlr3viz}
+							Provides visualization for mlr3 objects.
+							Create with \codeinline{mlr3viz::autoplot(object, type)}
+							\\
+							\begin{itemize}
+								\item \codeinline{BenchmarkResult} (\codeinline{boxplot} of performance measures, \codeinline{roc}, \codeinline{prc})\\
+								\item \codeinline{Filter} (\codeinline{barplot} of filter scores)\\
+								\item \codeinline{PredictionClassif} (\codeinline{stacked} barplot of true and estimated class labels, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{PredictionRegr} (\codeinline{xy} scatterplot, \codeinline{histogram} of residuals)
+								\item \codeinline{ResampleResult} (\codeinline{boxplot} or \codeinline{histogram} of performance measures, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{TaskClassif} (barplot of \codeinline{target}, \codeinline{duo} target-features plot matrix, \codeinline{pairs} feature plot matrix with color set to target)
+								\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
+								\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
+							\end{itemize}
 						\end{myblock}
 						\begin{myblock}{Error Handling and Encapsulation}
 							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to prevent the program flow from stopping in case of errors, warnings and crashes.
