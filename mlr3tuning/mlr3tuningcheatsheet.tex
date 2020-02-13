@@ -179,24 +179,17 @@
 							\vspace{1em}
 							\begin{codeboxexample}
 								{\tiny
-									learner = lrn("classif.svm", type = "C-classification",\\
-									\hspace*{1ex} kernel = "radial")\\
+                                    \# optimize hyperpar of RBF SVM on logscale\\
+									learner = lrn("classif.svm", kernel = "radial")\\
 									tune\_ps = ParamSet\$new(list(\\
-									\hspace*{1ex} ParamDbl\$new("cost", lower = -5, upper = 5),\\
-									\hspace*{1ex} ParamDbl\$new("gamma", lower = -1, upper = 1)))\\
+									\hspace*{1ex} ParamDbl\$new("cost", lower = -8, upper = 8),\\
+									\hspace*{1ex} ParamDbl\$new("gamma", lower = -8, upper = 8)))\\
 									tune\_ps\$trafo = function(x, param\_set) \{\\
-									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost\\
-									\hspace*{1ex} x\$gamma = 2\textasciicircum x\$gamma\\
-									\hspace*{1ex} x\}\\
-									evals20 = term("evals", n\_evals = 20)
-									\vspace{1em}
-									\\
+									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost; x\$gamma = 2\textasciicircum x\$gamma; x\}\\
+									evals20 = term("evals", n\_evals = 20)\\
 									instance = TuningInstance\$new(\\
-									\hspace*{1ex} task, learner, resampling, measures, param\_set = tune\_ps,\\
-									\hspace*{1ex} terminator = evals20, bm\_args = list(store\_models = TRUE))\\
-									tuner = tnr("grid\_search", resolution = 5)
-									\vspace{1em}
-									\\
+									\hspace*{1ex} task, learner, resampling, measures, tune\_ps, evals20)\\
+									tuner = tnr("random\_search")\\
 									tuner\$tune(instance)\\
 									instance\$result}
 							\end{codeboxexample}
