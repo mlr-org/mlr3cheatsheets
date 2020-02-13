@@ -70,6 +70,7 @@
 	tcbox raise base}
 
 \newcommand{\codeinline}[1]{\begin{codeboxinline}#1\end{codeboxinline}}
+\newcommand{\sectionheading}[1]{{\color{mlrblue}\large\raggedright\textbf{#1}}\vspace{1em}}
 \newcommand{\monospace}[1]{\multido{}{#1}{\space}}
 
 \begin{document}
@@ -133,28 +134,31 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Task Class}
-							Stores observation and columns (\codeinline{backend}) and additional
-							meta-data about the dataset.
+							Stores data and meta data. \codeinline{backend} can be a datatable, 
+                            \codeinline{target} points to y-column by name.
 							\\
 							\begin{codebox}
-								task = \textbf{TaskClassif}\$new(backend, target)
+								task = \textbf{TaskRegr}\$new(backend, target) 
 							\end{codebox}
-							For classification, \codeinline{target} needs to be a character vector representing class labels.
-							\\
+							\begin{codebox}
+								task = \textbf{TaskClassif}\$new(backend, target) 
+							\end{codebox}
+                            Create task for regression or classification. 
+							\begin{codebox}
+                                task = tsk(.key)
+							\end{codebox}
+                            Sugar to get example task from \codeinline{mlr\_tasks}.
 							\begin{codebox}
 								task\$\textbf{positive} = "<positive\_class>"
 							\end{codebox}
 							Set positive class for binary classification.
 							\\
-							\begin{codebox}
-								task = \textbf{TaskRegr}\$new(backend, target)
-							\end{codebox}
-							For regression, \codeinline{target} needs to be a numeric vector.
 							\vspace{1em}
 							\\
-	                        Get example tasks with \codeinline{tsk(.key)}.
 							\vspace{1em}
 							\\
+                            \sectionheading{Column Roles}
+                            \\
 							Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
 							\\
 							\begin{itemize}
@@ -166,7 +170,8 @@
 								\item \codeinline{weight} - Observation weights
 							\end{itemize}
 							\vspace{1em}
-							\begin{codebox}
+                            \sectionheading{Data Operations}
+                            \begin{codebox}
 								task\$\textbf{select}(cols)
 							\end{codebox}
 							Subsets the task based on feature names.
