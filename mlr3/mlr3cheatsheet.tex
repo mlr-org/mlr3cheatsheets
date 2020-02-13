@@ -143,18 +143,24 @@
 							\begin{codebox}
 								task = \textbf{TaskClassif}\$new(backend, target) 
 							\end{codebox}
-                            Create task for regression or classification. 
+                            Create task for regression or classification.
+                            \\
 							\begin{codebox}
                                 task = tsk(.key)
 							\end{codebox}
-                            Sugar to get example task from \codeinline{mlr\_tasks}.
+                            Sugar to get example task from \codeinline{mlr\_tasks}:
+                            \\
+                            \begin{itemize}
+								\item \codeinline{german\_credit}, \codeinline{pima}, \codeinline{sonar},
+								\codeinline{spam}
+								\item \codeinline{iris}, \codeinline{wine}, \codeinline{zoo}
+								\item \codeinline{boston\_housing}, \codeinline{mtcars}
+                            \end{itemize}
+							\vspace{1em}
 							\begin{codebox}
 								task\$\textbf{positive} = "<positive\_class>"
 							\end{codebox}
 							Set positive class for binary classification.
-							\\
-							\vspace{1em}
-							\\
 							\vspace{1em}
 							\\
                             \sectionheading{Column Roles}
