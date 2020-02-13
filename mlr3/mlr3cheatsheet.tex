@@ -317,8 +317,13 @@
 							\begin{codebox}
 								measure = \textbf{msr}(.key)
 							\end{codebox}
-							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
-							\\
+							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}:
+							\begin{itemize}
+								\item \codeinline{classif.ce} - Classification error\\
+								\item \codeinline{classif.auc} - AUROC\\
+								\item \codeinline{regr.rmse} - Root mean square error\\
+							\end{itemize}
+							\vspace{1em}
 							\begin{codebox}
 								prediction\$\textbf{score}(measures)
 							\end{codebox}
@@ -340,7 +345,6 @@
 						\begin{myblock}{Resampling Class}
 							Define later partitioning of task into series of train and test sets. \\ 
 							Create with \codeinline{resampling = \textbf{rsmp}(.key, ...)}:
-							\\
 							\begin{itemize}
                                 \item \codeinline{holdout}
                                 (\codeinline{ratio})\\
