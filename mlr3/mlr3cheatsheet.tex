@@ -86,7 +86,6 @@
 						\end{myblock}
 						\begin{myblock}{mlr3 Dictionaries}
                             Key-value store for sets of mlr objects. These are provided by mlr3: 
-							\vspace{0.5em}
 							\begin{itemize}
 								\item \codeinline{mlr\_tasks} - ML example tasks.
 								\item \codeinline{mlr\_task\_generators} - Example generators.
@@ -143,31 +142,36 @@
 							\begin{codebox}
 								task = \textbf{TaskClassif}\$new(backend, target) 
 							\end{codebox}
-                            Create task for regression or classification. 
+                            Create task for regression or classification.
+                            \\
 							\begin{codebox}
                                 task = tsk(.key)
 							\end{codebox}
-                            Sugar to get example task from \codeinline{mlr\_tasks}.
+                            Sugar to get example task from \codeinline{mlr\_tasks}:
+                            \begin{itemize}
+								\item \codeinline{german\_credit}, \codeinline{pima}, \codeinline{sonar},
+								\codeinline{spam} - Twoclass.
+								\item \codeinline{iris}, \codeinline{wine}, \codeinline{zoo} - Multiclass.
+								\item \codeinline{boston\_housing}, \codeinline{mtcars} - Regression.
+                            \end{itemize}
+							\vspace{1em}
 							\begin{codebox}
 								task\$\textbf{positive} = "<positive\_class>"
 							\end{codebox}
 							Set positive class for binary classification.
-							\\
-							\vspace{1em}
-							\\
 							\vspace{1em}
 							\\
                             \sectionheading{Column Roles}
                             \\
-							Column roles affect the behavior of the task for different operations. Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
-							\\
+							Column roles affect the behavior of the task for different operations. 
+							Set with \codeinline{task\$\textbf{col\_roles}\$<role> = "<column\_name>"}:
 							\begin{itemize}
-								\item \codeinline{feature} - Regular features
-								\item \codeinline{target} - Target variable
-								\item \codeinline{name} - Labels for plots
-								\item \codeinline{group} -  Groups for block resampling
-								\item \codeinline{stratum} - Stratification variables
-								\item \codeinline{weight} - Observation weights
+								\item \codeinline{feature} - Regular features.
+								\item \codeinline{target} - Target variable.
+								\item \codeinline{name} - Labels for plots.
+								\item \codeinline{group} -  Groups for block resampling.
+								\item \codeinline{stratum} - Stratification variables.
+								\item \codeinline{weight} - Observation weights.
 							\end{itemize}
 							\vspace{1em}
                             \sectionheading{Data Operations}
@@ -213,7 +217,6 @@
 							Get learner by \codeinline{.key} (from \codeinline{mlr\_learners}) 
 							and construct the learner with specific hyperparameters and settings (...) in one go.
 							\\
-							\vspace{1em}
 							\begin{codebox}
 								learner\$\textbf{param\_set}
 							\end{codebox}
@@ -312,8 +315,13 @@
 							\begin{codebox}
 								measure = \textbf{msr}(.key)
 							\end{codebox}
-							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}.
-							\\
+							Get measure by \codeinline{.key} from \codeinline{mlr\_measures}:
+							\begin{itemize}
+								\item \codeinline{classif.ce} - Classification error.
+								\item \codeinline{classif.auc} - AUROC.
+								\item \codeinline{regr.rmse} - Root mean square error.
+							\end{itemize}
+							\vspace{1em}
 							\begin{codebox}
 								prediction\$\textbf{score}(measures)
 							\end{codebox}
@@ -335,7 +343,6 @@
 						\begin{myblock}{Resampling Class}
 							Define later partitioning of task into series of train and test sets. \\ 
 							Create with \codeinline{resampling = \textbf{rsmp}(.key, ...)}:
-							\\
 							\begin{itemize}
                                 \item \codeinline{holdout}
                                 (\codeinline{ratio})\\
@@ -466,11 +473,15 @@
 									\vspace{1em}
 									\\
 									bmr\$aggregate()\\
-									\#\# nr \monospace{2}resample\_result task\_id ... classif.ce\\
-									\#\#\monospace{2}1\monospace{2}<ResampleResult>\monospace{3}sonar ... 0.26928916\\
-									\#\#\monospace{2}2\monospace{2}<ResampleResult>\monospace{3}sonar ... 0.17798482\\
-									\#\#\monospace{2}3\monospace{2}<ResampleResult>\monospace{4}spam ... 0.10106500\\
-									\#\#\monospace{2}4\monospace{2}<ResampleResult>\monospace{4}spam ... 0.10106500}
+									\#\# nr \monospace{2}res\_result task\_id\monospace{5}learner\_id ... classif.ce\\
+									\#\#\monospace{2}1\monospace{2}<ResResult>\monospace{3}sonar
+									\monospace{1}classif.rpart ... 0.26928916\\
+									\#\#\monospace{2}2\monospace{2}<ResResult>\monospace{3}sonar
+									classif.ranger ... 0.17798482\\
+									\#\#\monospace{2}3\monospace{2}<ResResult>\monospace{4}spam
+									\monospace{1}classif.rpart ... 0.10106500\\
+									\#\#\monospace{2}4\monospace{2}<ResResult>\monospace{4}spam
+									classif.ranger ... 0.10106500}
 							\end{codeboxexample}
 							Results are presented in datatables.
 							\codeinline{BenchmarkResult} contains a \codeinline{ResampleResult} for each task-learner-resampling combination
@@ -529,29 +540,6 @@
 							All operations building on top of the \codeinline{resample()} function 
 							such as resampling, benchmarking, tuning and feature selection are executed in parallel.
 						\end{myblock}
-						\begin{myblock}{mlr3viz}
-							Provides visualization for mlr3 objects.
-							Create with \codeinline{mlr3viz::autoplot(object, type)}
-							\\
-							\begin{itemize}
-								\item \codeinline{BenchmarkResult} (\codeinline{boxplot}, \codeinline{roc}, \codeinline{prc})
-								\item \codeinline{Filter} (\codeinline{barplot})
-								\item \codeinline{PredictionClassif} (\codeinline{stacked}, \codeinline{roc}, \codeinline{prc})
-								\item \codeinline{PredictionRegr} (\codeinline{xy}, \codeinline{histogram})
-								\item \codeinline{ResampleResult} (\codeinline{boxplot}, \codeinline{histogram}, \codeinline{roc}, \codeinline{prc})
-								\item \codeinline{TaskClassif} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
-								\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
-								\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
-							\end{itemize}
-						\end{myblock}
-					\vfill}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Logging}
 							\codeinline{lgr} is used for logging and progress output.
 							\\
@@ -564,9 +552,31 @@
 							\\
 							\begin{codeboxmultiline}[width=25cm]
 								\footnotesize{
-								lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")}
+									lgr::get\_logger("mlr3")\$\textbf{set\_threshold}("<level>")}
 							\end{codeboxmultiline}
 							Change log-level, you can also do this for other mlr3 packages analogously.
+						\end{myblock}
+					\vfill}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+						\begin{myblock}{mlr3viz}
+							Provides visualization for mlr3 objects.
+							Create with \codeinline{mlr3viz::autoplot(object, type)}:
+							\begin{itemize}
+								\item \codeinline{BenchmarkResult} (\codeinline{boxplot} of performance measures, \codeinline{roc}, \codeinline{prc})\\
+								\item \codeinline{Filter} (\codeinline{barplot} of filter scores)\\
+								\item \codeinline{PredictionClassif} (\codeinline{stacked} barplot of true and estimated class labels, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{PredictionRegr} (\codeinline{xy} scatterplot, \codeinline{histogram} of residuals)
+								\item \codeinline{ResampleResult} (\codeinline{boxplot} or \codeinline{histogram} of performance measures, \codeinline{roc}, \codeinline{prc})
+								\item \codeinline{TaskClassif} (barplot of \codeinline{target}, \codeinline{duo} target-features plot matrix, \codeinline{pairs} feature plot matrix with color set to target)
+								\item \codeinline{TaskRegr} (\codeinline{target}, \codeinline{pairs})
+								\item \codeinline{TaskSurv} (\codeinline{target}, \codeinline{duo}, \codeinline{pairs})
+							\end{itemize}
 						\end{myblock}
 						\begin{myblock}{Error Handling and Encapsulation}
 							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to prevent the program flow from stopping in case of errors, warnings and crashes.
