@@ -138,17 +138,15 @@
               % trained and predicted \codeinline{Graph} has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
               \ \\
               The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs:
-              \begin{codeboxmultiline}[width=24cm]
-                gr = po("pca") \textbf{\%>{}>\%}\\
-                \hspace*{1ex} po("learner", lrn("classif.rpart"))
-              \end{codeboxmultiline}
+              \begin{codebox}
+                gr = po("pca") \textbf{\%>{}>\%} lrn("classif.rpart")
+              \end{codebox}
               \ \\
               For full control, construct an empty \codeinline{Graph}, add \codeinline{PipeOp}s and connect them via their \codeinline{\$id}:
               \begin{codeboxmultiline}[width=23cm]
                 gr = \textbf{Graph}\$new()\\
                 gr\$\textbf{add\_pipeop}(po("pca"))\\
-                gr\$\textbf{add\_pipeop}(po("learner",\\
-                \hspace*{1ex}lrn("classif.rpart")))\\
+                gr\$\textbf{add\_pipeop}(lrn("classif.rpart"))\\
                 gr\$\textbf{add\_edge}("pca", "classif.rpart")
               \end{codeboxmultiline}
               \leavevmode
@@ -159,19 +157,24 @@
               \end{itemize}
               \ \\
               A \codeinline{GraphLearner} behaves like any other \codeinline{Learner}: \codeinline{grl = \textbf{GraphLearner}\$new(gr)}\\
-              See the slots \codeinline{\$encapsulate} for debugging and \codeinline{\$model} for results after training.\\
-              Predicting probabilities requires to set the predict type explicitly \codeinline{grl\$predict\_type = "prob"}
+              See the slots \codeinline{\$encapsulate} for debugging and \codeinline{\$model} for results after training. Predicting probabilities requires to set the predict type explicitly \codeinline{grl\$predict\_type = "prob"}.
 						\end{myblock}
             \begin{myblock}{Linear Graphs}
-              Often, a \codeinline{Graph} (or a \codeinline{GraphLearner}) resembles a linear structure and only requires use of the \%>{}>\% operator, e.g.:
+              Often, a \codeinline{Graph} (or a \codeinline{GraphLearner}) resembles a linear structure and only requires use of \%>{}>\%, e.g.:
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/grl_linear.pdf}
               \end{center}
-              \begin{codeboxmultiline}[width=27cm]
-                GraphLearner\$new(po("scale") \%>{}>\%\\
-                \hspace*{1ex} po("encode") \%>{}>\% po("imputemean") \%>{}>\% \\
-                \hspace*{1ex} po("learner", lrn("classif.rpart")))
-              \end{codeboxmultiline}
+              \begin{codeboxexample}
+                {\footnotesize
+                  grl = GraphLearner\$new(po("scale") \%>{}>\%\\
+                  \hspace*{1ex} po("encode") \%>{}>\% po("imputemean") \%>{}>\% \\
+                  \hspace*{1ex} lrn("classif.rpart"))\\
+                  grl\$train(task); grl\$model \# train and results\\
+                  \# perform 3-fold cross-validation:\\
+                  rcv = rsmp("cv", folds = 3); rcv\$instantiate(task)\\
+                  rr = resample(task, grl, rcv)\\
+                  grl\$predict(task) \# predict on a (new) task}
+              \end{codeboxexample}
             \end{myblock}
 						\vfill}
 				\end{minipage}
@@ -189,6 +192,7 @@
               This allows for splitting a node into several paths, i.e., \textbf{branching} (in the following, only one path, pca or scale, can be set active at a time):
               \begin{codeboxexample}
 						    {\footnotesize
+                  \# embed pca and scale between branch and unbranch:\\
                   choices = c("pca", "scale")\\
                   gr = po("branch", options = choices) \%>{}>\%\\
                   \hspace*{1ex} gunion(list(po("pca"), po("scale"))) \%>{}>\%\\
@@ -200,6 +204,7 @@
               \codeinline{PipeOpFeatureUnion} aggregates features from all input tasks into a single \codeinline{Task} (in the example we combine the original features with the principal components obtained from the pca):
               \begin{codeboxexample}
 						    {\footnotesize
+                  \# copy input to nop and pca; combine the features:\\
                   gr = po("copy", outnum = 2) \%>{}>\%\\
                   \hspace*{1ex} gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
                   \hspace*{1ex} po("featureunion")}
@@ -209,11 +214,12 @@
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/greplicate.pdf}
               \end{center}
-              Together with \codeinline{PipeOpSubsample} this straightforward allows for, e.g., \textbf{bagging} (subsampling the data, refitting the learner and averaging over the predictions):
+              Together with \codeinline{PipeOpSubsample} this straightforward allows for, e.g., \textbf{bagging} (subsampling, refitting and averaging):
               \begin{codeboxexample}
 						    {\footnotesize
-                  pr = po("subsample") \%>{}>\%\\
-                  \hspace*{1ex} po("learner", lrn("classif.rpart"))\\
+                  \# simple subsample and learner\\
+                  pr = po("subsample") \%>{}>\% lrn("classif.rpart")\\
+                  \# 10 replicates with averaging over predictions\\
                   bagging = greplicate(pr, n = 10) \%>{}>\%\\
                   \hspace*{1ex} po("classifavg", innum = 10)}
 					    \end{codeboxexample}
@@ -245,24 +251,30 @@
               \begin{codeboxexample}
 						  {\footnotesize
                 task = tsk("iris")\\
-                gr = po("pca") \%>{}>\%\\
-                \hspace*{1ex} po("learner", lrn("classif.rpart"))\\
+                \# pca and rpart as GraphLearner:\\
+                gr = po("pca") \%>{}>\% lrn("classif.rpart")\\
                 grl = GraphLearner\$new(gr)\\
                 \ \\
+                \# inner loop holdout:\\
                 resampling\_inner = rsmp("holdout")\\
                 measures = msr("classif.ce")\\
+                \# define the tuning parameters:\\
                 tune\_ps = ParamSet\$new(list(\\
                 \hspace*{1ex} ParamInt\$new("pca.rank.", lower = 1, upper = 4),\\
                 \hspace*{1ex} ParamDbl\$new("classif.rpart.cp",\\
                 \hspace*{2ex} lower = 0, upper = 0.05)\\
                 ))\\
+                \# 20 evaluations using grid\_search:\\
                 terminator = term("evals", n\_evals = 20)\\
                 tuner = tnr("grid\_search", resolution = 5)\\
                 \ \\
+                \# set up the auto tuner:\\
                 at = AutoTuner\$new(grl, resampling\_inner,\\
                 \hspace*{1ex} measures, tune\_ps, terminator, tuner)\\
                 \ \\
+                \# outer loop 2-fold cv:\\
                 resampling\_outer = rsmp("cv", folds = 2)\\
+                \ \\
                 rr = resample(task, at, resampling\_outer)}
 					    \end{codeboxexample}
             \end{myblock}
