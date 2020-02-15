@@ -79,9 +79,8 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Intro}
-              Combine ML operations to flexible pipelines and processing graphs, 
-              which can be configured trained, resampled, tuned as any regular learner.
-                            % The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the \%>{}>\% operator.
+              Combine ML operations to flexible pipelines and processing graphs, which can be configured trained, resampled, tuned as any regular learner.
+              % The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the \%>{}>\% operator.
             \end{myblock}
 						\begin{myblock}{PipeOps}
               Flow operation with train and predict step. During train, transforms input and learns a state. During predict, applies transforms input with stored state.
@@ -96,7 +95,7 @@
                 \item \codeinline{\textbf{\$train}(input)}: arg is named list
                 \item \codeinline{\textbf{\$predict}(input)}: arg is named list
                 \item \codeinline{\textbf{\$state}} 
-                    % obtained during training and usually required for prediction
+                % obtained during training and usually required for prediction
                 \item \codeinline{\textbf{\$param\_set}} see Hyperparameters
               \end{itemize}
   			\end{myblock}
@@ -110,9 +109,10 @@
                     PipeOpRemoveConstants & "removeconstants" & Repair Tasks\\
                     PipeOpEncode & "encode" & Factor Encoding\\
                     PipeOpClassBalancing & "classbalancing" & Imbalanced Data\\
-                    PipeOpImputeHist & "imputehist" & Missing Data\\
+                    PipeOpImputeMean & "imputemean" & Missing Data\\
                     PipeOpLearner & "learner" & Any Learner\\
-                    PipeOpLearnerCV & "learner\_cv" & Ensembles\\ \hline
+                    PipeOpLearnerCV & "learner\_cv" & Ensembles\\
+                    PipeOpMutate & "mutate" & Fearure Engineering\\ \hline
                   \end{tabular}
                 \end{centering}
               \end{footnotesize}
@@ -130,19 +130,16 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Graphs}
-              Connects \codeinline{PipeOp}s with edges to control data flow during training and prediction.
-              Input is sent to sources (no incoming edges), output is read from sinks (no outoing edges) 
-              of the graph.
+              Connects \codeinline{PipeOp}s with edges to control data flow during training and prediction. Input is sent to sources (no incoming edges), output is read from sinks (no outoing edges) of the graph. \codeinline{PipeOp}s can have different numbers of \codeinline{\$input}s and  \codeinline{\$output}s.\\
               % The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
-
-              % trained and predicted \codeinline{Graph} has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
+              % Trained and predicted \codeinline{Graph} has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
               \ \\
-              The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs:
+              The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs; this requires the number of outputs and inputs to match:
               \begin{codebox}
                 gr = po("pca") \textbf{\%>{}>\%} lrn("classif.rpart")
               \end{codebox}
               \ \\
-              For full control, construct an empty \codeinline{Graph}, add \codeinline{PipeOp}s and connect them via their \codeinline{\$id}:
+              For full control of input-output connection, construct an empty \codeinline{Graph}, add \codeinline{PipeOp}s and connect them via their \codeinline{\$id}:
               \begin{codeboxmultiline}[width=23cm]
                 gr = \textbf{Graph}\$new()\\
                 gr\$\textbf{add\_pipeop}(po("pca"))\\
@@ -156,26 +153,10 @@
                 \item Assessing the \codeinline{PipeOp}s: \codeinline{gr\$\textbf{pipeops}}
               \end{itemize}
               \ \\
-              A \codeinline{GraphLearner} behaves like any other \codeinline{Learner}: \codeinline{grl = \textbf{GraphLearner}\$new(gr)}\\
+              A \codeinline{GraphLearner} can be constructed from any \codeinline{Graph} and behaves like any other \codeinline{Learner}: \codeinline{grl = \textbf{GraphLearner}\$new(gr)}\\
+              \ \\
               See the slots \codeinline{\$encapsulate} for debugging and \codeinline{\$model} for results after training. Predicting probabilities requires to set the predict type explicitly \codeinline{grl\$predict\_type = "prob"}.
 						\end{myblock}
-            \begin{myblock}{Linear Graphs}
-              Often, a \codeinline{Graph} (or a \codeinline{GraphLearner}) resembles a linear structure and only requires use of \%>{}>\%, e.g.:
-              \begin{center}
-                \includegraphics[width=0.7\textwidth]{img/grl_linear.pdf}
-              \end{center}
-              \begin{codeboxexample}
-                {\footnotesize
-                  grl = GraphLearner\$new(po("scale") \%>{}>\%\\
-                  \hspace*{1ex} po("encode") \%>{}>\% po("imputemean") \%>{}>\% \\
-                  \hspace*{1ex} lrn("classif.rpart"))\\
-                  grl\$train(task); grl\$model \# train and results\\
-                  \# perform 3-fold cross-validation:\\
-                  rcv = rsmp("cv", folds = 3); rcv\$instantiate(task)\\
-                  rr = resample(task, grl, rcv)\\
-                  grl\$predict(task) \# predict on a (new) task}
-              \end{codeboxexample}
-            \end{myblock}
 						\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
@@ -184,12 +165,49 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-            \begin{myblock}{Nonlinear Graphs}
+            \begin{myblock}{Linear Graphs}
+              The main purpose of a \codeinline{Graph} is to build combined preprocessing and model fitting pipelines that can be used as a \codeinline{Learner}. Often, a \codeinline{Graph} (or a \codeinline{GraphLearner}) resembles a linear structure and only requires use of \%>{}>\%. The following schematic shows a \codeinline{GraphLearner} centering and scaling features, encoding factors and imputing missing data before a \codeinline{Learner} is applied.
+              \begin{center}
+                \includegraphics[width=0.7\textwidth]{img/grl_linear.pdf}
+              \end{center}
+              \ \\
+              \begin{codeboxexample}
+                {\footnotesize
+                  \# construct the graph learner:\\
+                  grl = GraphLearner\$new(po("scale") \%>{}>\%\\
+                  \hspace*{1ex} po("encode") \%>{}>\% po("imputemean") \%>{}>\%\\
+                  \hspace*{1ex} lrn("classif.rpart"))\\
+                  \ \\
+                  \# train on a task:\\
+                  grl\$train(task)\\
+                  \# and look at the results:\\
+                  grl\$model\\
+                  \ \\
+                  \# predict on a (new) task:\\
+                  grl\$predict(task)\\
+                  \ \\
+                  \# perform resampling (3-fold cv):\\
+                  rcv = rsmp("cv", folds = 3)\\
+                  rcv\$instantiate(task)\\
+                  rr = resample(task, grl, rcv)}
+              \end{codeboxexample}
+            \end{myblock}
+				    \vfill}
+				\end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+    \begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+             \begin{myblock}{Nonlinear Graphs}
+              Multiple input or output channels allow for nonlinear \codeinline{Graphs}. Useful functions in this context are \codeinline{gunion()} and \codeinline{greplicate()}.\\
+              \ \\
               \codeinline{\textbf{gunion}()} arranges \codeinline{PipeOp}s or \codeinline{Graph}s next to each other in a disjoint graph union.
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/gunion.pdf}
               \end{center}
-              This allows for splitting a node into several paths, i.e., \textbf{branching} (in the following, only one path, pca or scale, can be set active at a time):
+              Using \codeinline{PipeOpBranch} and \codeinline{PipeOpUnbranch}, this allows for splitting a node into several paths, called \textbf{branching} (in the following, only one path, pca or scale, can be set active at a time):
               \begin{codeboxexample}
 						    {\footnotesize
                   \# embed pca and scale between branch and unbranch:\\
@@ -198,17 +216,9 @@
                   \hspace*{1ex} gunion(list(po("pca"), po("scale"))) \%>{}>\%\\
                   \hspace*{1ex} po("unbranch", options = choices)\\
                   \# set the pca path active:\\
+                  \ \\
                   gr\$param\_set\$values\$branch.selection = "pca"}
 					      \end{codeboxexample}
-              \ \\
-              \codeinline{PipeOpFeatureUnion} aggregates features from all input tasks into a single \codeinline{Task} (in the example we combine the original features with the principal components obtained from the pca):
-              \begin{codeboxexample}
-						    {\footnotesize
-                  \# copy input to nop and pca; combine the features:\\
-                  gr = po("copy", outnum = 2) \%>{}>\%\\
-                  \hspace*{1ex} gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
-                  \hspace*{1ex} po("featureunion")}
-              \end{codeboxexample}
               \ \\
               \codeinline{\textbf{greplicate}()} creates a new \codeinline{Graph} containing \codeinline{n} copies of the input (\codeinline{PipeOp} or \codeinline{Graph}).
               \begin{center}
@@ -224,7 +234,50 @@
                   \hspace*{1ex} po("classifavg", innum = 10)}
 					    \end{codeboxexample}
             \end{myblock}
-						\vfill}
+            \vfill}
+         \end{minipage}
+	    \end{beamercolorbox}
+		\end{column}
+ \end{columns}
+\end{frame}
+\begin{frame}[fragile]{}
+	\begin{columns}
+		\begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+            \codeinline{PipeOpFeatureUnion} aggregates features from all input tasks into a single \codeinline{Task} (in the example below, we combine the original features obtained from \codeinline{PipeOpNOP} with the principal components obtained from the pca):
+              \begin{codeboxexample}
+						    {\footnotesize
+                  \# copy input to nop and pca; combine the features:\\
+                  gr = po("copy", outnum = 2) \%>{}>\%\\
+                  \hspace*{1ex} gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
+                  \hspace*{1ex} po("featureunion")}
+              \end{codeboxexample}
+              \begin{myblock}{Special PipeOps}
+                \codeinline{PipeOpImpute} imputes missing data. Methods include e.g. mean, median and histogram imputation.\\
+                \ \\
+                \codeinline{PipeOpMutate} allows for adding new features. This works by providing expressions in an \codeinline{alist}:
+                \begin{codeboxexample}
+                  \footnotesize{
+                  task = tsk("iris")\\
+                  \# add new features related to the iris task:\\
+                  mutations = list(\\
+                  \hspace*{1ex} Sepal.Sum = \char`\~ \ Sepal.Length + Sepal.Width,\\
+                  \hspace*{1ex} Petal.Sum = \char`\~ \ Petal.Length + Petal.Width\\
+                  )\\
+                  mutate = po("mutate", param\_vals =\\
+                  GraphLearner\$new(mutate \%>{}>\% lrn("classif.rpart"))
+                  \hspace*{1ex} list(mutation = mutations))}
+                \end{codeboxexample}
+                \ \\
+                \codeinline{PipeOpChunk} allows for splitting data into several parts.\\
+                \ \\
+                \codeinline{PipeOpFilter} can be used with filters from the mlr3filters package. Use this so select features for subsequent learners.\\
+                \ \\
+                \codeinline{PipeOpSelect} removes features from a task given a \codeinline{Selector} function defining the features to keep.
+              \end{myblock}
+           	\vfill}
 				\end{minipage}
 			\end{beamercolorbox}
 		\end{column}
@@ -279,7 +332,27 @@
 					    \end{codeboxexample}
             \end{myblock}
 						\vfill}
-				\end{minipage}
+        \end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+    \begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+            \begin{myblock}{}
+            \end{myblock}
+						\vfill}
+        \end{minipage}
+			\end{beamercolorbox}
+		\end{column}
+    \begin{column}{.245\textwidth}
+			\begin{beamercolorbox}[center]{postercolumn}
+				\begin{minipage}{.98\textwidth}
+					\parbox[t][\columnheight]{\textwidth}{
+            \begin{myblock}{}
+            \end{myblock}
+						\vfill}
+        \end{minipage}
 			\end{beamercolorbox}
 		\end{column}
 	\end{columns}
