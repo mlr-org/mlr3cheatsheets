@@ -178,6 +178,9 @@
                   \hspace*{1ex} po("encode") \%>{}>\% po("imputemean") \%>{}>\%\\
                   \hspace*{1ex} lrn("classif.rpart"))\\
                   \ \\
+                  \# assess the scale pipeop:
+                  grl\$graph\$pipeops\$scale\\
+                  \ \\
                   \# train on a task:\\
                   grl\$train(task)\\
                   \# and look at the results:\\
