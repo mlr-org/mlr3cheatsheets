@@ -153,6 +153,7 @@
 								\codeinline{spam} - Twoclass.
 								\item \codeinline{iris}, \codeinline{wine}, \codeinline{zoo} - Multiclass.
 								\item \codeinline{boston\_housing}, \codeinline{mtcars} - Regression.
+                                \item Inspect \codeinline{mlr\_tasks} for more.
                             \end{itemize}
 							\vspace{1em}
 							\begin{codebox}
@@ -323,6 +324,7 @@
 								\item \codeinline{classif.ce} - Classification error.
 								\item \codeinline{classif.auc} - AUROC.
 								\item \codeinline{regr.rmse} - Root mean square error.
+                                \item Inspect \codeinline{mlr\_measures} for more.
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
@@ -582,12 +584,12 @@
 							\end{itemize}
 						\end{myblock}
 						\begin{myblock}{Error Handling and Encapsulation}
-							The \codeinline{evaluate} package is used to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to prevent the program flow from stopping in case of errors, warnings and crashes.
+                            Packages \codeinline{evaluate} and \codeinline{callr} are used internally to encapsulate execution of \codeinline{\$train} and \codeinline{\$predict} to prevent stops in case of errors and crashes - useful for larger experments. \codeinline{callr} runs both steps in separate R sessions.
 							\\
-							\begin{codeboxmultiline}[width=16cm]
+							\begin{codeboxmultiline}[width=20cm]
 								learner\$\textbf{encapsulate} = c(\\
-								\hspace*{1ex} train = "evaluate", \\
-								\hspace*{1ex} predict = "evaluate")
+								\hspace*{1ex} train = "evaluate/callr", \\
+								\hspace*{1ex} predict = "evaluate/callr")
 							\end{codeboxmultiline}
 							\vspace{1em}
 							\begin{codebox}
@@ -599,14 +601,15 @@
 								learner\$\textbf{fallback} = lrn(.key)
 							\end{codebox}
 							If learner fails, fallback is used to generate predictions. 
-                            Use robust fallback, e.g. "featureless"! Can ease pain in complex benchmarks when learners fail in edge-cases.
+                            Use robust fallback, e.g. "featureless". Can ease pain when learners fail in edge-cases.
 						\end{myblock}
 						\begin{myblock}{Resources}
 							\begin{itemize}
 								\item \href{https://mlr3book.mlr-org.com/index.html}{mlr3book}\\ (https://mlr3book.mlr-org.com)
-								\item \href{https://github.com/mlr-org}{mlr-org on GitHub}\\ (https://github.com/mlr-org)
+								% \item \href{https://github.com/mlr-org}{mlr-org on GitHub}\\ (https://github.com/mlr-org)
 								\item \href{https://github.com/mlr-org/mlr3learners}{mlr3learners package}\\ (https://github.com/mlr-org/mlr3learners)
 								\item \href{https://github.com/mlr3learners}{mlr3learners organization}\\ (https://github.com/mlr3learners)
+								\item \href{https://mlr3gallery.mlr-org.com/}{mlr3gallery scripts}\\ (https://mlr3gallery.mlr-org.com/)
 							\end{itemize}
 						\end{myblock}
 					\vfill}
