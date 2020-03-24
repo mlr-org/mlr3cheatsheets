@@ -5,6 +5,7 @@ Cheat Sheets of mlr-org packages
 ## Cheatsheets
 
 - [mlr3](cheatsheets.mlr-org.com/mlr3.pdf)
+- [mlr3pipelines](cheatsheets.mlr-org.com/mlr3pipelines.pdf)
 
 ## Instructions
 
