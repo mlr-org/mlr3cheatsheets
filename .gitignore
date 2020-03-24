@@ -244,3 +244,5 @@ TSWLatexianTemp*
 *.spl
 .Rproj.user
 *.Rproj
+docs/
+.vscode
