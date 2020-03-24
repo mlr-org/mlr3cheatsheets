@@ -1,6 +1,11 @@
 get_stage("deploy") %>%
+  # mlr3
   add_code_step(withr::with_dir("mlr3", tinytex::latexmk("mlr3cheatsheet.tex"))) %>%
   add_code_step(fs::file_move("mlr3/mlr3cheatsheet.pdf", "mlr3.pdf")) %>%
+  # mlr3pipelines
+  add_code_step(withr::with_dir("mlr3pipelines", tinytex::latexmk("mlr3pipelinescheatsheet.tex"))) %>%
+  add_code_step(fs::file_move("mlr3pipelines/mlr3pipelinescheatsheet.pdf", "mlr3pipelines.pdf")) %>%
+  # CNAME
   add_code_step(writeLines("cheatsheets.mlr-org.com", "CNAME"))
 
 if (ci_can_push() && !ci_is_tag()) {
