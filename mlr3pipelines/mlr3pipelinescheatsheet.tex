@@ -116,7 +116,7 @@
                     \textbf{Class} & \textbf{Key} & \textbf{Operation} \\ \hline
                     PipeOpRemoveConstants & "removeconstants" & Repair Tasks\\
                     PipeOpScale & "scale" & Scale Features\\
-                    PipeOpImpute & "impute" & Impute NAs\\
+                    PipeOpImputeMean & "impute" & Impute NAs\\
                     PipeOpFilter & "filter" & Feature Filter\\
                     PipeOpEncode & "encode" & Factor Encoding\\
                     PipeOpPCA & "pca" & PCA\\
@@ -203,9 +203,9 @@
                   grl\$model\\
                   grl\$predict(task)\\
                   % \# perform resampling (3-fold cv):\\
-                  rcv = rsmp("cv", folds = 3)\\
+                  % rcv = rsmp("cv", folds = 3)\\
                   % rcv\$instantiate(task)\\
-                  rr = resample(task, grl, rsmp("cv", 3))
+                  rr = resample(task, grl, rsmp("cv", folds = 3))
               }
               \end{codeboxexample}
             \end{myblock}
@@ -223,12 +223,12 @@
               For POs: Exactly as in a \codeinline{Learner}.
               % To inspect the parameters see the \codeinline{\$param\_set}, e.g., \codeinline{po("pca")\$\textbf{param\_set}}.\\
               % Access the \codeinline{\$param\_set\$values} slot to set or retrieve a parameter, or specify \codeinline{param\_vals} during construction:
-              \begin{codeboxmultiline}[width=24cm]
-                {\footnotesize pca = po("pca") \\
-                pca\$param\_set\\
-                pca\$param\_set\$\textbf{values} = list(scale. = TRUE) \\
+              \begin{codeboxmultiline}[width=26cm]
+                {\footnotesize enc = po("encode") \\
+                enc\$param\_set\\
+                enc\$param\_set\$\textbf{values} = list(method="one-hot") \\
                 % \# alternatively:\\
-                po("pca", \textbf{param\_vals} = list(scale. = TRUE))}
+                po("encode", \textbf{param\_vals} = list(method="one-hot"))}
               \end{codeboxmultiline}
               For \codeinline{Graph} / \codeinline{GraphLearner}: All HPs are collected in a global \codeinline{\$param\_set}. IDs are prefixed with the respective \codeinline{PipeOp}'s \codeinline{id}.
               % e.g., \codeinline{pca.rank.} corresponds to the \codeinline{PipeOpPCA}'s \codeinline{rank.} parameter.
@@ -245,23 +245,25 @@
              % Done as with any other \codeinline{Learner} (see \href{FIXME:CheatsheetLink}{mlr3tuning}). E.g., use an \codeinline{AutoTuner} for the rank parameter of the PCA and the complexity parameter of rpart with respect to the classification error as the performance measure:
              \begin{codeboxexample}
 						  {\footnotesize
-               task = tsk("iris")\\
+               % task = tsk("iris")\\
                % \# pca and rpart as GraphLearner:\\
-               gr = po("pca") \%>{}>\% lrn("classif.rpart")\\
+               gr = po("encode") \%>{}>\% lrn("classif.rpart")\\
                grl = GraphLearner\$new(gr)\\
                % \# inner loop holdout:\\
                % measures = msr("classif.ce")\\
                % \# define the tuning parameters:\\
                tune\_ps = ParamSet\$new(list(\\
-               \hspace*{1ex} ParamInt\$new("pca.rank", lower = 1, upper = 4),\\
+               \hspace*{1ex} ParamFct\$new("encode.method",\\ 
+               \hspace*{3ex} levels = c("one-hot", "poly")),\\
+               % lower = 1, upper = 4),\\
                \hspace*{1ex} ParamDbl\$new("classif.rpart.cp",\\
-               \hspace*{2ex} lower = 0, upper = 0.05)\\
+               \hspace*{3ex} lower = 0, upper = 0.05)\\
                ))\\
-               % tt = term("evals", n\_evals = 20)\\
+               tt = term("evals", n\_evals = 20)\\
                rs = rsmp("holdout")\\
-               inst = TuningInstance\$new(tsk("iris"), grl, rs,\\
-               \hspace*{1ex} msr("classif.ce"), tune\_ps, term("evals", 20))\\
-               tuner = tnr("grid\_search", resolution = 5)\\
+               inst = TuningInstance\$new(task, grl, rs,\\
+               \hspace*{1ex} msr("classif.ce"), tune\_ps, tt)\\
+               tuner = tnr("random\_search")\\
                tuner\$tune(inst)
                % resampling\_outer = rsmp("cv", folds = 2)\\
                % rr = resample(task, at, resampling\_outer)
