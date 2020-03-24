@@ -73,64 +73,62 @@
 
 \begin{document}
 \begin{frame}[fragile]{}
-	\begin{columns}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Intro}
+  \begin{columns}
+    \begin{column}{.245\textwidth}
+      \begin{beamercolorbox}[center]{postercolumn}
+        \begin{minipage}{.98\textwidth}
+          \parbox[t][\columnheight]{\textwidth}{
+            \begin{myblock}{Introduction}
               % \vspace{-0.5em}
               Combine ML operations to flexible pipelines and processing graphs, which can be configured trained, resampled, tuned as any regular learner.
               % The mlr3pipelines package is an extension for the \href{https://github.com/mlr-org/mlr3}{mlr3} package and provides \codeinline{PipeOp}s (pipeline operators) which can be connected to a \codeinline{Graph} using, e.g., the \%>{}>\% operator.
-              The main purpose of a \codeinline{Graph} is to build combined preprocessing and model fitting pipelines that can be used as a \codeinline{Learner}. 
+              The main purpose of a \codeinline{Graph} is to build combined preprocessing and model fitting pipelines that can be used as a \codeinline{Learner}.
               % The following schematic shows a \codeinline{GraphLearner} centering and scaling features, encoding factors and imputing missing data before a \codeinline{Learner} is applied.
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/grl_linear.pdf}
               \end{center}
-              Each operation in this example is a \codeinline{PipeOp} which transforms the data when it flows through it. \codeinline{PipeOp}s are connected with the \codeinline{\%>{}>\%} operator.
-              
+              Each operation in the above example is a \codeinline{PipeOp} which transforms the data in each step. \codeinline{PipeOp}s are chained with the \codeinline{\%>{}>\%} operator.
             \end{myblock}
+            \vspace{-1.0em}
+            \begin{myblock}{PipeOp}
               \vspace{-1.0em}
-              \begin{myblock}{PipeOp}
-              \vspace{-1.0em}
-              Flow operation with train and predict step. During train, transforms input and learns a state. During predict, transforms input with stored state.
+              Flow operation with \codeinline{\$train()} and \codeinline{\$predict()} step.
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/po.pdf}
               \end{center}
-              Construction via a \codeinline{key}, e.g.: \codeinline{pca = \textbf{po}("pca")} \\
-              Important methods and slots:
+              Construction example: \codeinline{pca = \textbf{po}("pca")}
+              \\
               \begin{itemize}
-                \item \codeinline{\textbf{\$train}(input)}: arg is named list
-                \item \codeinline{\textbf{\$predict}(input)}: arg is named list
-                \item \codeinline{\textbf{\$state}}: learned parameters
-                % obtained during training and usually required for prediction
-                \item \codeinline{\textbf{\$param\_set}} see Hyperparameters
+                \item \codeinline{\textbf{\$train}(input)}: Named list
+                \item \codeinline{\textbf{\$predict}(input)}: Named list
+                \item \codeinline{\textbf{\$state}}: Learned parameters
+                      % obtained during training and usually required for prediction
+                \item \codeinline{\textbf{\$param\_set}}: See hyperparameters
               \end{itemize}
-  			    \end{myblock}
-              \vspace{-1.0em}
-            \begin{myblock}{Important PipeOps}
-              \vspace{-1.0em}
+            \end{myblock}
+            \vspace{-1.0em}
+            \begin{myblock}{Popular PipeOps}
               \begin{footnotesize}
                 \begin{centering}
                   \begin{tabular}{l l l}
-                    \textbf{Class} & \textbf{Key} & \textbf{Operation} \\ \hline
-                    PipeOpRemoveConstants & "removeconstants" & Repair Tasks\\
-                    PipeOpScale & "scale" & Scale Features\\
-                    PipeOpImputeMean & "impute" & Impute NAs\\
-                    PipeOpFilter & "filter" & Feature Filter\\
-                    PipeOpEncode & "encode" & Factor Encoding\\
-                    PipeOpPCA & "pca" & PCA\\
-                    PipeOpSelect & "select" & Restrict Columns\\ 
-                    PipeOpColApply & "colapply" & Transform Columns\\ 
-                    PipeOpClassBalancing & "classbalancing" & Imbalanced Data\\
-                    PipeOpLearner & "learner" & Use Learner\\
-                    PipeOpLearnerCV & "learner\_cv" & Crossval Learner\\
-                    PipeOpMutate & "mutate" & Fearure Engineering\\ 
-                    PipeOpChunk & "chunk" & Split Data\\ 
-                    PipeOpSubsample & "subsample" & Subsample Rows\\ 
-                    PipeOpFeatureUnion & "featureunion" & Combine Features\\ 
-                    PipeOpFixFactors & "fixfactors" & Handle Unknown Levels\\
-                    PipeOpNOP & "nop" & Do Nothing\\
+                    \textbf{Class}        & \textbf{Key}      & \textbf{Operation}    \\ \hline
+                    PipeOpRemoveConstants & "removeconstants" & Repair Tasks          \\
+                    PipeOpScale           & "scale"           & Scale Features        \\
+                    PipeOpImputeMean      & "impute"          & Impute NAs            \\
+                    PipeOpFilter          & "filter"          & Feature Filter        \\
+                    PipeOpEncode          & "encode"          & Factor Encoding       \\
+                    PipeOpPCA             & "pca"             & PCA                   \\
+                    PipeOpSelect          & "select"          & Restrict Columns      \\
+                    PipeOpColApply        & "colapply"        & Transform Columns     \\
+                    PipeOpClassBalancing  & "classbalancing"  & Imbalanced Data       \\
+                    PipeOpLearner         & "learner"         & Use Learner           \\
+                    PipeOpLearnerCV       & "learner\_cv"     & Crossval Learner      \\
+                    PipeOpMutate          & "mutate"          & Fearure Engineering   \\
+                    PipeOpChunk           & "chunk"           & Split Data            \\
+                    PipeOpSubsample       & "subsample"       & Subsample Rows        \\
+                    PipeOpFeatureUnion    & "featureunion"    & Combine Features      \\
+                    PipeOpFixFactors      & "fixfactors"      & Handle Unknown Levels \\
+                    PipeOpNOP             & "nop"             & Do Nothing            \\
                     \hline
                     % PipeOpChunk & "mutate" & Fearure Engineering\\ \hline
                   \end{tabular}
@@ -138,38 +136,39 @@
               \end{footnotesize}
               \ \\
               Full list: \codeinline{as.data.table(mlr\_pipeops)}
-						\end{myblock}
-           	\vfill}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
+            \end{myblock}
+            \vfill}
+        \end{minipage}
+      \end{beamercolorbox}
+    \end{column}
+    \begin{column}{.245\textwidth}
+      \begin{beamercolorbox}[center]{postercolumn}
+        \begin{minipage}{.98\textwidth}
+          \parbox[t][\columnheight]{\textwidth}{
             % \vspace{-0.5em}
-						\begin{myblock}{Graph}
-              \vspace{-0.5em}
-              Connects \codeinline{PipeOp}s with edges to control data flow during training and prediction. Input is sent to sources (no in-edges), output is read from sinks (no out-edges). 
+            \begin{myblock}{Graph}
+              Connects \codeinline{PipeOp}s with edges to control data flow during training and prediction. Input is sent to sources (no in-edges), output is read from sinks (no out-edges).
+              \\
               % \codeinline{PipeOp}s can have different numbers of \codeinline{\$input}s and  \codeinline{\$output}s.\\
               % Can be constructed by concatenating \codeinline{PipeOp}s via \codeinline{\%>{}>\%}, or using \codeinline{Graph\$new()}.\\
               % The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
               % Trained and predicted \codeinline{Graph} has a \codeinline{\$train()} and \codeinline{\$predict()} method that accept data and propagate this data through the network of \codeinline{PipeOp}s. The return value corresponds to the output of the \codeinline{PipeOp} outputs that are not connected to other \codeinline{PipeOp}s.\\
-            % this requires the number of outputs and inputs to match:
+              % this requires the number of outputs and inputs to match:
               % \begin{codebox}
-                % gr = po("pca") \textbf{\%>{}>\%} lrn("classif.rpart")
+              % gr = po("pca") \textbf{\%>{}>\%} lrn("classif.rpart")
               % \end{codebox}
               \ \\
               Important methods and slots:
               \begin{itemize}
                 \item Display: \codeinline{\textbf{print}(gr)}, \codeinline{gr\$\textbf{plot}(html = TRUE)}\\
-                \item Accessing the \codeinline{PipeOp}s: \codeinline{gr\$\textbf{pipeops}}\\
-                Named list of all contained POs.  
-            \end{itemize}
+                \item Accessing \codeinline{PipeOp}s: \codeinline{gr\$\textbf{pipeops}}\\
+                      Named list of all contained POs.
+              \end{itemize}
             \end{myblock}
             \begin{myblock}{Graph Construction}
-                The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs.
+              The \codeinline{\%>{}>\%} operator takes either a \codeinline{PipeOp} or a \codeinline{Graph} on each of its sides and connects all left-hand outputs to the right-hand inputs.
               \ \\
+              \\
               For full control, connect \codeinline{PipeOp}s explicitly:
               \begin{codeboxmultiline}[width=23cm]
                 gr = \textbf{Graph}\$new()\\
@@ -181,56 +180,60 @@
             \vspace{-0.5em}
             \begin{myblock}{GraphLearner}
               \vspace{-0.5em}
-              Make \codeinline{Graph} behave like \codeinline{Learner} and enable all mlr3 features.
+              \codeinline{GraphLearner} behave like \codeinline{Learner} and enable all mlr3 features.
               : \codeinline{grl = \textbf{GraphLearner}\$new(gr)}\\
-              See slots \codeinline{\$encapsulate} for debugging and \codeinline{\$model} for results after training. 
+              \\
+              See slots \codeinline{\$encapsulate} for debugging and \codeinline{\$model} for results after training.
               % NB \codeinline{grl\$predict\_type} must be set exp.
-						\end{myblock}
+            \end{myblock}
             \begin{myblock}{Linear Graphs}
               \vspace{-0.5em}
-              Simply concat POs with \codeinline{\%>{}>\%}:
+              Concatenate POs with \codeinline{\%>{}>\%}:
+              \\
               % Below, we construct the introductory example: scaling, one-hot encoding and mean imputation. By wrapping the \codeinline{Graph} in a \codeinline{GraphLearner} we construct a \codeinline{Learner}.
               \begin{codeboxexample}
                 {\footnotesize
-                  % \# construct the graph:\\
-                  gr = po("scale") \%>{}>\% po("encode") \%>{}>\%\\
-                  \hspace*{1ex} po("imputemean") \%>{}>\% lrn("classif.rpart")\\
-                  grl = GraphLearner\$new(gr)\\
-                  \# access the scale pipeop:
-                  grl\$graph\$pipeops\$scale\\
-                  % \# train and predict on a task:\\
-                  grl\$train(task)\\
-                  grl\$model\\
-                  grl\$predict(task)\\
-                  % \# perform resampling (3-fold cv):\\
-                  % rcv = rsmp("cv", folds = 3)\\
-                  % rcv\$instantiate(task)\\
-                  rr = resample(task, grl, rsmp("cv", folds = 3))
-              }
+                % \# construct the graph:\\
+                gr = po("scale") \%>{}>\% po("encode") \%>{}>\%\\
+                \hspace*{1ex} po("imputemean") \%>{}>\% lrn("classif.rpart")\\
+                grl = GraphLearner\$new(gr)\\
+                \# access the scale pipeop:
+                grl\$graph\$pipeops\$scale\\
+                % \# train and predict on a task:\\
+                grl\$train(task)\\
+                grl\$model\\
+                grl\$predict(task)\\
+                % \# perform resampling (3-fold cv):\\
+                % rcv = rsmp("cv", folds = 3)\\
+                % rcv\$instantiate(task)\\
+                rr = resample(task, grl, rsmp("cv", folds = 3))
+                }
               \end{codeboxexample}
             \end{myblock}
-						\vfill}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
-		\begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
+            \vfill}
+        \end{minipage}
+      \end{beamercolorbox}
+    \end{column}
+    \begin{column}{.245\textwidth}
+      \begin{beamercolorbox}[center]{postercolumn}
+        \begin{minipage}{.98\textwidth}
+          \parbox[t][\columnheight]{\textwidth}{
             \begin{myblock}{Hyperparameters}
-              \vspace{-0.5em}
               % mlr3pipelines relies on the paradox package to provide parameters that can modify a \codeinline{PipeOp}'s or \codeinline{Graph}'s behavior. 
               For POs: Exactly as in a \codeinline{Learner}.
+              \\
               % To inspect the parameters see the \codeinline{\$param\_set}, e.g., \codeinline{po("pca")\$\textbf{param\_set}}.\\
               % Access the \codeinline{\$param\_set\$values} slot to set or retrieve a parameter, or specify \codeinline{param\_vals} during construction:
               \begin{codeboxmultiline}[width=26cm]
                 {\footnotesize enc = po("encode") \\
-                enc\$param\_set\\
-                enc\$param\_set\$\textbf{values} = list(method="one-hot") \\
-                % \# alternatively:\\
-                po("encode", \textbf{param\_vals} = list(method="one-hot"))}
+                  enc\$param\_set\\
+                  enc\$param\_set\$\textbf{values} = list(method="one-hot") \\
+                  % \# alternatively:\\
+                  po("encode", \textbf{param\_vals} = list(method="one-hot"))}
               \end{codeboxmultiline}
-              For \codeinline{Graph} / \codeinline{GraphLearner}: All HPs are collected in a global \codeinline{\$param\_set}. IDs are prefixed with the respective \codeinline{PipeOp}'s \codeinline{id}.
+              \vspace{1.0em}
+              For \codeinline{Graph} / \codeinline{GraphLearner}: All HPs are collected in a global ParamSet stored in \codeinline{\$param\_set}.
+              IDs are prefixed with the respective \codeinline{PipeOp}'s \codeinline{id}.
               % e.g., \codeinline{pca.rank.} corresponds to the \codeinline{PipeOpPCA}'s \codeinline{rank.} parameter.
               % . A \codeinline{GraphLearner} preserves the parameters of its encapsulated objects.\\ . A \codeinline{GraphLearner} preserves the parameters of its encapsulated objects.\\
               % \ \\
@@ -238,120 +241,129 @@
               % This can be done as with any other \codeinline{Learner} (see \href{FIXME:CheatsheetLink}{mlr3tuning}). 
               % Hyperparameter names are prefixed with the respective \codeinline{PipeOp}'s \codeinline{id}, e.g., \codeinline{pca.rank.} corresponds to the \codeinline{PipeOpPCA}'s \codeinline{rank.} parameter.
             \end{myblock}
-              \vspace{-1.0em}
-           \begin{myblock}{Tuning}
-              \vspace{-1.0em}
-             Can jointly tune any Pipeline, no difference.  
-             % Done as with any other \codeinline{Learner} (see \href{FIXME:CheatsheetLink}{mlr3tuning}). E.g., use an \codeinline{AutoTuner} for the rank parameter of the PCA and the complexity parameter of rpart with respect to the classification error as the performance measure:
-             \begin{codeboxexample}
-						  {\footnotesize
-               % task = tsk("iris")\\
-               % \# pca and rpart as GraphLearner:\\
-               gr = po("encode") \%>{}>\% lrn("classif.rpart")\\
-               grl = GraphLearner\$new(gr)\\
-               % \# inner loop holdout:\\
-               % measures = msr("classif.ce")\\
-               % \# define the tuning parameters:\\
-               tune\_ps = ParamSet\$new(list(\\
-               \hspace*{1ex} ParamFct\$new("encode.method",\\ 
-               \hspace*{3ex} levels = c("one-hot", "poly")),\\
-               % lower = 1, upper = 4),\\
-               \hspace*{1ex} ParamDbl\$new("classif.rpart.cp",\\
-               \hspace*{3ex} lower = 0, upper = 0.05)\\
-               ))\\
-               tt = term("evals", n\_evals = 20)\\
-               rs = rsmp("holdout")\\
-               inst = TuningInstance\$new(task, grl, rs,\\
-               \hspace*{1ex} msr("classif.ce"), tune\_ps, tt)\\
-               tuner = tnr("random\_search")\\
-               tuner\$tune(inst)
-               % resampling\_outer = rsmp("cv", folds = 2)\\
-               % rr = resample(task, at, resampling\_outer)
-           }
-				\end{codeboxexample}
-            Usage of \codeinline{AutoTuner} is also completely the same.
+            \vspace{-1.0em}
+            \begin{myblock}{Tuning}
+              Can jointly tune any Pipeline.
+              \\
+              % Done as with any other \codeinline{Learner} (see \href{FIXME:CheatsheetLink}{mlr3tuning}). E.g., use an \codeinline{AutoTuner} for the rank parameter of the PCA and the complexity parameter of rpart with respect to the classification error as the performance measure:
+              \begin{codeboxexample}
+                {\footnotesize
+                % task = tsk("iris")\\
+                % \# pca and rpart as GraphLearner:\\
+                gr = po("encode") \%>{}>\% lrn("classif.rpart")\\
+                grl = GraphLearner\$new(gr)\\
+                % \# inner loop holdout:\\
+                % measures = msr("classif.ce")\\
+                % \# define the tuning parameters:\\
+                tune\_ps = ParamSet\$new(list(\\
+                \hspace*{1ex} ParamFct\$new("encode.method",\\
+                \hspace*{3ex} levels = c("one-hot", "poly")),\\
+                % lower = 1, upper = 4),\\
+                \hspace*{1ex} ParamDbl\$new("classif.rpart.cp",\\
+                \hspace*{3ex} lower = 0, upper = 0.05)\\
+                ))\\
+                tt = term("evals", n\_evals = 20)\\
+                rs = rsmp("holdout")\\
+                inst = TuningInstance\$new(task, grl, rs,\\
+                \hspace*{1ex} msr("classif.ce"), tune\_ps, tt)\\
+                tuner = tnr("random\_search")\\
+                tuner\$tune(inst)
+                % resampling\_outer = rsmp("cv", folds = 2)\\
+                % rr = resample(task, at, resampling\_outer)
+                }
+              \end{codeboxexample}
+              \vspace{1.0em}
+              Usage of \codeinline{AutoTuner} is identical.
             \end{myblock}
-              \vspace{-1.0em}
-          \begin{myblock}{Feature Engineering}
-            % \codeinline{PipeOpImpute} imputes missing data. Methods include e.g. mean, median and histogram imputation.\\
-            \codeinline{PipeOpMutate} allows for adding new features. This works by providing expressions in an \codeinline{alist}:
-            \begin{codeboxexample}
-              \footnotesize{
-              task = tsk("iris")\\
-              % \# add new features related to the iris task:\\
-              mutations = list(\\
-              \hspace*{1ex} Sepal.Sum = \char`\~ \ Sepal.Length + Sepal.Width\\
-              % \hspace*{1ex} Petal.Sum = \char`\~ \ Petal.Length + Petal.Width\\
-              )\\
-              mutate = po("mutate", param\_vals =\\
-              \hspace*{1ex} list(mutation = mutations))\\
-              GraphLearner\$new(mutate \%>{}>\% lrn("classif.rpart"))
-            }
-            \end{codeboxexample}
+            \vspace{-1.0em}
+            \begin{myblock}{Feature Engineering}
+              % \codeinline{PipeOpImpute} imputes missing data. Methods include e.g. mean, median and histogram imputation.\\
+              \codeinline{PipeOpMutate} adds new features.
+              This works by providing expressions in a \codeinline{list}.
+              \\
+              \begin{codeboxexample}
+                \footnotesize{
+                task = tsk("iris")\\
+                % \# add new features related to the iris task:\\
+                mutations = list(\\
+                \hspace*{1ex} Sepal.Sum = \char`\~ \ Sepal.Length + Sepal.Width\\
+                % \hspace*{1ex} Petal.Sum = \char`\~ \ Petal.Length + Petal.Width\\
+                )\\
+                mutate = po("mutate", param\_vals =\\
+                \hspace*{1ex} list(mutation = mutations))\\
+                GraphLearner\$new(mutate \%>{}>\% lrn("classif.rpart"))
+                }
+              \end{codeboxexample}
             \end{myblock}
-              \vspace{-1.0em}
-       			\vfill}
-				\end{minipage}
-			\end{beamercolorbox}
-		\end{column}
+            \vspace{-1.0em}
+            \vfill}
+        \end{minipage}
+      \end{beamercolorbox}
+    \end{column}
     \begin{column}{.245\textwidth}
-			\begin{beamercolorbox}[center]{postercolumn}
-				\begin{minipage}{.98\textwidth}
-					\parbox[t][\columnheight]{\textwidth}{
+      \begin{beamercolorbox}[center]{postercolumn}
+        \begin{minipage}{.98\textwidth}
+          \parbox[t][\columnheight]{\textwidth}{
             \begin{myblock}{Nonlinear Graphs}
-              \vspace{-0.5em}
               % Multiple input/output channels allow for nonlinear \codeinline{Graphs}, using e.g. \codeinline{gunion()} or \codeinline{greplicate()}.\\
               % \ \\
               \codeinline{\textbf{gunion}()} arranges \codeinline{PipeOp}s or \codeinline{Graph}s next to each other in a disjoint graph union.
+              \\
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/gunion.pdf}
               \end{center}
               \vspace{0.3em}
               \codeinline{\textbf{greplicate}()} creates a new \codeinline{Graph} containing \codeinline{n} copies of the input (\codeinline{PipeOp} or \codeinline{Graph}).
+              \\
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/greplicate.pdf}
               \end{center}
               \codeinline{\textbf{PipeOpFeatureUnion}} aggregates features from all input tasks into a single \codeinline{Task}.
+              \\
               % (in the example below, we combine the original features obtained from \codeinline{PipeOpNOP} with the principal components obtained from \codeinline{PipeOpPCA}:
               % \vspace{0.3em}
-                \begin{codeboxexample}[- Feature Union]
-						    {\footnotesize
-                  % \# copy input to nop and pca; combine the features:\\
-                  % gr = po("copy", outnum = 2) \%>{}>\%\\
-                  \# train on orig and pca features\\
-                  gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
-                  po("featureunion")} \%>{}>\% lrn("classif.rpart")\\
+              \begin{codeboxexample}[- Feature Union]
+                {\footnotesize
+                % \# copy input to nop and pca; combine the features:\\
+                % gr = po("copy", outnum = 2) \%>{}>\%\\
+                \# train on orig and pca features\\
+                gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
+                po("featureunion")} \%>{}>\% lrn("classif.rpart")\\
               \end{codeboxexample}
-                        \begin{codeboxexample}[- Bagging Ensemble]
-						    {\footnotesize
-                  pr = po("subsample") \%>{}>\% lrn("classif.rpart")\\
-                  % \# 10 replicates with averaging over predictions\\
-                  bagging = greplicate(pr, n = 10) \%>{}>\%\\
-                  \hspace*{1ex} po("classifavg", innum = 10)}
-					    \end{codeboxexample}
+              \begin{codeboxexample}[- Bagging Ensemble]
+                {\footnotesize
+                pr = po("subsample") \%>{}>\% lrn("classif.rpart")\\
+                % \# 10 replicates with averaging over predictions\\
+                bagging = greplicate(pr, n = 10) \%>{}>\%\\
+                \hspace*{1ex} po("classifavg", innum = 10)}
+              \end{codeboxexample}
             \end{myblock}
-              \vspace{-1.0em}
+            \vspace{-1.0em}
             \begin{myblock}{Branching}
-              Allows the controlled of path execution. Only one branch is active, configured by a
-              hyperparameter. Unbranching ends the fork. 
-               % \codeinline{PipeOpBranch} and \codeinline{PipeOpUnbranch}, this allows for splitting a node into several paths, called \textbf{branching} (either \textit{pca} or \textit{scale} can be active):
-              \begin{codeboxexample}[- Selected Preproc.]
-						    {\footnotesize
-                  choices = c("pca", "scale")\\
-                  gr = po("branch", options = choices) \%>{}>\%\\
-                  \hspace*{1ex} gunion(list(po("pca"), po("scale"))) \%>{}>\%\\
-                  \hspace*{1ex} po("unbranch", options = choices)\\
-                  \# set the pca path active:\\
-                  gr\$param\_set\$values\$branch.selection = "pca"}
-					      \end{codeboxexample}
-            Tuning over the branching selection enables powerful model selection.
+              Controls the path execution.
+              Only one branch can be active.
+              Which one is controlled by a hyperparameter.
+              Unbranching ends the forking.
+              \\
+              % \codeinline{PipeOpBranch} and \codeinline{PipeOpUnbranch}, this allows for splitting a node into several paths, called \textbf{branching} (either \textit{pca} or \textit{scale} can be active):
+              \begin{codeboxexample}[- Preprocessing]
+                {\footnotesize
+                choices = c("pca", "scale")\\
+                gr = po("branch", options = choices) \%>{}>\%\\
+                \hspace*{1ex} gunion(list(po("pca"), po("scale"))) \%>{}>\%\\
+                \hspace*{1ex} po("unbranch", options = choices)\\
+                \# set the "pca" path as the active one:\\
+                gr\$param\_set\$values\$branch.selection = "pca"}
+              \end{codeboxexample}
+              \vspace{1.0em}
+              Tuning the branching selection enables powerful model selection.
             \end{myblock}
-              \vspace{-1.0em}
+            \vspace{-1.0em}
             \vfill}
-         \end{minipage}
-	    \end{beamercolorbox}
-		\end{column}
- \end{columns}
+        \end{minipage}
+      \end{beamercolorbox}
+    \end{column}
+  \end{columns}
 \end{frame}
 %\begin{frame}[fragile]{}
 %	\begin{columns}
