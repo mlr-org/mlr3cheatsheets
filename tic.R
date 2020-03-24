@@ -1,5 +1,5 @@
 get_stage("deploy") %>%
-  add_code_step(tinytex::latexmk("mlr3/mlr3cheatsheet.tex")) %>%
+  add_code_step(setwd("mlr3"); tinytex::latexmk("mlr3cheatsheet.tex")) %>%
   add_code_step(writeLines("cheatsheets.mlr-org.com", "docs/CNAME"))
 
 if (ci_can_push() && !ci_is_tag()) {
