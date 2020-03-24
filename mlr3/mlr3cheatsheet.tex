@@ -585,24 +585,24 @@
 								\end{itemize}
 							\end{myblock}
 							\begin{myblock}{Error Handling and Encapsulation}
-								Packages \codeinline{evaluate} and \codeinline{callr} are used internally to encapsulate execution of \codeinline{\$train()} and \codeinline{\$predict()} to prevent stops in case of errors and segfaults - useful for larger experments. \codeinline{callr} runs both steps in separate R sessions.
+								Packages \codeinline{evaluate} and \codeinline{callr} can be used to encapsulate execution of \codeinline{\$train()} and \codeinline{\$predict()} to prevent stops in case of errors - useful for larger experiments. \codeinline{callr} isolates the execution in a separate R sessions, guarding against segfaults.
 								\\
 								\begin{codeboxmultiline}[width=20cm]
 									learner\$\textbf{encapsulate} = c(\\
-									\hspace*{1ex} train = "evaluate/callr", \\
-									\hspace*{1ex} predict = "evaluate/callr")
+									\hspace*{1ex} train = "evaluate", \\
+									\hspace*{1ex} predict = "callr")
 								\end{codeboxmultiline}
 								\vspace{1em}
 								\begin{codebox}
 									learner\$\textbf{errors}
 								\end{codebox}
-								Returns the recorded log of errors.
+								Returns the log of recorded errors.
 								\\
 								\begin{codebox}
 									learner\$\textbf{fallback} = lrn(.key)
 								\end{codebox}
 								If learner fails, a fallback learner is used to generate predictions.
-								Use a robust fallback, e.g. "featureless".
+								Use a robust fallback, e.g. a "featureless" learner.
 							\end{myblock}
 							\begin{myblock}{Resources}
 								\begin{itemize}
