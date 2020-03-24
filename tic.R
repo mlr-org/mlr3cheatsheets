@@ -7,6 +7,9 @@ get_stage("deploy") %>%
   # mlr3pipelines
   add_code_step(withr::with_dir("mlr3pipelines", tinytex::latexmk("mlr3pipelinescheatsheet.tex"))) %>%
   add_code_step(fs::file_move("mlr3pipelines/mlr3pipelinescheatsheet.pdf", "docs/mlr3pipelines.pdf")) %>%
+  # mlr3tuning
+  add_code_step(withr::with_dir("mlr3tuning", tinytex::latexmk("mlr3tuningcheatsheet.tex"))) %>%
+  add_code_step(fs::file_move("mlr3tuning/mlr3tuningcheatsheet.pdf", "docs/mlr3tuning.pdf")) %>%
   # CNAME
   add_code_step(writeLines("cheatsheets.mlr-org.com", "docs/CNAME"))
 
@@ -22,6 +25,7 @@ if (ci_can_push() && !ci_is_tag()) {
       add_step(step_do_push_deploy(path = "docs", commit_paths = c(
         "mlr3.pdf",
         "mlr3pipelines.pdf",
+        "mlr3tuning.pdf",
         "CNAME",
         "README.md"))
       )
