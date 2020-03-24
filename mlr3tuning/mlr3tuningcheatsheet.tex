@@ -80,17 +80,16 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-						\begin{myblock}{Overview of Classes}
-                            The package provides a set of classes which allow to (a) define general 
-                            hyperparameter (HP) tuning problems and (b) search algorithms which act on these. (a) is called a TuningInstance, which defines a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.\\
-                            \\
-                            \vspace{1em}
-                            \includegraphics[width=0.95\textwidth]{img/class_diagram.pdf}
+						\begin{myblock}{Class Overview}
+							The package provides a set of R6 classes which allow to (a) define general
+							hyperparameter (HP) tuning instances and (b) run algorithms which optimize on these.
+							(a) is called a TuningInstance, which defines a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.\\
+							\\
+							\includegraphics[width=0.95\textwidth]{img/class_diagram.pdf}
 						\end{myblock}
-						\begin{myblock}{ParamSet - Params and Ranges}
-					        % Hyperparameters and ranges for tuning (1). 
-					        Scalar doubles, ints, factors, logicals are combined 
-					        in set to define multivariate tuning space.
+						\begin{myblock}{ParamSet - Parameters and Ranges}
+							% Hyperparameters and ranges for tuning (1). 
+							Scalar doubles, integers, factors or logicals are combined to define a multivariate tuning space.
 							\\
 							\begin{codeboxmultiline}[width=20.75cm]
 								tune\_ps = \textbf{ParamSet}\$new(list(\\
@@ -99,31 +98,27 @@
 								\hspace*{1ex}\textbf{ParamFct}\$new(id, levels),\\
 								\hspace*{1ex}\textbf{ParamLgl}\$new(id)))
 							\end{codeboxmultiline}
-                            \codeinline{id} is param name in learner. 
-                            \codeinline{lower}/\codeinline{upper} define 
-                            numerical range, \codeinline{levels} for categories.
-                            \vspace{1em}
-                            \\ 
-                            \sectionheading{Transformations for Rescaling}
+							\codeinline{id} is the Param identifier.
+							\codeinline{lower}/\codeinline{upper} define numerical ranges, \codeinline{levels} is for categories.
+							\vspace{1em}
+							\\
+							\sectionheading{Transformations for Rescaling}
 							\begin{codeboxmultiline}[width=25.5cm]
 								tune\_ps\$\textbf{trafo} = function(x, param\_set) \{\\
-								\hspace*{1ex}x\$id =  2\^{}x\$id; return(x)\}      
+								\hspace*{1ex}x\$id =  2\^{}x\$id; return(x)\}
 							\end{codeboxmultiline}
-							Set a transformation for param \codeinline{id} which  
-                            allows the rescaling of (parts of) the configuration 
-							before passing it to the \codeinline{Learner}.
-                            \vspace{1em}
+							Apply a custom transformation before passing the param to the \codeinline{Learner}.
+							\vspace{1em}
 							\\
-                            \sectionheading{Dependencies}
-                            \\
-                            Dependencies prevent configurations during tuning which are invalid in the learner.
-                            \\
+							\sectionheading{Parameter Dependencies}
+							\\
+							Dependencies prevent invalid learner configurations.
+							\\
 							\begin{codebox}
 								tune\_ps\$\textbf{add\_dep}(id, on, cond)
 							\end{codebox}
-							Adds dependency to the \codeinline{ParamSet}, 
-							so that \codeinline{id} depends on parameter \codeinline{on}.
-							\codeinline{cond} is \codeinline{CondEqual\$new(rhs)} or \codeinline{CondAnyOf\$new(rhs)}.
+							Adds a dependency for param \codeinline{id} so that param \codeinline{id} depends on param \codeinline{on}, optional to condition \codeinline{cond}.
+							%\codeinline{cond} is \codeinline{CondEqual\$new(rhs)} or \codeinline{CondAnyOf\$new(rhs)}.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -133,46 +128,43 @@
 			\begin{beamercolorbox}[center]{postercolumn}
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
-                        \begin{myblock}{Terminators - When to stop}
-							Create with \codeinline{\textbf{term}(.key, ...)}
+						\begin{myblock}{Terminators - When to stop}
+							Construction: \codeinline{\textbf{term}(.key, ...)}
 							\\
 							\begin{itemize}
-                                \item \codeinline{evals}
-                                (\codeinline{n\_evals})\\
-                                After a given amount of iterations.
-								\item \codeinline{clock\_time} 
-								(\codeinline{secs}, \codeinline{stop\_time})\\
-								After a given absolute time.
+								\item \codeinline{evals}
+								      (\codeinline{n\_evals})\\
+								      After a given amount of iterations.
+								\item \codeinline{clock\_time}
+								      (\codeinline{secs}, \codeinline{stop\_time})\\
+								      After a given absolute time.
 								\item \codeinline{model\_time}
-								(\codeinline{secs })\\
-								After a given model time.
+								      (\codeinline{secs })\\
+								      After a given training time.
 								\item \codeinline{perf\_reached}
-								(\codeinline{level})\\
-								After a specific numerical performance was reached.
+								      (\codeinline{level})\\
+								      After a specific performance was reached.
 								\item \codeinline{stagnation}
-								(\codeinline{iters}, \codeinline{threshold})\\
-								After the performance stagnates.
+								      (\codeinline{iters}, \codeinline{threshold})\\
+								      After the performance stagnated for given iterations.
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
 								as.data.table(\textbf{mlr\_terminators})
 							\end{codebox}
-							Lists terminator dictionary.
-							\\
-							\begin{codebox}
-								terminator = term("\textbf{combo}", terminators, any)
-							\end{codebox}
-							List of \codeinline{terminators} that terminate 
-							if any (\codeinline{any = TRUE}) 
-							or all (\codeinline{any = FALSE}) terminators are positive.
+							Lists all available terminators.
+							% \begin{codebox}
+							% 	terminator = term("\textbf{combo}", terminators, any)
+							% \end{codebox}
+							% List of \codeinline{terminators} that terminate
+							% if any (\codeinline{any = TRUE})
+							% or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
-                        \begin{myblock}{TuningInstance - Search Scenario}
-							Evaluator 
-							and container for resampled performances 
-							of HP configurations duing tuning. 
-                            Its main (internal) function \codeinline{eval\_batch(dt)} calls \codeinline{benchmark()} to evaluate a table of HP configurations. 
-                            % If the available budget is exhausted, an exception is raised, and no further evaluations can be performed from this point on. 
-                            Also stores archive of all evaluated experiments and the final result.
+						\begin{myblock}{TuningInstance - Search Scenario}
+							Evaluator and container for resampled performances of HP configurations during tuning.
+							The main (internal) function \codeinline{eval\_batch(dt)} calls \codeinline{benchmark()} to evaluate a table of HP configurations.
+							% If the available budget is exhausted, an exception is raised, and no further evaluations can be performed from this point on. 
+							Also stores archive of all evaluated experiments and the final result.
 							\\
 							\begin{codeboxmultiline}[width=23.7cm]
 								instance = \textbf{TuningInstance}\$new(\\
@@ -181,15 +173,17 @@
 							\end{codeboxmultiline}
 							\vspace{1em}
 							\begin{codeboxexample}
-								{\tiny
-                                    \# optimize hyperpar of RBF SVM on logscale\\
+								{\scriptsize
+									\# optimize hyperpar of RBF SVM on logscale\\
 									learner = lrn("classif.svm", kernel = "radial")\\
+									\\
 									tune\_ps = ParamSet\$new(list(\\
 									\hspace*{1ex} ParamDbl\$new("cost", lower = -8, upper = 8),\\
 									\hspace*{1ex} ParamDbl\$new("gamma", lower = -8, upper = 8)))\\
 									tune\_ps\$trafo = function(x, param\_set) \{\\
 									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost; x\$gamma = 2\textasciicircum x\$gamma; x\}\\
 									evals20 = term("evals", n\_evals = 20)\\
+									\\
 									instance = TuningInstance\$new(\\
 									\hspace*{1ex} task, learner, resampling, measures, tune\_ps, evals20)\\
 									tuner = tnr("random\_search")\\
@@ -206,42 +200,40 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Tuner - Search Strategy}
-                            Tuning strategy. Generates candidate configurations 
-                            and passes them to \codeinline{TuningInstance} for evaluation until termination. 
-                            Create witth \codeinline{\textbf{tnr}(.key, ...)}
+							Tuning strategy. 
+							Generates candidate configurations and passes these to \codeinline{TuningInstance} for evaluation until termination.
+							Creation: \codeinline{\textbf{tnr}(.key, ...)}
 							\\
 							\begin{itemize}
 								\item \codeinline{grid\_search}
-								(\codeinline{resolution}, \codeinline{batch\_size})\\
-								Grid search.
+								      (\codeinline{resolution}, \codeinline{batch\_size})\\
+								      Grid search.
 								\item \codeinline{random\_search}
-								(\codeinline{batch\_size})\\
-								Random search.
+								      (\codeinline{batch\_size})\\
+								      Random search.
 								\item \codeinline{gensa}
-								(\codeinline{smooth}, \codeinline{temperature})\\
-								Generalized simulated annealing.
+								      (\codeinline{smooth}, \codeinline{temperature})\\
+								      Generalized Simulated Annealing.
 								\item \codeinline{design\_points}
-								(\codeinline{batch\_size }, \codeinline{design})\\
-								All points user-specified.
+								      (\codeinline{batch\_size }, \codeinline{design})\\
+								      User supplied settings.
 							\end{itemize}
 							\vspace{1em}
 							\begin{codebox}
 								as.data.table(\textbf{mlr\_tuners})
 							\end{codebox}
-							Lists tuner dictionary.
+							Lists all available tuners.
 						\end{myblock}
-						\begin{myblock}{Running the Tuning}
+						\begin{myblock}{Executing the Tuning}
 							\begin{codebox}
 								tuner\$\textbf{tune}(instance)
 							\end{codebox}
-							Starts the tuning. \codeinline{Tuner} generates candidate configurations
-							and passes them to the \codeinline{\$eval()} method of \codeinline{TuningInstance}
-							until the budget of \codeinline{Terminator} is exhausted.
+							Starts the tuning. \codeinline{Tuner} generates candidate configurations and passes these to the \codeinline{\$eval()} method of the \codeinline{TuningInstance} until the budget of the \codeinline{Terminator} is exhausted.
 							\\
 							\begin{codebox}
 								instance\$\textbf{archive}(unnest = "no")
 							\end{codebox}
-							Returns all tried configurations and their resampling results. 
+							Returns all evaluated configurations and their resampling results.
 							Use \codeinline{unnest} to display HP without
 							(\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
 							\\
@@ -249,7 +241,7 @@
 								{\tiny
 									instance\$archive()\\
 									\#\# nr batch\_nr ... resample\_result\monospace{2}iters params tune\_x classif.ce\\
-									\#\#\monospace{2}1\monospace{8}1 ...\monospace{1}<ResampleResult> 
+									\#\#\monospace{2}1\monospace{8}1 ...\monospace{1}<ResampleResult>
 									\monospace{4}5 <list> <list>\monospace{2}0.2825482\\
 									\#\#\monospace{2}2\monospace{8}1 ...\monospace{1}<ResampleResult>
 									\monospace{4}5 <list> <list>\monospace{2}0.2825482\\
@@ -262,7 +254,7 @@
 							\begin{codebox}
 								instance\$\textbf{result}
 							\end{codebox}
-							Returns list with optimal configuration and estimated performance.
+							Returns list with optimal configurations and estimated performance.
 							\\
 							\begin{codebox}
 								{\footnotesize learner\$param\_set\$\textbf{values} = instance\$result\$\textbf{params}}
@@ -278,7 +270,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{AutoTuner - Tune before Train}
-							Wraps learner and adds automatic tuning. 
+							Wraps learner and performs integrated tuning.
 							\\
 							\begin{codeboxmultiline}[width=23.75cm]
 								at = \textbf{AutoTuner}\$new(\\
@@ -286,18 +278,17 @@
 								\hspace*{1ex}tune\_ps, terminator, tuner, bm\_args)
 							\end{codeboxmultiline}
 							\vspace{0.5em}
-                            Inherits from \codeinline{Learner} class; can be used like it. 
-                            Training starts tuning on the training set,
-                            and after completion trains the learner finally with 
-                            this the optimal configuration on the full training set.
+							Inherits from class \codeinline{Learner}.
+							Training starts tuning on the training set.
+							After completion the learner is trained with the "optimal" configuration on the given task.
+							\\
 							\begin{codeboxmultiline}[width=16.5cm]
 								at\$\textbf{train}(task)\\
 								at\$\textbf{predict}(task, row\_ids)
 							\end{codeboxmultiline}
 						\end{myblock}
 						\begin{myblock}{Nested Resampling}
-							Resampling the \codeinline{AutoTuner} achieves nested resampling 
-							with an inner and outer loop. 
+							Resampling the \codeinline{AutoTuner} results in nested resampling with an inner and outer loop.
 							\\
 							\begin{codeboxexample}
 								{\scriptsize
@@ -324,12 +315,13 @@
 							\begin{codebox}
 								rr\$\textbf{aggregate()}
 							\end{codebox}
-							Aggregates performance of outer results.
+							Aggregates performances of outer folds.
 							\\
 							\begin{codebox}
 								rr\$data\$learner[[1]]\$\textbf{tuning\_result}
 							\end{codebox}
-							Retrieve inner tuning results.
+							Retrieves inner tuning results.
+							\vspace{-0.5em}
 						\end{myblock}
 						\begin{myblock}{Logging and Parallelization}
 							\begin{codebox}
@@ -340,8 +332,8 @@
 							\begin{codebox}
 								future::\textbf{plan}(strategy)
 							\end{codebox}
-							Selects the parallelization strategy.
-							Speeds up the tuning by running resample iterations in parallel.
+							Sets the parallelization backend.
+							Speeds up tuning by running iterations in parallel.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
