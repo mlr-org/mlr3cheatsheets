@@ -1,6 +1,6 @@
 # mlr3cheatsheets
 
-Cheat Sheets of mlr-org packages
+Cheatsheets of mlr-org packages
 
 ## Cheatsheets
 
