@@ -14,13 +14,13 @@ if (ci_can_push() && !ci_is_tag()) {
     add_step(step_setup_push_deploy(path = ".", branch = "gh-pages",
       orphan = TRUE))
 
-    # only deploy on master branch
-    if (ci_get_branch() == "master") {
-      get_stage("deploy") %>%
-        add_step(step_do_push_deploy(commit_paths = c(
-          "mlr3.pdf",
-          "mlr3pipelines.pdf",
-          "CNAME"))
-        )
-    }
+  # only deploy on master branch
+  if (ci_get_branch() == "master") {
+    get_stage("deploy") %>%
+      add_step(step_do_push_deploy(commit_paths = c(
+        "mlr3.pdf",
+        "mlr3pipelines.pdf",
+        "CNAME"))
+      )
+  }
 }
