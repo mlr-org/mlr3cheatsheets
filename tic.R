@@ -12,7 +12,7 @@ if (ci_can_push() && !ci_is_tag()) {
   get_stage("before_deploy") %>%
     add_step(step_setup_ssh()) %>%
     add_step(step_setup_push_deploy(path = ".", branch = "gh-pages",
-      orphan = TRUE)) %>%
+      orphan = TRUE))
 
     # only deploy on master branch
     if (ci_get_branch() == "master") {
