@@ -1,7 +1,15 @@
 # mlr3cheatsheets
 
-Cheat Sheets for mlr3 and Friends
+Cheat Sheets of mlr-org packages
 
-Please do not upload `.pdf`-versions, only latex / markdown / knitr etc. sources and input / image files.
+## Cheatsheets
 
-Requirements: texlive-2018
+- [mlr3](cheatsheets.mlr-org.com/mlr3.pdf)
+
+## Instructions
+
+Please do not upload `.pdf`-versions, only LaTeX and image files.
+
+A functional LaTeX installation is required.
+Alternatively, install the {tinytex} package and call `tinytex::latexmk()` on the respective `.tex` file of the cheatsheet.
+{tinytex} will auto-install all missing packages and render the cheatsheet afterwards.
