@@ -1,5 +1,5 @@
 get_stage("deploy") %>%
-  add_code_step(wihtr::with_dir("mlr3", tinytex::latexmk("mlr3cheatsheet.tex"))) %>%
+  add_code_step(withr::with_dir("mlr3", tinytex::latexmk("mlr3cheatsheet.tex"))) %>%
   add_code_step(writeLines("cheatsheets.mlr-org.com", "CNAME"))
 
 if (ci_can_push() && !ci_is_tag()) {
@@ -11,6 +11,6 @@ if (ci_can_push() && !ci_is_tag()) {
       add_step(step_setup_push_deploy(path = ".", branch = "gh-pages",
         orphan = TRUE)) %>%
       add_step(step_do_push_deploy(commit_paths = c("mlr3/mlr3cheatsheet.pdf",
-      "CNAME"))
+        "CNAME")))
   }
 }
