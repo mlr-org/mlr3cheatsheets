@@ -1,12 +1,8 @@
 on:
   push:
   pull_request:
-  # for now, CRON jobs only run on the default branch of the repo (i.e. usually on master)
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron: "0 4 * * *"
 
-name: R CMD Check via {tic}
+name: Deploy cheatsheets
 
 jobs:
   R-CMD-check:
@@ -62,3 +58,16 @@ jobs:
 
       - name: "[Stage] After Success"
         run: Rscript -e "tic::after_success()"
+        
+      - name: "[Stage] Before Deploy"
+        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
+        run: |
+          Rscript -e "tic::before_deploy()"
+
+      - name: "[Stage] Deploy"
+        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
+        run: Rscript -e "tic::deploy()"
+
+      - name: "[Stage] After Deploy"
+        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
+        run: Rscript -e "tic::after_deploy()"
