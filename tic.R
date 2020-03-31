@@ -2,7 +2,7 @@ get_stage("deploy") %>%
   add_code_step(fs::dir_create("docs/")) %>%
   add_code_step(fs::file_copy("README.md", "docs/")) %>%
   # mlr
-  add_code_step(fs::file_move("mlr3/mlrcheatsheet.pdf", "docs/mlr.pdf")) %>%
+  add_code_step(fs::file_move("mlr/mlrcheatsheet.pdf", "docs/mlr.pdf")) %>%
   # mlr3
   add_code_step(withr::with_dir("mlr3", tinytex::latexmk("mlr3cheatsheet.tex"))) %>%
   add_code_step(fs::file_move("mlr3/mlr3cheatsheet.pdf", "docs/mlr3.pdf")) %>%
