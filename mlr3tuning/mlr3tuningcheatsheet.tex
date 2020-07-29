@@ -83,7 +83,7 @@
 						\begin{myblock}{Class Overview}
 							The package provides a set of R6 classes which allow to (a) define general
 							hyperparameter (HP) tuning instances and (b) run algorithms which optimize on these.
-							(a) is called a TuningInstance, which defines a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.\\
+							(a) is called a TuningInstanceSingleCrit or TuningInstaneMultiCrit, which define a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.\\
 							\\
 							\includegraphics[width=0.95\textwidth]{img/class_diagram.pdf}
 						\end{myblock}
@@ -129,7 +129,7 @@
 				\begin{minipage}{.98\textwidth}
 					\parbox[t][\columnheight]{\textwidth}{
 						\begin{myblock}{Terminators - When to stop}
-							Construction: \codeinline{\textbf{term}(.key, ...)}
+							Construction: \codeinline{\textbf{trm}(.key, ...)}
 							\\
 							\begin{itemize}
 								\item \codeinline{evals}
@@ -160,36 +160,38 @@
 							% if any (\codeinline{any = TRUE})
 							% or all (\codeinline{any = FALSE}) terminators are positive.
 						\end{myblock}
-						\begin{myblock}{TuningInstance - Search Scenario}
+						\begin{myblock}{TuningInstance* - Search Scenario}
 							Evaluator and container for resampled performances of HP configurations during tuning.
-							The main (internal) function \codeinline{eval\_batch(dt)} calls \codeinline{benchmark()} to evaluate a table of HP configurations.
+							The main (internal) function \codeinline{eval\_batch(xdt)} calls \codeinline{benchmark()} to evaluate a table of HP configurations.
 							% If the available budget is exhausted, an exception is raised, and no further evaluations can be performed from this point on. 
 							Also stores archive of all evaluated experiments and the final result.
 							\\
-							\begin{codeboxmultiline}[width=23.7cm]
-								instance = \textbf{TuningInstance}\$new(\\
-								\hspace*{1ex}task, learner, resampling, measures,\\
-								\hspace*{1ex}tune\_ps, terminator, bm\_args)
+							\begin{codeboxmultiline}[width=25cm]
+								instance = \textbf{TuningInstanceSingleCrit}\$new(\\
+								\hspace*{1ex}task, learner, resampling, measure,\\
+								\hspace*{1ex}tune\_ps, terminator)
 							\end{codeboxmultiline}
 							\vspace{1em}
 							\begin{codeboxexample}
 								{\scriptsize
 									\# optimize hyperpar of RBF SVM on logscale\\
-									learner = lrn("classif.svm", kernel = "radial")\\
+									learner = lrn("classif.svm", kernel = "radial",\\
+									\hspace*{1ex} type = "C-classification")\\
 									\\
 									tune\_ps = ParamSet\$new(list(\\
 									\hspace*{1ex} ParamDbl\$new("cost", lower = -8, upper = 8),\\
 									\hspace*{1ex} ParamDbl\$new("gamma", lower = -8, upper = 8)))\\
 									tune\_ps\$trafo = function(x, param\_set) \{\\
 									\hspace*{1ex} x\$cost = 2\textasciicircum x\$cost; x\$gamma = 2\textasciicircum x\$gamma; x\}\\
-									evals20 = term("evals", n\_evals = 20)\\
+									evals20 = trm("evals", n\_evals = 20)\\
 									\\
-									instance = TuningInstance\$new(\\
-									\hspace*{1ex} task, learner, resampling, measures, tune\_ps, evals20)\\
+									instance = TuningInstanceSingleCrit\$new(\\
+									\hspace*{1ex} task, learner, resampling, measure, tune\_ps, evals20)\\
 									tuner = tnr("random\_search")\\
-									tuner\$tune(instance)\\
+									tuner\$optimize(instance)\\
 									instance\$result}
 							\end{codeboxexample}
+							Use \codeinline{TuningInstanceMultiCrit} for multi-criteria tuning.
 						\end{myblock}
 						\vfill}
 				\end{minipage}
@@ -226,29 +228,25 @@
 						\end{myblock}
 						\begin{myblock}{Executing the Tuning}
 							\begin{codebox}
-								tuner\$\textbf{tune}(instance)
+								tuner\$\textbf{optimize}(instance)
 							\end{codebox}
-							Starts the tuning. \codeinline{Tuner} generates candidate configurations and passes these to the \codeinline{\$eval()} method of the \codeinline{TuningInstance} until the budget of the \codeinline{Terminator} is exhausted.
+							Starts the tuning. \codeinline{Tuner} generates candidate configurations and passes these to the \codeinline{\$eval\_batch()} method of the \codeinline{TuningInstance*} until the budget of the \codeinline{Terminator} is exhausted.
 							\\
 							\begin{codebox}
-								instance\$\textbf{archive}(unnest = "no")
+								instance\$archive\$\textbf{data()}
 							\end{codebox}
 							Returns all evaluated configurations and their resampling results.
-							Use \codeinline{unnest} to display HP without
-							(\codeinline{tune\_x}) or with (\codeinline{params}) trafo applied.
+							Use \codeinline{unnest} to display HP with (\codeinline{x\_domain}) trafo applied.
 							\\
 							\begin{codeboxmultiline}[width=24.75cm]
 								{\tiny
-									instance\$archive()\\
-									\#\# nr batch\_nr ... resample\_result\monospace{2}iters params tune\_x classif.ce\\
-									\#\#\monospace{2}1\monospace{8}1 ...\monospace{1}<ResampleResult>
-									\monospace{4}5 <list> <list>\monospace{2}0.2825482\\
-									\#\#\monospace{2}2\monospace{8}1 ...\monospace{1}<ResampleResult>
-									\monospace{4}5 <list> <list>\monospace{2}0.2825482\\
-									\#\#\monospace{2}3\monospace{8}2 ...\monospace{1}<ResampleResult>
-									\monospace{4}5 <list> <list>\monospace{2}0.2696206\\
-									\#\#\monospace{2}4\monospace{8}2 ...\monospace{1}<ResampleResult>
-									\monospace{4}5 <list> <list>\monospace{2}0.2721586}
+									instance\$archive\$data()\\
+									\#\#\monospace{4}cost\monospace{2}gamma classif.ce  resample\_result \monospace{1}x\_domain batch\_nr\\
+									\#\# 1: -1.01 -3.10 0.10\monospace{7}<ResampleResult> <list>\monospace{3}1\\
+									\#\# 2:  7.53\monospace{2}3.14\monospace{2}0.08\monospace{7}<ResampleResult> <list>\monospace{3}2\\
+									\#\# 3:  2.11\monospace{2}6.50\monospace{2}0.68\monospace{7}<ResampleResult> <list>\monospace{3}3\\
+									\#\# 4:  4.25\monospace{2}5.54\monospace{2}0.52\monospace{7}<ResampleResult> <list>\monospace{3}4\\
+								}
 							\end{codeboxmultiline}
 							\vspace{1em}
 							\begin{codebox}
@@ -256,9 +254,9 @@
 							\end{codebox}
 							Returns list with optimal configurations and estimated performance.
 							\\
-							\begin{codebox}
-								{\footnotesize learner\$param\_set\$\textbf{values} = instance\$result\$\textbf{params}}
-							\end{codebox}
+							\begin{codeboxmultiline}[width=18.2cm]
+								{\footnotesize learner\$param\_set\$\textbf{values} = \\ instance\$\textbf{result\_learner\_param\_vals}}
+							\end{codeboxmultiline}
 							Set optimized HP in \codeinline{Learner}.
 						\end{myblock}
 						\vfill}
@@ -274,8 +272,8 @@
 							\\
 							\begin{codeboxmultiline}[width=23.75cm]
 								at = \textbf{AutoTuner}\$new(\\
-								\hspace*{1ex}learner, resampling, measures, \\
-								\hspace*{1ex}tune\_ps, terminator, tuner, bm\_args)
+								\hspace*{1ex}learner, resampling, measure, \\
+								\hspace*{1ex}tune\_ps, terminator, tuner)
 							\end{codeboxmultiline}
 							\vspace{0.5em}
 							Inherits from class \codeinline{Learner}.
@@ -296,7 +294,7 @@
 									\vspace{1em}
 									\\
 									at = AutoTuner\$new(learner, resampling\_inner, \\
-									\hspace*{1ex}measures, tune\_ps, evals20, tuner) \\
+									\hspace*{1ex}measure, tune\_ps, evals20, tuner) \\
 									at\$store\_tuning\_instance = TRUE
 									\vspace{1em}
 									\\
@@ -326,7 +324,7 @@
 						\begin{myblock}{Logging and Parallelization}
 							\begin{codebox}
 								{\scriptsize
-									lgr::get\_logger("\textbf{mlr3/mlr3tuning}")\$set\_threshold("<level>")}
+									lgr::get\_logger("\textbf{bbotk}")\$set\_threshold("<level>")}
 							\end{codebox}
 							Change log-level only for mlr3tuning.\\
 							\begin{codebox}
