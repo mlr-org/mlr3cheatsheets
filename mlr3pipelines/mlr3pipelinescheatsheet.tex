@@ -262,12 +262,12 @@
                 \hspace*{1ex} ParamDbl\$new("classif.rpart.cp",\\
                 \hspace*{3ex} lower = 0, upper = 0.05)\\
                 ))\\
-                tt = term("evals", n\_evals = 20)\\
+                tt = trm("evals", n\_evals = 20)\\
                 rs = rsmp("holdout")\\
-                inst = TuningInstance\$new(task, grl, rs,\\
+                inst = TuningInstanceSingleCrit\$new(task, grl, rs,\\
                 \hspace*{1ex} msr("classif.ce"), tune\_ps, tt)\\
                 tuner = tnr("random\_search")\\
-                tuner\$tune(inst)
+                tuner\$optimize(inst)
                 % resampling\_outer = rsmp("cv", folds = 2)\\
                 % rr = resample(task, at, resampling\_outer)
                 }
@@ -286,9 +286,8 @@
                 task = tsk("iris")\\
                 % \# add new features related to the iris task:\\
                 mutations = list(\\
-                \hspace*{1ex} Sepal.Sum = \char`\~ \ Sepal.Length + Sepal.Width\\
+                \hspace*{1ex} Sepal.Sum = \char`\~ \ Sepal.Length + Sepal.Width)\\
                 % \hspace*{1ex} Petal.Sum = \char`\~ \ Petal.Length + Petal.Width\\
-                )\\
                 mutate = po("mutate", param\_vals =\\
                 \hspace*{1ex} list(mutation = mutations))\\
                 GraphLearner\$new(mutate \%>{}>\% lrn("classif.rpart"))
@@ -305,7 +304,7 @@
         \begin{minipage}{.98\textwidth}
           \parbox[t][\columnheight]{\textwidth}{
             \begin{myblock}{Nonlinear Graphs}
-              % Multiple input/output channels allow for nonlinear \codeinline{Graphs}, using e.g. \codeinline{gunion()} or \codeinline{greplicate()}.\\
+              % Multiple input/output channels allow for nonlinear \codeinline{Graphs}, using e.g. \codeinline{gunion()} or \codeinline{pipeline_greplicate()}.\\
               % \ \\
               \codeinline{\textbf{gunion}()} arranges \codeinline{PipeOp}s or \codeinline{Graph}s next to each other in a disjoint graph union.
               \\
@@ -313,7 +312,7 @@
                 \includegraphics[width=0.7\textwidth]{img/gunion.pdf}
               \end{center}
               \vspace{0.3em}
-              \codeinline{\textbf{greplicate}()} creates a new \codeinline{Graph} containing \codeinline{n} copies of the input (\codeinline{PipeOp} or \codeinline{Graph}).
+              \codeinline{\textbf{pipeline\_greplicate}()} creates a new \codeinline{Graph} containing \codeinline{n} copies of the input (\codeinline{PipeOp} or \codeinline{Graph}).
               \\
               \begin{center}
                 \includegraphics[width=0.7\textwidth]{img/greplicate.pdf}
@@ -328,13 +327,13 @@
                 % gr = po("copy", outnum = 2) \%>{}>\%\\
                 \# train on orig and pca features\\
                 gunion(list(po("nop"), po("pca"))) \%>{}>\%\\
-                po("featureunion")} \%>{}>\% lrn("classif.rpart")\\
+                \hspace*{1ex} po("featureunion") \%>{}>\% lrn("classif.rpart")}
               \end{codeboxexample}
               \begin{codeboxexample}[- Bagging Ensemble]
                 {\footnotesize
                 pr = po("subsample") \%>{}>\% lrn("classif.rpart")\\
                 % \# 10 replicates with averaging over predictions\\
-                bagging = greplicate(pr, n = 10) \%>{}>\%\\
+                bagging = ppl("greplicate", pr, n = 10) \%>{}>\%\\
                 \hspace*{1ex} po("classifavg", innum = 10)}
               \end{codeboxexample}
             \end{myblock}
@@ -348,10 +347,9 @@
               % \codeinline{PipeOpBranch} and \codeinline{PipeOpUnbranch}, this allows for splitting a node into several paths, called \textbf{branching} (either \textit{pca} or \textit{scale} can be active):
               \begin{codeboxexample}[- Preprocessing]
                 {\footnotesize
-                choices = c("pca", "scale")\\
-                gr = po("branch", options = choices) \%>{}>\%\\
-                \hspace*{1ex} gunion(list(po("pca"), po("scale"))) \%>{}>\%\\
-                \hspace*{1ex} po("unbranch", options = choices)\\
+                gr = ppl("branch", list(\\
+                \hspace*{1ex} pca = po("pca"), scale = po("scale"))\\
+                )\\
                 \# set the "pca" path as the active one:\\
                 gr\$param\_set\$values\$branch.selection = "pca"}
               \end{codeboxexample}
@@ -421,7 +419,7 @@
 %               \hspace*{2ex} lower = 0, upper = 0.05)\\
 %               ))\\
 %               \# 20 evaluations using grid\_search:\\
-%               terminator = term("evals", n\_evals = 20)\\
+%               terminator = trm("evals", n\_evals = 20)\\
 %               tuner = tnr("grid\_search", resolution = 5)\\
 %               \ \\
 %               \# set up the auto tuner:\\
