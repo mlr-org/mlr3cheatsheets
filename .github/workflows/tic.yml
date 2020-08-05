@@ -53,8 +53,8 @@ jobs:
       # Linux: ~ 1 min
       # macOS: ~ 1 min 30s
       # Windows: never finishes
-      - uses: r-lib/actions/setup-tinytex@master
-        if: matrix.config.latex == 'true'
+      # - uses: r-lib/actions/setup-tinytex@master
+      #   if: matrix.config.latex == 'true'
 
       - uses: r-lib/actions/setup-pandoc@master
 
@@ -79,6 +79,8 @@ jobs:
         run: |
           Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
           Rscript -e "if (getRversion() < '3.2' && !requireNamespace('curl')) install.packages('curl', type = 'source')"
+          Rscript -e "if (!requireNamespace('tinytex')) install.packages('tinytex', type = 'source')"
+          Rscript -e "tinytex::install_tinytex(TRUE, repository = "https://ctan.kako-dev.de/")"
 
       - name: "[Stage] [Linux] Install curl"
         if: runner.os == 'Linux'
