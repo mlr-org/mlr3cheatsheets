@@ -80,7 +80,7 @@ jobs:
           Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
           Rscript -e "if (getRversion() < '3.2' && !requireNamespace('curl')) install.packages('curl', type = 'source')"
           Rscript -e "if (!requireNamespace('tinytex')) install.packages('tinytex', type = 'source')"
-          Rscript -e "tinytex::install_tinytex(TRUE, repository = "https://ctan.kako-dev.de/")"
+          Rscript -e "tinytex::install_tinytex(TRUE, repository = 'https://ctan.kako-dev.de/')"
 
       - name: "[Stage] [Linux] Install curl"
         if: runner.os == 'Linux'
