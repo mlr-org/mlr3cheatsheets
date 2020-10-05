@@ -12,6 +12,7 @@ Cheatsheets of mlr-org packages
 - [mlr3](https://cheatsheets.mlr-org.com/mlr3.pdf)
 - [mlr3pipelines](https://cheatsheets.mlr-org.com/mlr3pipelines.pdf)
 - [mlr3tuning](https://cheatsheets.mlr-org.com/mlr3tuning.pdf)
+- [mlr3fselect](https://cheatsheets.mlr-org.com/mlr3fselect.pdf)
 
 ## Instructions
 
