@@ -20,6 +20,9 @@ Cheatsheets of mlr-org packages
 
 1. Install [cheatdown](https://github.com/be-marc/cheatdown).
 2. Edit R Markdown file.
+  * Force section to new column with `column_breaks` in yml header.
+  * Add second page with `<div class="page_break"></div>`.
+  * Use `results='hide'` for executable code chunks.
 3. Preview cheat sheet with `cheatdown::preview_chrome()`.
 4. Check pdf version with `cheatdown::print_pdf()`.
 5. Upload R Markdown and image files. Do not upload `.pdf`-versions.
