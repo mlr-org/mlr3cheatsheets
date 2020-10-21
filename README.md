@@ -3,7 +3,7 @@
 Cheatsheets of mlr-org packages
 
 <!-- badges: start -->
-[![Deploy cheatsheets](https://github.com/mlr-org/mlr3cheatsheets/workflows/Deploy%20cheatsheets/badge.svg?branch=master)](https://github.com/mlr-org/mlr3cheatsheets/actions)
+![Render](https://github.com/mlr-org/mlr3cheatsheets/workflows/render/badge.svg?branch=master)
 <!-- badges: end -->
 
 ## Cheatsheets
@@ -18,8 +18,9 @@ Cheatsheets of mlr-org packages
 
 (For internal use only)
 
-Please do not upload `.pdf`-versions, only LaTeX and image files.
-
-A functional LaTeX installation is required.
-Alternatively, install the {tinytex} package and call `tinytex::latexmk()` on the respective `.tex` file of the cheatsheet.
-{tinytex} will auto-install all missing packages and render the cheatsheet afterwards.
+1. Install [cheatdown](https://github.com/be-marc/cheatdown).
+2. Edit R Markdown file.
+3. Preview cheat sheet with `cheatdown::preview_chrome()`.
+4. Check pdf version with `cheatdown::print_pdf()`.
+5. Upload R Markdown and image files. Do not upload `.pdf`-versions.
+6. The pdf versions are build on github actions and deployed to `gh-pages`.
