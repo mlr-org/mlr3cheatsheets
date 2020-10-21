@@ -1,0 +1,48 @@
+name: render
+on: push
+jobs:
+  all:
+    name: Render cheat sheets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: r-lib/actions/setup-r@v1
+
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Install curl
+        run: sudo apt install libcurl4-openssl-dev
+
+      - name: Install dependencies
+        run: |
+          Rscript -e "install.packages('remotes')"
+          Rscript -e "install.packages(c('mlr3', 'mlr3tuning', 'mlr3fselect', 'mlr3pipelines', 'mlr3learners', 'e1071'))"
+          Rscript -e "remotes::install_github('be-marc/cheatdown')"
+
+      - name: Render cheat sheets
+        run: |
+          Rscript -e "cheatdown::print_pdf('mlr3/mlr3.Rmd', 'pdf/mlr3.pdf')"
+          Rscript -e "cheatdown::print_pdf('mlr3tuning/mlr3tuning.Rmd', 'pdf/mlr3tuning.pdf')"
+          Rscript -e "cheatdown::print_pdf('mlr3fselect/mlr3fselect.Rmd', 'pdf/mlr3fselect.pdf')"
+          Rscript -e "cheatdown::print_pdf('mlr3pipelines/mlr3pipelines.Rmd', 'pdf/mlr3pipelines.pdf')"
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: pdf/
+          CLEAN: false
+
+      - name: Upload actifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: cheatsheet
+          path: |
+            pdf/
+            mlr3/
+            mlr3tuning/
+            mlr3fselect/
+            mlr3pipelines/

@@ -18,8 +18,4 @@ Cheatsheets of mlr-org packages
 
 (For internal use only)
 
-Please do not upload `.pdf`-versions, only LaTeX and image files.
-
-A functional LaTeX installation is required.
-Alternatively, install the {tinytex} package and call `tinytex::latexmk()` on the respective `.tex` file of the cheatsheet.
-{tinytex} will auto-install all missing packages and render the cheatsheet afterwards.
+Please do not upload `.pdf`-versions, only R Markdown and image files.

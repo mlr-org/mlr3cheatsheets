@@ -1,0 +1,477 @@
+---
+title: "mlr3cheatsheet"
+author: "mlr-org"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+short_description: "Machine learning with mlr3"
+logo: "logo.png"
+column_breaks: [2, 3, 4, 7, 8, 11]
+output: 
+  cheatdown::cheatdown_html
+---
+
+```{r, include=FALSE}
+library(mlr3)
+library(data.table)
+```
+
+## Class Overview
+
+The package provides a set of R6 classes which allow to (a) define general feature selection instances and (b) run algorithms which optimize on these. 
+(a) is called a FSelectInstanceSingleCrit or FSelectInstaneMultiCrit, which define a blackbox optimization function that maps feature subsets to resampled performance values for arbitrary performance measures.
+
+## mlr3 Dictionaries
+
+Key-value store for sets of mlr objects. These are provided by mlr3:
+
+* `mlr_tasks` - ML example tasks.
+* `mlr_task_generators` - Example generators.
+* `mlr_learners` - ML algorithms.
+* `mlr_measures` - Performance measures.
+* `mlr_resamplings` - Resampling strategies.
+
+These dictionaries can be extended by loading extension packages.
+For example, by loading the **mlr3learners** package, the `mlr_learners` dictionary is extended with more learners.
+
+Syntactic sugar functions retrieve objects from dictionaries, set hyperparameters and assign fields in one go e.g. `lrn("classif.rpart", cp = 0.1)`.
+
+```{r, eval=FALSE}
+Dictionary$keys(pattern = NULL)
+```
+
+Returns all keys which match pattern.
+If NULL, all keys are returned.
+
+```{r, eval=FALSE}
+Dictionary$get(key, ...)
+```
+
+Retrieves object by key and passes arguments "..." to the construction of the objects.
+
+```{r, eval=FALSE}
+Dictionary$mget(keys, ...)
+```
+
+Retrieves objects by keys and passes named arguments "..." to the construction of the objects.
+
+```{r, eval=FALSE}
+as.data.table(Dictionary)
+```
+					
+Lists objects with metadata.		
+
+## Class: Task
+
+Stores data and metadata. `backend` can be a `data.table`,
+`target` points to y-column by name.
+							
+```{r, eval=FALSE}
+task = TaskRegr$new(backend, target)
+```
+							
+Create task for regression or classification.
+							
+```{r, eval=FALSE}
+task = tsk(.key)
+```
+
+Sugar to get example task from `mlr_tasks`:
+							
+* Twoclass: `german_credit`, `pima`, `sonar`,  `spam`
+* Multiclass: `iris`, `wine`, `zoo`
+* Regression: `boston_housing`, `mtcars`
+
+Print the `mlr_tasks` dictionary for more.
+							
+```{r, eval=FALSE}
+task$positive = "<positive_class>"
+```
+Set positive class for binary classification.
+
+
+### Column Roles
+
+Column roles affect the behavior of the task for different operations.
+Set with
+
+`task$col_roles$<role> = "<column_name>"`:
+
+* `feature` - Regular features.
+* `target` - Target variable.
+* `name` - Labels for plots.
+* `group` -  Groups for block resampling.
+* `stratum` - Stratification variables.
+* `weight` - Observation weights.
+
+### Data Operations
+
+```{r, eval=FALSE}
+task$select(cols)
+```
+
+Subsets the task based on feature names.
+
+```{r, eval=FALSE}
+task$filter(rows)
+```
+
+Subsets the task based on row ids.
+
+```{r, eval=FALSE}
+task$cbind(data) / task$rbind(data)
+```
+
+Adds additional columns / rows.
+
+```{r, eval=FALSE}
+task$rename(from, to)
+```
+
+Rename columns.
+
+## Class: Learner
+
+Wraps learners from R with a unified interface.
+							
+```{r, eval=FALSE}
+learner = lrn(.key, ...)
+```
+
+Get learner by `.key` (from `mlr_learners`)
+and construct the learner with specific hyperparameters and settings "..." in one go.
+							
+[github.com/mlr-org/mlr3learners](https://github.com/mlr-org/mlr3learners) (R package) and [github.com/mlr3learners](https://github.com/mlr3learners) (GitHub organization) hold all available learners.
+							
+```{r, eval=FALSE}
+learner$param_set
+```
+
+Returns description of hyperparameters.
+							
+```{r, eval=FALSE}
+learner$param_set$values = list(id = value)
+```
+
+Change the current hyperparameter values by assigning a named `list(id = value)` to the `$values` field.
+This overwrites all previously set parameters.
+							
+```{r, eval=FALSE}
+learner$param_set$values$<id> = <value>
+```
+
+Update a single hyperparameter.
+							
+```{r, eval=FALSE}
+learner$predict_type = "<type>"
+```
+
+Changes/sets the output type of the prediction. For classification, `"response"` means class labels, `"prob"` means posterior probabilities.
+For regression, `"response"` means numeric response, `"se"` extracts the standard error.
+							
+```{r, results='hide', class.source='example'}
+task = tsk("sonar")
+learner = lrn("classif.rpart")
+
+train_set = sample(task$nrow, 0.8 * task$nrow)
+test_set = setdiff(seq_len(task$nrow), train_set)
+
+learner$train(task, row_ids = train_set)
+
+prediction = learner$predict(task, row_ids = test_set)
+prediction$score()
+## > classif.ce
+## > 0.2619048
+```
+
+## Train & Predict
+
+```{r, include=FALSE}
+row_ids = 1:50
+```
+
+```{r, results='hide'}
+learner$train(task, row_ids)
+```
+
+Train on (selected) observations.
+
+```{r, results='hide'}
+learner$model
+```
+
+The resulting model is stored in the `$model` slot of the `learner`.
+
+```{r, results='hide'}
+prediction = learner$predict(task, row_ids)
+```
+
+Predict on ( selected) observations.
+
+## Measures & Scoring
+
+```{r, eval=FALSE}
+measure = msr(.key)
+```
+
+Get measure by `.key` from `mlr_measures:
+
+* `classif.ce` - Classification error.
+* `classif.auc` - AUROC.
+* `regr.rmse` - Root mean square error.
+
+Print `mlr_measures` for all measures.
+
+```{r, include=FALSE}
+measures = msrs(c("classif.ce", "classif.acc"))
+```
+
+```{r, results='hide'}
+prediction$score(measures)
+```
+Calculate performance with one or more measures.
+
+<!--- Dummy div to start new page --->
+<div class="page_break"> </div>
+
+## Class: Resampling
+								
+Define partitioning of task into train and test sets.
+Creation: `resampling = rsmp(.key, ...)`
+
+* `holdout` (`ratio`) Holdout-validation.
+* `cv` (`folds`) k-fold cross-validation.
+* `repeated_cv` (`folds`, `repeats`) Repeated k-fold cross-validation.
+* `subsampling` (`repeats`, `ratio`) Repeated holdouts.
+* `bootstrap` (`repeats`, `ratio`) Out-of-bag bootstrap.
+* Custom splits 
+```{r, results='hide'}
+resampling = rsmp("custom")
+resampling$instantiate(task, 
+  train = list(c(1:10, 51:60, 101:110)), 
+  test = list(c(11:20, 61:70, 111:120)))									
+```		
+
+```{r, include=FALSE}
+resampling = rsmp("cv")
+```
+		
+```{r, results='hide'}					
+resampling$param_set
+```
+
+Returns a description of parameter settings.
+
+```{r, results='hide'}					
+resampling$param_set$values = list(folds = 10)
+```							
+								
+Sets folds to 10.
+
+```{r, eval=FALSE}						
+task$col_roles$stratum = "<column_names>"
+```								
+								
+Sets stratification variables.
+								
+```{r, eval=FALSE}						
+task$col_roles$group = "<column_name>"
+```								
+														
+Sets group variable.
+								
+```{r, results='hide'}					
+resampling$instantiate(task)
+```										
+							
+Perform splitting and define index sets.				
+
+## Resample
+								
+Train-Predict-Score a learner on each train/test set.
+								
+```{r, results='hide'}
+rr = resample(task, learner, resampling)
+```
+Returns a `ResampleResult` container object.
+
+```{r, results='hide'}
+rr$score(measures)
+```
+Returns a `data.table` of scores on test sets.
+
+```{r, results='hide'}
+rr$aggregate(measures)
+```
+Gets aggregated performance scores as vector.
+
+```{r, include=FALSE}
+iters = 1
+```
+
+```{r, results='hide'}
+rr$filter(iters)
+```
+Filters to specific iterations.
+								
+```{r, eval = FALSE, class.source='example'}
+library(mlr3learners)
+task = tsk("pima")
+learner = lrn("classif.rpart", predict_type = "prob")
+measure = msr("classif.ce")
+resampling = rsmp("cv", folds = 3L)
+resampling$instantiate(task)
+rr = resample(task, learner, resampling)
+as.data.table(rr)[, list(resampling, iteration, prediction)]
+## >           resampling  iteration              prediction
+## > 1: <ResamplingCV[19]>         1 <PredictionClassif[19]>
+## > 2: <ResamplingCV[19]>         2 <PredictionClassif[19]>
+## > 3: <ResamplingCV[19]>         3 <PredictionClassif[19]>
+rr$aggregate(measure)
+## > classif.ce 
+## >  0.2239583
+learners = lrns(c("classif.rpart", "classif.ranger"))
+tasks = tsks(c("sonar", "spam"))
+resampling = rsmp("cv", folds = 3L)
+design = benchmark_grid(tasks, learners,resampling)
+bmr = benchmark(design)
+bmr
+## >                      learner         resampling   iteration
+## >  1: <LearnerClassifRpart[33]>  <ResamplingCV[19]>         1
+## >  2: <LearnerClassifRpart[33]>  <ResamplingCV[19]>         2
+## >  3: <LearnerClassifRpart[33]>  <ResamplingCV[19]>         3
+## >  4: <LearnerClassifRanger[33]> <ResamplingCV[19]>         1
+bmr$aggregate()[, list(nr, resample_result, task_id, learner_id, classif.ce)]
+## >    nr      resample_result task_id     learner_id classif.ce
+## > 1:  1 <ResampleResult[21]>   sonar  classif.rpart 0.30276052
+## > 2:  2 <ResampleResult[21]>   sonar classif.ranger 0.17308489
+## > 3:  3 <ResampleResult[21]>    spam  classif.rpart 0.09997865
+## > 4:  4 <ResampleResult[21]>    spam classif.ranger 0.04868526
+```					
+Results are stored as a `data.table`. `BenchmarkResult` contains a `ResampleResult` object for each task-learner-resampling combination which in turn contain a `Prediction` object for each resampling iteration.
+
+## Benchmark
+
+Compare learner(s) on task(s) with resampling(s).
+
+```{r, include=FALSE}
+tasks = tsk("pima")
+learners = lrns(c("classif.rpart", "classif.featureless"))
+resamplings = rsmp("holdout")
+```
+								
+```{r, results='hide'}
+design = benchmark_grid(
+  tasks, learners, resamplings)
+```
+Creates a cross-join datatable with list-columns. Can also be set up manually for full control.
+								
+```{r, results='hide'}	
+bmr = benchmark(design)
+```
+Returns a `BenckmarkResult` container.
+								
+```{r, results='hide'}	
+bmr$aggregate(measures)
+```
+`data.table` of `ResampleResult` with scores.
+								
+```{r, results='hide'}
+bmr$score(measures)
+```
+Data `data.table` of resampling iterations with scores.
+								
+```{r, include=FALSE}
+task_ids = "pima"
+learner_ids = "classif.rpart"
+resampling_ids = "holdout"
+```
+
+```{r, results='hide'}	
+bmr$filter(task_ids, learner_ids, resampling_ids)
+```
+Filter by task, learner and resampling.
+
+```{r, include=FALSE}
+bmr1 = bmr
+```
+
+```{r, results='hide'}
+bmr$combine(bmr)
+c(bmr, bmr1) # alternative S3 method
+```
+Merge other `BenchmarkResult`.
+
+## Parallelization
+
+The `future` framework is used for parallelization.
+								
+```{r, eval=FALSE}
+future::plan(backend)
+```
+Selects the parallelization backend for the current session.
+
+Parallelization is automatically applied to all levels (resampling, tuning and FeatSel).
+
+## Logging
+								
+`lgr` is used for logging and progress output.
+								
+```{r, results='hide'}
+getOption("lgr.log_levels")
+## > fatal error  warn  info debug trace 
+## >  100   200   300   400   500   600 
+```
+Gets threshold levels. The default is 400.
+								
+```{r, eval=FALSE}
+lgr::get_logger("mlr3")$set_threshold("<level>")
+```
+Changes the log-level on a per-package basis.
+
+## mlr3viz
+
+Provides visualization for `mlr3} objects.
+Creation: `mlr3viz::autoplot(object, type)}
+
+* `BenchmarkResult` (`boxplot` of performance measures, `roc`, `prc`)
+* `Filter` (`barplot` of filter scores)
+* `PredictionClassif` (Stacked barplot of true and estimated class labels, `roc`, `prc`)
+* `PredictionRegr` (`xy` scatterplot, `histogram` of residuals)
+* `ResampleResult` (`boxplot` or `histogram` of performance measures, `roc`, `prc`)
+* `TaskClassif` (barplot of `target`, duo target-features plot matrix, `pairs` feature plot matrix with color set to target)
+* `TaskRegr` (`target`, `pairs`)
+* `TaskSurv` (`target`, `duo`, `pairs`)
+
+## Error Handling and Encapsulation
+
+Packages `evaluate` and `callr` can be used to encapsulate execution of `$train()` and `$predict()` to prevent stops in case of errors - useful for larger experiments. `callr` isolates the execution in a separate R sessions, guarding against segfaults.
+
+```{r, results='hide'}
+learner$encapsulate = c(
+ train = "evaluate", 
+ predict = "callr")
+```
+								
+```{r, results='hide'}
+learner$errors
+```
+Returns the log of recorded errors.
+								
+```{r, eval=FALSE}
+learner$fallback = lrn(.key)
+```
+If learner fails, a fallback learner is used to generate predictions.
+Use a robust fallback, e.g. a "featureless" learner.
+
+## Resources
+
+* [mlr3book](https://mlr3book.mlr-org.com/index.html)<br>
+(ht<span>tps://mlr3book.mlr-org.com)
+* [mlr-org on GitHub](https://github.com/mlr-org)<br>
+(ht<span>tps://github.com/mlr-org)
+* [mlr3learners R package](https://github.com/mlr-org/mlr3learners)<br>
+(ht<span>tps://github.com/mlr-org/mlr3learners)
+* [mlr3learners organization](https://github.com/mlr3learners)<br>
+(ht<span>tps://github.com/mlr3learners)
+* [mlr3gallery use cases](https://mlr3gallery.mlr-org.com/)<br>
+(ht<span>tps://mlr3gallery.mlr-org.com/)
+
