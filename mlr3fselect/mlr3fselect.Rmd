@@ -152,7 +152,7 @@ at$predict(task, row_ids)
 
 Resampling the `AutoFSelect` results in nested resampling with an inner and outer loop.
 							
-```{r, results='hide', class.source='example'}
+```{r, eval=FALSE, class.source='example'}
 resampling_inner = rsmp("holdout")
 evals20 = trm("evals", n_evals = 20)
 
@@ -168,13 +168,13 @@ as.data.table(rr)
 ## > 2: <AutoFSelect[38]> <ResamplingCV[19]>         2 <PredictionClassif[19]>
 ```
 						
-```{r, results='hide'}
+```{r, eval=FALSE}
 rr$aggregate()
 ```
 
 Aggregates performances of outer folds.
 							
-```{r, results='hide'}
+```{r, eval=FALSE}
 as.data.table(rr)$learner[[1]]$fselect_result
 ```
 
