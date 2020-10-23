@@ -125,12 +125,12 @@ task$select(instance$result_feature_set)
 
 Set optimized feature subset in `Task`.
 
-## AutoFSelect - Select before Train
+## AutoFSelector - Select before Train
 
 Wraps learner and performs integrated feature selection.
 						
 ```{r, results='hide'}
-at = AutoFSelect$new(
+at = AutoFSelector$new(
   learner, resampling, measure, terminator, 
   fselector)
 ```
@@ -150,13 +150,13 @@ at$predict(task, row_ids)
 					
 ## Nested Resampling
 
-Resampling the `AutoFSelect` results in nested resampling with an inner and outer loop.
+Resampling the `AutoFSelector` results in nested resampling with an inner and outer loop.
 							
 ```{r, eval=FALSE, class.source='example'}
 resampling_inner = rsmp("holdout")
 evals20 = trm("evals", n_evals = 20)
 
-at = AutoFSelect$new(learner, resampling_inner, measure, evals20, fselector) 
+at = AutoFSelector$new(learner, resampling_inner, measure, evals20, fselector) 
 at$store_fselect_instance = TRUE
 
 resampling_outer = rsmp("cv", folds = 2)
@@ -164,8 +164,8 @@ rr = resample(task, at, resampling_outer, store_models = TRUE)
 
 as.data.table(rr)
 ## >              learner         resampling iteration              prediction
-## > 1: <AutoFSelect[38]> <ResamplingCV[19]>         1 <PredictionClassif[19]>
-## > 2: <AutoFSelect[38]> <ResamplingCV[19]>         2 <PredictionClassif[19]>
+## > 1: <AutoFSelector[38]> <ResamplingCV[19]>         1 <PredictionClassif[19]>
+## > 2: <AutoFSelector[38]> <ResamplingCV[19]>         2 <PredictionClassif[19]>
 ```
 						
 ```{r, eval=FALSE}
