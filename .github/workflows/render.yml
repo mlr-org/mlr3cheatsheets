@@ -1,5 +1,10 @@
 name: render
-on: push
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 4 * * *"
+
 jobs:
   all:
     name: Render cheat sheets
