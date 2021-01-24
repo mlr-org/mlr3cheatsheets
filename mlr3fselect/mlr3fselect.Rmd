@@ -99,13 +99,13 @@ fselector$optimize(instance)
 Starts the feature selection. `FSelector` generates feature subsets and passes these to the `$eval_batch()` method of the `FSelectInstance*` until the budget of the `Terminator` is exhausted.
 							
 ```{r, results='hide'}
-instance$archive$data()
+as.data.table(instance$archive)
 ```
 							
 Returns all evaluated feature subsets and their resampling results.
 							
 ```{r, results='hide', class.source='example'}
-instance$archive$data()
+as.data.table(instance$archive)
 ## >     Petal.Length Petal.Width Sepal.Length Sepal.Width classif.ce
 ## >  1:        FALSE       FALSE         TRUE       FALSE 0.26000000
 ## >  2:         TRUE       FALSE         TRUE       FALSE 0.08000000
