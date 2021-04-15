@@ -16,8 +16,7 @@ library(data.table)
 
 ## Class Overview
 
-The package provides a set of R6 classes which allow to (a) define general feature selection instances and (b) run algorithms which optimize on these. 
-(a) is called a FSelectInstanceSingleCrit or FSelectInstaneMultiCrit, which define a blackbox optimization function that maps feature subsets to resampled performance values for arbitrary performance measures.
+The \textbf{mlr3} package builds on R6 classes and provides the essential building blocks of a machine learning workflow.
 
 ## mlr3 Dictionaries
 
