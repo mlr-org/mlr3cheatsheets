@@ -4,7 +4,7 @@ author: "mlr-org"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Dataflow programming with mlr3pipelines"
 logo: "logo.png"
-column_breaks: [3, 7, 10]
+column_breaks: [3, 8, 12]
 output: 
   cheatdown::cheatdown_html
 ---
@@ -106,6 +106,26 @@ grl$predict(task)
 rr = resample(task, grl, rsmp("cv", folds = 3))
 ```
 
+## Debugging and Intermediate Results
+
+```{r, results='hide'}
+gr$keep_results = TRUE
+```
+
+Store intermediate results of `PipeOp`s.
+
+```{r, results='hide'}
+grl$graph$pipeops$encode$.result
+```
+
+Access encode pipeop output.
+
+```{r, results='hide'}
+grl$state
+```
+
+Returns state and fitted models.
+
 ## Hyperparameters
 
 For POs: Exactly as in a `Learner`.
@@ -156,6 +176,15 @@ mutate = po("mutate", param_vals =
   list(mutation = mutations))
 GraphLearner$new(mutate %>>% lrn("classif.rpart"))
 ```
+
+## Logging
+
+```{r, eval=FALSE}
+lg = lgr::get_logger("mlr3pipelines")
+lg$set_threshold("<level>")
+```
+
+Change log-level only for mlr3pipelines.
 
 ## Nonlinear Graphs
 
