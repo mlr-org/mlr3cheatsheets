@@ -96,7 +96,7 @@ See slots `$encapsulate` for debugging and `$model` for results after training.
 Concatenate POs with `%>>%`:
               
 
-```{r, eval=FALSE, class.source='example', results='hide'}
+```{r, class.source='example', results='hide'}
 task = tsk("penguins")
 gr = po("scale") %>>% po("encode") %>>%
   po("imputemean") %>>% lrn("classif.rpart")
@@ -222,7 +222,7 @@ Which one is controlled by a hyperparameter.
 Unbranching ends the forking.
               
              
-```{r, results='hide' class.source='example'}
+```{r, results='hide', class.source='example'}
 gr = ppl("branch", list(
   pca = po("pca"), scale = po("scale"))
 )
