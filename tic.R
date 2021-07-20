@@ -13,7 +13,7 @@ get_stage("script") %>%
   })
 
 # deploy
-if (ci_get_branch() == "tic") {
+if (ci_get_branch() == "main") {
   get_stage("before_deploy") %>%
     add_step(step_setup_ssh()) %>%
     add_step(step_setup_push_deploy(branch = "gh-pages", orphan = TRUE))
