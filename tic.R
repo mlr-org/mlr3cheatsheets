@@ -7,7 +7,7 @@ get_stage("script") %>%
   add_code_step({
     files = list.files(".", pattern = "^mlr3.*\\.Rmd$", recursive = TRUE)
     lapply(files, function(file) {
-      out_file = gsub(".Rmd", ".pdf", basename(file))
+      out_file = file.path("pdf", gsub(".Rmd", ".pdf", basename(file)))
       cheatdown::print_pdf(file, out_file)
     })
   })
