@@ -20,5 +20,5 @@ if (ci_get_branch() == "tic") {
 
   get_stage("deploy") %>%
     add_code_step(writeLines("cheatsheets.mlr-org.com", "CNAME")) %>%
-    add_step(step_do_push_deploy(commit_paths = "CNAME"))
+    add_step(step_do_push_deploy(commit_paths = c("CNAME", "pdf/")))
 }
