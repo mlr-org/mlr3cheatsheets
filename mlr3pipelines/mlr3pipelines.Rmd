@@ -12,6 +12,8 @@ output:
 ```{r, include=FALSE}
 library(mlr3)
 library(mlr3pipelines)
+library(paradox)
+library(mlr3verse)
 ```
 
 ## Introduction
@@ -77,7 +79,7 @@ The `%>>%` operator takes either a `PipeOp` or a `Graph` on each of its sides an
           
  For full control, connect `PipeOp`s explicitly:
 
-```{r, eval=FALSE}
+```{r, results='hide'}
 gr = Graph$new()
 gr$add_pipeop(po("pca"))
 gr$add_pipeop(lrn("classif.rpart"))
@@ -86,7 +88,7 @@ gr$add_edge("pca", "classif.rpart")
 
 ## GraphLearner
               
-`GraphLearner` behave like `Learner` and enable all mlr3 features : `grl = GraphLearner`$new(gr)`
+`GraphLearner` behave like `Learner` and enable all mlr3 features : `grl = GraphLearner$new(gr)`
 See slots `$encapsulate` for debugging and `$model` for results after training.
           
 ## Linear Graphs
@@ -94,7 +96,8 @@ See slots `$encapsulate` for debugging and `$model` for results after training.
 Concatenate POs with `%>>%`:
               
 
-```{r, eval=FALSE, class.source='example'}
+```{r, class.source='example', results='hide'}
+task = tsk("penguins")
 gr = po("scale") %>>% po("encode") %>>%
   po("imputemean") %>>% lrn("classif.rpart")
 grl = GraphLearner$new(gr)
@@ -130,7 +133,7 @@ Returns state and fitted models.
 
 For POs: Exactly as in a `Learner`.
               
-```{r, eval=FALSE}
+```{r, results='hide'}
 enc = po("encode") 
 enc$param_set
 enc$param_set$values = list(method="one-hot") 
@@ -144,7 +147,7 @@ IDs are prefixed with the respective `PipeOp`'s `id`.
              
 Can jointly tune any Pipeline.        
              
-```{r, eval=FALSE, class.source='example'}
+```{r, results='hide', class.source='example'}
 gr = po("encode") %>>% lrn("classif.rpart")
 grl = GraphLearner$new(gr)
 tune_ps = ParamSet$new(list(
@@ -156,7 +159,7 @@ tune_ps = ParamSet$new(list(
 tt = trm("evals", n_evals = 20)
 rs = rsmp("holdout")
 inst = TuningInstanceSingleCrit$new(task, grl, rs,
-  msr("classif.ce"), tune_ps, tt)
+  msr("classif.ce"), tt, tune_ps)
 tuner = tnr("random_search")
 tuner$optimize(inst)
 ```
@@ -168,7 +171,7 @@ Usage of `AutoTuner` is identical.
 `PipeOpMutate` adds new features.
 This works by providing expressions in a `list`.
               
-```{r, eval=FALSE, class.source='example'}
+```{r, results='hide', class.source='example'}
 task = tsk("iris")
 mutations = list(
   Sepal.Sum = ~ Sepal.Length + Sepal.Width)
@@ -199,13 +202,13 @@ Change log-level only for mlr3pipelines.
 `PipeOpFeatureUnion` aggregates features from all input tasks into a single `Task`.
               
         
-```{r, eval=FALSE, class.source='example'}
+```{r, results='hide', class.source='example'}
 # train on orig and pca features
 gunion(list(po("nop"), po("pca"))) %>>%
   po("featureunion") %>>% lrn("classif.rpart")
 ```
 
-```{r, eval=FALSE, class.source='example'}
+```{r, results='hide', class.source='example'}
 pr = po("subsample") %>>% lrn("classif.rpart")
 bagging = ppl("greplicate", pr, n = 10) %>>%
   po("classifavg", innum = 10)
@@ -219,12 +222,12 @@ Which one is controlled by a hyperparameter.
 Unbranching ends the forking.
               
              
-```{r, eval=FALSE, class.source='example'}
+```{r, results='hide', class.source='example'}
 gr = ppl("branch", list(
   pca = po("pca"), scale = po("scale"))
 )
 # set the "pca" path as the active one:
-gr$param_set$values$branch.selection = "pca"`
+gr$param_set$values$branch.selection = "pca"
 ```
               
 Tuning the branching selection enables powerful model selection.

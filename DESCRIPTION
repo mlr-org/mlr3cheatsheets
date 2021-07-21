@@ -1,0 +1,31 @@
+Package: mlr3cheatsheets
+Title: R Package to Build the mlr3 cheatsheets via Cheatdown
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Marc",
+           family = "Becker",
+           role = c("cre", "aut"),
+           email = "marcbecker@posteo.de",
+           comment = c(ORCID = "0000-0002-8115-0400"))
+Description: Use this package to install all dependencies and additional
+    helper files required to build the mlr3 cheatsheets.
+License: MIT
+Depends:
+    R (>= 3.6.0)
+Imports:
+    cheatdown,
+    data.table,
+    e1071,
+    mlr3,
+    mlr3fselect,
+    mlr3learners,
+    mlr3pipelines,
+    mlr3tuning,
+    mlr3verse,
+    paradox
+Remotes: 
+    be-marc/cheatdown
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
