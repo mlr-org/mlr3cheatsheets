@@ -8,11 +8,11 @@ Cheatsheets of mlr-org packages
 
 ## Cheatsheets
 
-- [mlr](https://cheatsheets.mlr-org.com/pdf/mlr.pdf)
-- [mlr3](https://cheatsheets.mlr-org.com/pdf/mlr3.pdf)
-- [mlr3pipelines](https://cheatsheets.mlr-org.com/pdf/mlr3pipelines.pdf)
-- [mlr3tuning](https://cheatsheets.mlr-org.com/pdf/mlr3tuning.pdf)
-- [mlr3fselect](https://cheatsheets.mlr-org.com/pdf/mlr3fselect.pdf)
+- [mlr](https://cheatsheets.mlr-org.com/mlr.pdf)
+- [mlr3](https://cheatsheets.mlr-org.com/mlr3.pdf)
+- [mlr3pipelines](https://cheatsheets.mlr-org.com/mlr3pipelines.pdf)
+- [mlr3tuning](https://cheatsheets.mlr-org.com/mlr3tuning.pdf)
+- [mlr3fselect](https://cheatsheets.mlr-org.com/mlr3fselect.pdf)
 
 ## Instructions
 
