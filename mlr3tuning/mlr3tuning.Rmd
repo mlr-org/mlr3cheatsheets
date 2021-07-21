@@ -4,7 +4,7 @@ author: "mlr3-org"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
-column_breaks: [2, 4, 6]
+column_breaks: [3, 5, 7]
 output: 
   cheatdown::cheatdown_html
 ---
@@ -15,12 +15,13 @@ library(mlr3tuning)
 library(mlr3learners)
 library(data.table)
 library(paradox)
+library(mlr3book)
 ```
 
 ## Class Overview
 
 The package provides a set of R6 classes which allow to (a) define general hyperparameter (HP) tuning instances and (b) run algorithms which optimize on these. 
-(a) is called a TuningInstanceSingleCrit or TuningInstaneMultiCrit, which define a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.
+(a) is called a `TuningInstanceSingleCrit` or `TuningInstaneMultiCrit`, which define a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.
 
 ![](class_diagram.png)
 
@@ -29,42 +30,29 @@ The package provides a set of R6 classes which allow to (a) define general hyper
 Scalar doubles, integers, factors or logicals are combined to define a multivariate tuning space.
 
 ```{r, eval=FALSE}
-tune_ps = ParamSet$new(list(
-  ParamInt$new(id, lower, upper),
-  ParamDbl$new(id, lower, upper),
-  ParamFct$new(id, levels),
-  ParamLgl$new(id)))
+tune_ps = ps(
+  <id> = p_int(lower, upper),
+  <id> = p_dbl(lower, upper),
+  <id> = p_dct(levels),
+  <id> = p_lgl())
 ```
 
 `id` is the Param identifier. `lower`/`upper` define numerical ranges, `levels` is for categories.
-							
-							
-### Transformations for Rescaling
 
-```{r, eval=FALSE}
-tune_ps$trafo = function(x, param_set) {
-x$id =  2^{x$id}; return(x)}
+```{r, results='hide'}
+lrn("classif.rpart", 
+  cp = to_tune(0.001, 0.1, logscale = TRUE))
 ```
 
-Apply a custom transformation before passing the param to the `Learner`.
-							
-### Parameter Dependencies
-							
-Dependencies prevent invalid learner configurations.
-							
-```{r, eval=FALSE}
-tune_ps$add_dep(id, on, cond)
-```
-
-Adds a dependency for param `id` so that param `id` depends on param `on`, optional to condition `cond`.
+Alternatively, use `to_tune()` function to set tuning space in parameter set of the `Learner`. 
+Set `logscale = TRUE` to tune on logarithmic scale.
 
 ## Terminators - When to stop
 
 Construction: `trm(.key, ...)`
 
 * `evals` (`n_evals`)<br> After a given amount of iterations.
-* `clock_time` (`secs`, `stop_time`)<br> After a given absolute time.
-* `model_time` (`secs `)<br> After a given training time.
+* `run_time` (`secs `)<br> After a given training time.
 * `perf_reached` (`level`)<br> After a specific performance was reached.
 * `stagnation` (`iters`, `threshold`)<br> After the performance stagnated for given iterations.
 
@@ -78,7 +66,6 @@ Lists all available terminators.
 
 Evaluator and container for resampled performances of HP configurations during tuning.
 The main (internal) function `eval_batch(xdt)` calls `benchmark()` to evaluate a table of HP configurations.
-
 Also stores archive of all evaluated experiments and the final result.
 
 ```{r, include=FALSE}
@@ -88,32 +75,27 @@ resampling = rsmp("holdout")
 measure = msr("classif.ce")
 terminator = trm("evals", n_evals = 20)
 
-tune_ps = ParamSet$new(list(
-  ParamDbl$new("cp", lower = 0.01, upper = 0.4)
-))
+tune_ps = ps(cp = p_dbl(0.001, 0.1, logscale = TRUE))
 ```
 
 ```{r, results='hide'}
-instance = TuningInstanceSingleCrit$new(
-  task, learner, resampling, measure,
-  terminator, tune_ps)
+instance = TuningInstanceSingleCrit$new(task, 
+  learner, resampling, measure,terminator, tune_ps)
 ```
+
 Set `store_benchmark_result = TRUE` to store resamplings of evaluations and `store_models = TRUE` to store associated models.
 
 ```{r, results='hide', class.source='example'}
-# optimize hyperpar of RBF SVM on logscale
-learner = lrn("classif.svm", kernel = "radial",
-  type = "C-classification")
+# optimize hyperparameter of RBF SVM on logscale
+learner = lrn("classif.svm", kernel = "radial", type = "C-classification")
     
-tune_ps = ParamSet$new(list(
-  ParamDbl$new("cost", lower = -8, upper = 8),
-  ParamDbl$new("gamma", lower = -8, upper = 8)))
-tune_ps$trafo = function(x, param_set) {
-  x$cost = 2^x$cost; x$gamma = 2^x$gamma; x}
+tune_ps = ps(
+  cost = p_dbl(1e-4, 1e4, logscale = TRUE),
+  gamma = p_dbl(1e-4, 1e4, logscale = TRUE))
+
 evals20 = trm("evals", n_evals = 20)
     
-instance = TuningInstanceSingleCrit$new(
-  task, learner, resampling, measure, evals20, 
+instance = TuningInstanceSingleCrit$new(task, learner, resampling, measure, evals20,
   tune_ps)
 tuner = tnr("random_search")
 tuner$optimize(instance)
@@ -132,6 +114,7 @@ Creation: `tnr(.key, ...)`
 * `random_search` (`batch_size`) <br> Random search.
 * `gensa` (`smooth`, `temperature`) <br> Generalized Simulated Annealing.
 * `nloptr` (`algorithm`) <br> Non-linear optimization.
+* `irace` <br> Iterated racing.
 * `design_points` (`batch_size `, `design`) <br> User supplied settings.
 
 ```{r, results='hide'}
@@ -176,61 +159,16 @@ learner$param_set$values =
 
 Set optimized HP in `Learner`.
 
-## AutoTuner - Tune before Train
-
-Wraps learner and performs integrated tuning.
-							
-```{r, results='hide'}
-at = AutoTuner$new(
-  learner, resampling, measure, terminator, 
-  tuner, tune_ps)
-```
-
-Inherits from class `Learner`.
-Training starts tuning on the training set.
-After completion the learner is trained with the "optimal" configuration on the given task.
-
-```{r, include=FALSE}
-row_ids = 1:50
-```
-
-```{r, results='hide'}
-at$train(task)
-at$predict(task, row_ids)
-```
-
-## Nested Resampling
-
-Resampling the `AutoTuner` results in nested resampling with an inner and outer loop.
-							
 ```{r, results='hide', class.source='example'}
-resampling_inner = rsmp("holdout")
+learner = lrn("classif.svm", type = "C-classification", kernel = "radial",
+  cost = to_tune(1e-4, 1e4, logscale = TRUE), 
+  gamma = to_tune(1e-4, 1e4, logscale = TRUE))
 
-at = AutoTuner$new(learner, resampling_inner, 
-  measure, evals20, tuner, tune_ps,
-  store_tuning_instance = TRUE) 
-									
-resampling_outer = rsmp("cv", folds = 2)
-rr = resample(task, at, resampling_outer, 
-  store_models = TRUE)
-									
-as.data.table(rr)
-## >             learner         resampling iteration  
-## > 1:  <AutoTuner[37]> <ResamplingCV[19]>         1
-## > 2:  <AutoTuner[37]> <ResamplingCV[19]>         2
+instance = tune(method = "grid_search", task = tsk("iris"), learner = learner, 
+  resampling = rsmp ("holdout"), measure = msr("classif.ce"), resolution = 5)
 ```
 
-```{r, results='hide'}
-rr$aggregate()
-```
-
-Aggregates performances of outer folds.
-							
-```{r, results='hide'}
-as.data.table(rr)$learner[[1]]$tuning_result
-```
-
-Retrieves inner tuning results.
+Use `tune()`-shortcut.
 
 ## Logging and Parallelization
 
@@ -246,3 +184,83 @@ future::plan(strategy)
 
 Sets the parallelization backend.
 Speeds up tuning by running iterations in parallel.
+
+## AutoTuner - Tune before Train
+
+Wraps learner and performs integrated tuning.
+							
+```{r, results='hide'}
+at = AutoTuner$new(learner, resampling, measure,
+  terminator, tuner)
+```
+
+Inherits from class `Learner`.
+Training starts tuning on the training set.
+After completion the learner is trained with the "optimal" configuration on the given task.
+
+```{r, include=FALSE}
+row_ids = 1:50
+```
+
+```{r, results='hide'}
+at$train(task)
+at$predict(task, row_ids)
+```
+
+```{r, results='hide'}
+at = auto_tuner(method = "grid_search", learner,
+  resampling, measure, term_evals = 20)
+```
+
+Use shortcut to create `AutoTuner`.
+
+## Nested Resampling
+
+Resampling the `AutoTuner` results in nested resampling with an inner and outer loop.
+							
+```{r, results='hide', class.source='example'}
+inner_resampling = rsmp("holdout")
+
+at = auto_tuner(method = "random_search", learner, inner_resampling, 
+  measure, term_evals = 20) 
+									
+outer_resampling = rsmp("cv", folds = 2)
+rr = resample(task, at, outer_resampling, store_models = TRUE)
+									
+as.data.table(rr)
+## >             learner         resampling iteration  
+## > 1:  <AutoTuner[37]> <ResamplingCV[19]>         1
+## > 2:  <AutoTuner[37]> <ResamplingCV[19]>         2
+```
+
+```{r, results='hide'}
+extract_inner_tuning_results(rr)
+```
+
+Check inner tuning results for stable HPs.
+
+```{r, results='hide'}
+rr$score()
+```
+
+Predictive performances estimated on the outer resampling.
+
+```{r, results='hide'}
+extract_inner_tuning_archives(rr)
+```
+
+All evaluated HP configurations.
+
+```{r, results='hide'}
+rr$aggregate()
+```
+
+Aggregates performances of outer resampling iterations. 
+						
+```{r, results='hide'}
+rr = tune_nested(method = "grid_search", task, 
+  learner = learner, inner_resampling, outer_resampling, measure,
+  term_evals = 20, )
+```
+
+Use shortcut to execute nested resampling.

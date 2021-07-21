@@ -24,7 +24,8 @@ Imports:
     mlr3verse,
     paradox
 Remotes: 
-    be-marc/cheatdown
+    be-marc/cheatdown,
+    mlr-org/mlr3tuning
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
