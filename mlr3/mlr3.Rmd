@@ -16,7 +16,7 @@ library(data.table)
 
 ## Class Overview
 
-The \textbf{mlr3} package builds on R6 classes and provides the essential building blocks of a machine learning workflow.
+The mlr3 package builds on R6 classes and provides the essential building blocks of a machine learning workflow.
 
 ## mlr3 Dictionaries
 
@@ -60,11 +60,11 @@ Lists objects with metadata.
 
 ## Class: Task
 
-Stores data and metadata. `backend` can be a `data.table`,
+Stores data and metadata. `x` can be a `data.table`,
 `target` points to y-column by name.
 							
 ```{r, eval=FALSE}
-task = TaskRegr$new(backend, target)
+task = as_task_regr(backend, target)
 ```
 							
 Create task for regression or classification.
@@ -428,8 +428,8 @@ Changes the log-level on a per-package basis.
 
 ## mlr3viz
 
-Provides visualization for `mlr3} objects.
-Creation: `mlr3viz::autoplot(object, type)}
+Provides visualization for mlr3 objects.
+Creation: `mlr3viz::autoplot(object, type)`
 
 * `BenchmarkResult` (`boxplot` of performance measures, `roc`, `prc`)
 * `Filter` (`barplot` of filter scores)
