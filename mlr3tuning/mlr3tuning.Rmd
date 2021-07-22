@@ -15,7 +15,6 @@ library(mlr3tuning)
 library(mlr3learners)
 library(data.table)
 library(paradox)
-library(mlr3book)
 ```
 
 ## Class Overview
