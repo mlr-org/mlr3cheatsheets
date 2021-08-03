@@ -90,12 +90,12 @@ instance = TuningInstanceSingleCrit$new(task,
 
 ```{r, results='hide', class.source='example'}
 # optimize HPs of RBF SVM on logscale
-svm = lrn("classif.svm", kernel = "radial", type = "C-classification") 
+learner = lrn("classif.svm", kernel = "radial", type = "C-classification") 
 ss = ps(
   cost = p_dbl(1e-4, 1e4, logscale = TRUE),
   gamma = p_dbl(1e-4, 1e4, logscale = TRUE))
 evals = trm("evals", n_evals = 20)
-instance = TuningInstanceSingleCrit$new(task, svm, resampling, measure, evals, ss)
+instance = TuningInstanceSingleCrit$new(task, learner, resampling, measure, evals, ss)
 tuner = tnr("random_search")
 tuner$optimize(instance)
 instance$result
@@ -120,13 +120,26 @@ Creation: `tnr(.key, ...)`
 as.data.table(mlr_tuners) # list all
 ```
 
+## Logging and Parallelization
+
+```{r, eval=FALSE}
+lgr::get_logger("bbotk")$set_threshold("<level>")
+```
+
+Change log-level only for mlr3tuning.
+
+```{r, eval=FALSE}
+future::plan(strategy)
+```
+
+Sets the parallelization backend.
+Speeds up tuning by running iterations in parallel.
+
 ## Execute Tuning
 
 ```{r, results='hide'}
 tuner$optimize(instance)
 ```
-
-## Access Results
 
 ```{r, results='hide'}
 as.data.table(instance$archive)
@@ -147,7 +160,7 @@ instance$result
 ```
 
 Returns list with optimal configurations and estimated performance.
-							
+
 ```{r, results='hide'}
 learner$param_set$values = 
   instance$result_learner_param_vals
@@ -254,18 +267,3 @@ rr = tune_nested(method = "grid_search", task,
 ```
 
 Use shortcut to execute nested resampling.
-
-## Logging and Parallelization
-
-```{r, eval=FALSE}
-lgr::get_logger("bbotk")$set_threshold("<level>")
-```
-
-Change log-level only for mlr3tuning.
-
-```{r, eval=FALSE}
-future::plan(strategy)
-```
-
-Sets the parallelization backend.
-Speeds up tuning by running iterations in parallel.
