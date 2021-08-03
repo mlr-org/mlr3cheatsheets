@@ -39,7 +39,8 @@ jobs:
       - name: Install dependencies
         run: |
           Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
-          Rscript -e "remotes::install_deps()"
+          Rscript -e "remotes::install_deps(upgrade = "always")"
+
       - name: Render cheat sheets
         run: |
           Rscript -e "cheatdown::print_pdf('mlr3/mlr3.Rmd', 'pdf/mlr3.pdf')"
