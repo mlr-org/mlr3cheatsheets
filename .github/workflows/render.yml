@@ -30,8 +30,8 @@ jobs:
         uses: pat-s/always-upload-cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
-          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
+          key: cheatsheets-${{steps.date.outputs.date}}
+          restore-keys: cheatsheets-${{steps.date.outputs.date}}
 
       - name: Install curl
         run: sudo apt install libcurl4-openssl-dev
@@ -46,6 +46,7 @@ jobs:
           Rscript -e "cheatdown::print_pdf('mlr3tuning/mlr3tuning.Rmd', 'pdf/mlr3tuning.pdf')"
           Rscript -e "cheatdown::print_pdf('mlr3fselect/mlr3fselect.Rmd', 'pdf/mlr3fselect.pdf')"
           Rscript -e "cheatdown::print_pdf('mlr3pipelines/mlr3pipelines.Rmd', 'pdf/mlr3pipelines.pdf')"
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
