@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-           Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
+          Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
           Rscript -e "remotes::install_deps()"
       - name: Render cheat sheets
         run: |
