@@ -19,14 +19,16 @@ library(paradox)
 
 ## Class Overview
 
-The package provides a set of R6 classes which allow to (a) define general hyperparameter (HP) tuning instances and (b) run algorithms which optimize on these. 
-(a) is called a `TuningInstanceSingleCrit` or `TuningInstaneMultiCrit`, which define a blackbox optimization function that maps HP candidate configurations to resampled performance values for arbitrary performance measures.
+The package provides a set of R6 classes which allow to 
+(a) define general hyperparameter (HP) tuning instances, i.e., the black-box objective that maps HP configurations to resampled performance values;
+(b) run black-box optimzers;
+(c) combine learners with tuners (for nested resampling).
 
 ![](class_diagram.png)
 
 ## ParamSet - Parameters and Ranges
 
-Scalar doubles, integers, factors or logicals are combined to define a multivariate tuning space.
+Scalar doubles, integers, factors or logicals are combined to define a multivariate search space (SS).
 
 ```{r, eval=FALSE}
 tune_ps = ps(
@@ -36,25 +38,29 @@ tune_ps = ps(
   <id> = p_lgl())
 ```
 
-`id` is the Param identifier. `lower`/`upper` define numerical ranges, `levels` is for categories.
+`id` is Param identifier. `lower`/`upper` for ranges, `levels` for categories.
 
 ```{r, results='hide'}
 lrn("classif.rpart", 
-  cp = to_tune(0.001, 0.1, logscale = TRUE))
+  cp = to_tune(0.001, 0.1, logscale = TRUE),
+  minsplit = to_tune(1, 10))
+lrn$param_set$search_space # only for inspection
 ```
 
-Alternatively, use `to_tune()` function to set tuning space in parameter set of the `Learner`. 
-Set `logscale = TRUE` to tune on logarithmic scale.
+Or, use `to_tune()` to set SS for each param in `Learner`. 
+SS is auto-generated when learner is tuned. 
+`logscale = TRUE` for log scale.
 
 ## Terminators - When to stop
 
 Construction: `trm(.key, ...)`
 
-* `evals` (`n_evals`)<br> After a given amount of iterations.
-* `run_time` (`secs `)<br> After a given training time.
-* `perf_reached` (`level`)<br> After a specific performance was reached.
-* `stagnation` (`iters`, `threshold`)<br> After the performance stagnated for given iterations.
-
+* `evals` (`n_evals`)<br> After iterations.
+* `run_time` (`secs `)<br> After training time.
+* `clock_time` (`secs `)<br> At given timepoint.
+* `perf_reached` (`level`)<br> After performance was reached.
+* `stagnation` (`iters`, `threshold`)<br> After performance stagnated.
+* `combo(list_of_terms, any=TRUE`<br>Combine terminators with AND or OR.
 ```{r, results='hide'}
 as.data.table(mlr_terminators)
 ```
