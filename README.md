@@ -3,7 +3,7 @@
 Cheatsheets of mlr-org packages
 
 <!-- badges: start -->
-![Render](https://github.com/mlr-org/mlr3cheatsheets/workflows/tic/badge.svg?branch=main)
+[![render](https://github.com/mlr-org/mlr3cheatsheets/actions/workflows/render.yml/badge.svg?branch=main)](https://github.com/mlr-org/mlr3cheatsheets/actions/workflows/render.yml)
 <!-- badges: end -->
 
 ## Cheatsheets
