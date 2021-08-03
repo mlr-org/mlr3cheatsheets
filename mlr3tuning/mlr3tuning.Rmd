@@ -4,7 +4,7 @@ author: "mlr3-org"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
-column_breaks: [3, 5, 7]
+column_breaks: [3, 6, 8]
 output: 
   cheatdown::cheatdown_html
 ---
@@ -112,9 +112,7 @@ Creation: `tnr(.key, ...)`
 * `grid_search` (`resolution`, `batch_size`) <br> Grid search.
 * `random_search` (`batch_size`) <br> Random search.
 * `gensa` (`smooth`, `temperature`) <br> Generalized Simulated Annealing.
-* `nloptr` (`algorithm`) <br> Non-linear optimization.
 * `irace` <br> Iterated racing.
-* `design_points` (`batch_size `, `design`) <br> User supplied settings.
 
 ```{r, results='hide'}
 as.data.table(mlr_tuners)
@@ -129,6 +127,8 @@ tuner$optimize(instance)
 
 Starts the tuning. `Tuner` generates candidate configurations and passes these to the `$eval_batch()` method of the `TuningInstance*` until the budget of the `Terminator` is exhausted.
 
+## Access Results
+
 ```{r, results='hide'}
 as.data.table(instance$archive)
 ```
@@ -142,8 +142,6 @@ as.data.table(instance$archive)
 ## > 1:  3.13  5.55       0.56  b8744...          3.13           5.55
 ## > 2: -1.94  1.32       0.10  f5623...         -1.94           1.32
 ```
-
-`uhash` refers to `instance$archive$benchmark_result`.
 
 ```{r, results='hide'}
 instance$result
@@ -160,29 +158,11 @@ Set optimized HP in `Learner`.
 
 ```{r, results='hide', class.source='example'}
 learner = lrn("classif.svm", type = "C-classification", kernel = "radial",
-  cost = to_tune(1e-4, 1e4, logscale = TRUE), 
-  gamma = to_tune(1e-4, 1e4, logscale = TRUE))
-
+  cost = to_tune(1e-4, 1e4, logscale = TRUE))
 instance = tune(method = "grid_search", task = tsk("iris"), learner = learner, 
   resampling = rsmp ("holdout"), measure = msr("classif.ce"), resolution = 5)
 ```
-
 Use `tune()`-shortcut.
-
-## Logging and Parallelization
-
-```{r, eval=FALSE}
-lgr::get_logger("bbotk")$set_threshold("<level>")
-```
-
-Change log-level only for mlr3tuning.
-
-```{r, eval=FALSE}
-future::plan(strategy)
-```
-
-Sets the parallelization backend.
-Speeds up tuning by running iterations in parallel.
 
 ## AutoTuner - Tune before Train
 
@@ -205,6 +185,18 @@ row_ids = 1:50
 at$train(task)
 at$predict(task, row_ids)
 ```
+
+```{r, results='hide'}
+at$learner
+```
+
+Returns tuned learner trained on full data set.
+
+```{r, results='hide'}
+at$tuning_result
+```
+
+Access tuning result.
 
 ```{r, results='hide'}
 at = auto_tuner(method = "grid_search", learner,
@@ -258,8 +250,23 @@ Aggregates performances of outer resampling iterations.
 						
 ```{r, results='hide'}
 rr = tune_nested(method = "grid_search", task, 
-  learner = learner, inner_resampling, outer_resampling, measure,
-  term_evals = 20, )
+  learner = learner, inner_resampling, 
+  outer_resampling, measure, term_evals = 20)
 ```
 
 Use shortcut to execute nested resampling.
+
+## Logging and Parallelization
+
+```{r, eval=FALSE}
+lgr::get_logger("bbotk")$set_threshold("<level>")
+```
+
+Change log-level only for mlr3tuning.
+
+```{r, eval=FALSE}
+future::plan(strategy)
+```
+
+Sets the parallelization backend.
+Speeds up tuning by running iterations in parallel.

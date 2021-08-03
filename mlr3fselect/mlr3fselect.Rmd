@@ -46,7 +46,7 @@ The main (internal) function `eval_batch(xdt)` calls `benchmark()` to evaluate a
 Also stores archive of all evaluated feature subsets and the final result.
 
 ```{r, include=FALSE}
-task = tsk("iris")
+task = tsk("penguins")
 learner = lrn("classif.rpart")
 resampling = rsmp("holdout")
 measure = msr("classif.ce")
@@ -54,17 +54,14 @@ terminator = trm("evals", n_evals = 20)
 ```
 
 ```{r, results='hide'}
-instance = FSelectInstanceSingleCrit$new(
-  task, learner, resampling, measure,
-  terminator)
+instance = FSelectInstanceSingleCrit$new(task, 
+  learner, resampling, measure, terminator)
 ```
 
 Set `store_benchmark_result = TRUE` to store resamplings of evaluations and `store_models = TRUE` to store associated models.
 
 ```{r, results='hide', class.source='example'}
-instance = FSelectInstanceSingleCrit$new(
-    tsk("iris"), lrn("classif.rpart"), rsmp("cv"), msr("classif.ce"), 
-    trm("evals", n_evals = 10))
+instance = FSelectInstanceSingleCrit$new(task, learner, resampling, measure, terminator)
 fselector = fs("random_search")
 fselector$optimize(instance)
 ```
@@ -106,9 +103,9 @@ Returns all evaluated feature subsets and their resampling results.
 							
 ```{r, results='hide', class.source='example'}
 as.data.table(instance$archive)
-## >     Petal.Length Petal.Width Sepal.Length Sepal.Width classif.ce
-## >  1:        FALSE       FALSE         TRUE       FALSE 0.26000000
-## >  2:         TRUE       FALSE         TRUE       FALSE 0.08000000
+## >    Petal.Length Petal.Width Sepal.Length Sepal.Width classif.ce      resample_result
+## > 1:         TRUE        TRUE         TRUE        TRUE 0.09333333 <ResampleResult[20]>
+## > 2:         TRUE        TRUE         TRUE       FALSE 0.09333333 <ResampleResult[20]>
 ```
 							 
 `uhash` refers to `instance$archive$benchmark_result`.
@@ -124,6 +121,13 @@ task$select(instance$result_feature_set)
 ```
 
 Set optimized feature subset in `Task`.
+
+```{r, results='hide', class.source='example'}
+instance = fselect(method = "random_search", task = tsk("penguins"), learner = learner, 
+  resampling = rsmp ("holdout"), measure = msr("classif.ce"))
+```
+
+Use `fselect()`-shortcut.
 
 ## AutoFSelector - Select before Train
 

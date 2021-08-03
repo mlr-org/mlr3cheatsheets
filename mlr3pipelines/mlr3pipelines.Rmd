@@ -94,7 +94,6 @@ See slots `$encapsulate` for debugging and `$model` for results after training.
 ## Linear Graphs
               
 Concatenate POs with `%>>%`:
-              
 
 ```{r, class.source='example', results='hide'}
 task = tsk("penguins")
@@ -104,7 +103,6 @@ grl = GraphLearner$new(gr)
 # access the scale pipeop:
 grl$graph$pipeops$scale
 grl$train(task)
-grl$model
 grl$predict(task)
 rr = resample(task, grl, rsmp("cv", folds = 3))
 ```
@@ -121,13 +119,13 @@ Store intermediate results of `PipeOp`s.
 grl$graph$pipeops$encode$.result
 ```
 
-Access encode pipeop output.
+Returns intermediate result of `$train()` and `$predict()` e.g. modified task returned by encode pipeop.
 
 ```{r, results='hide'}
 grl$state
 ```
 
-Returns state and fitted models.
+Internal state of graph learner. Contains fitted models in `$model`.
 
 ## Hyperparameters
 
