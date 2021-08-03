@@ -20,7 +20,7 @@ library(paradox)
 ## Class Overview
 
 The package provides a set of R6 classes which allow to 
-(a) define general hyperparameter (HP) tuning instances, i.e., the black-box objective that maps HP configurations to resampled performance values;
+(a) define general hyperparameter (HP) tuning instances, i.e., the black-box objective that maps HP configurations (HPCs) to resampled performance values;
 (b) run black-box optimzers;
 (c) combine learners with tuners (for nested resampling).
 
@@ -38,7 +38,7 @@ tune_ps = ps(
   <id> = p_lgl())
 ```
 
-`id` is Param identifier. `lower`/`upper` for ranges, `levels` for categories.
+`id` is identifier. `lower`/`upper` ranges, `levels` categories.
 
 ```{r, results='hide'}
 learner = lrn("classif.rpart", 
@@ -49,7 +49,7 @@ learner$param_set$search_space() # only for inspection
 
 Or, use `to_tune()` to set SS for each param in `Learner`. 
 SS is auto-generated when learner is tuned. 
-`logscale = TRUE` for log scale.
+`logscale = TRUE` creates SS on log-scale.
 
 ## Terminators - When to stop
 
@@ -57,19 +57,17 @@ Construction: `trm(.key, ...)`
 
 * `evals` (`n_evals`)<br> After iterations.
 * `run_time` (`secs `)<br> After training time.
-* `clock_time` (`secs `)<br> At given timepoint.
+* `clock_time` (`stop_time `)<br> At given timepoint.
 * `perf_reached` (`level`)<br> After performance was reached.
 * `stagnation` (`iters`, `threshold`)<br> After performance stagnated.
 * `combo` (list_of_terms, `any=TRUE`)<br>Combine terminators with AND or OR.
 ```{r, results='hide'}
-as.data.table(mlr_terminators)
+as.data.table(mlr_terminators) # list all
 ```
-
-Lists all available terminators.
 
 ## TuningInstance* - Search Scenario
 
-Evaluator and container for resampled performances of HP configurations during tuning.
+Evaluator and container for resampled performances of HPCs during tuning.
 The main (internal) function `eval_batch(xdt)` calls `benchmark()` to evaluate a table of HP configurations.
 Also stores archive of all evaluated experiments and the final result.
 
@@ -88,20 +86,16 @@ instance = TuningInstanceSingleCrit$new(task,
   learner, resampling, measure,terminator, tune_ps)
 ```
 
-Set `store_benchmark_result = TRUE` to store resamplings of evaluations and `store_models = TRUE` to store associated models.
+`store_benchmark_result = TRUE` to store resampled evals and `store_models = TRUE` for fitted models.
 
 ```{r, results='hide', class.source='example'}
-# optimize hyperparameter of RBF SVM on logscale
-learner = lrn("classif.svm", kernel = "radial", type = "C-classification")
-    
-tune_ps = ps(
+# optimize HPs of RBF SVM on logscale
+svm = lrn("classif.svm", kernel = "radial", type = "C-classification") 
+ss = ps(
   cost = p_dbl(1e-4, 1e4, logscale = TRUE),
   gamma = p_dbl(1e-4, 1e4, logscale = TRUE))
-
-evals20 = trm("evals", n_evals = 20)
-    
-instance = TuningInstanceSingleCrit$new(task, learner, resampling, measure, evals20,
-  tune_ps)
+evals = trm("evals", n_evals = 20)
+instance = TuningInstanceSingleCrit$new(task, svm, resampling, measure, evals, ss)
 tuner = tnr("random_search")
 tuner$optimize(instance)
 instance$result
@@ -111,27 +105,26 @@ Use `TuningInstanceMultiCrit` for multi-criteria tuning.
 
 ## Tuner - Search Strategy
 
-Tuning strategy. 
-Generates candidate configurations and passes these to `TuningInstance` for evaluation until termination.
+Generates HPCs and passes to tuning instance for evaluation until termination.
 Creation: `tnr(.key, ...)`
 
 * `grid_search` (`resolution`, `batch_size`) <br> Grid search.
 * `random_search` (`batch_size`) <br> Random search.
+* `design_points` (`design`) <br> Search at predefined points.
+* `random_search` (`batch_size`) <br> Random search.
+* `nloptr` (`algorithm`) <br> Non-linear optimization.
 * `gensa` (`smooth`, `temperature`) <br> Generalized Simulated Annealing.
 * `irace` <br> Iterated racing.
 
 ```{r, results='hide'}
-as.data.table(mlr_tuners)
+as.data.table(mlr_tuners) # list all
 ```
-Lists all available tuners.
 
-## Executing the Tuning
+## Execute Tuning
 
 ```{r, results='hide'}
 tuner$optimize(instance)
 ```
-
-Starts the tuning. `Tuner` generates candidate configurations and passes these to the `$eval_batch()` method of the `TuningInstance*` until the budget of the `Terminator` is exhausted.
 
 ## Access Results
 
