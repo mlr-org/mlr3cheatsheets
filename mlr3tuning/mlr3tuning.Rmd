@@ -38,7 +38,7 @@ tune_ps = ps(
   <id> = p_lgl())
 ```
 
-`id` is Param identifier. `lower`/`upper` for ranges, `levels` for categories.
+`id` is identifier. `lower`/`upper` ranges, `levels` categories.
 
 ```{r, results='hide'}
 lrn("classif.rpart", 
@@ -49,7 +49,7 @@ lrn$param_set$search_space # only for inspection
 
 Or, use `to_tune()` to set SS for each param in `Learner`. 
 SS is auto-generated when learner is tuned. 
-`logscale = TRUE` for log scale.
+`logscale = TRUE` creates SS on log-scale.
 
 ## Terminators - When to stop
 
@@ -57,7 +57,7 @@ Construction: `trm(.key, ...)`
 
 * `evals` (`n_evals`)<br> After iterations.
 * `run_time` (`secs `)<br> After training time.
-* `clock_time` (`secs `)<br> At given timepoint.
+* `clock_time` (`stop_time `)<br> At given timepoint.
 * `perf_reached` (`level`)<br> After performance was reached.
 * `stagnation` (`iters`, `threshold`)<br> After performance stagnated.
 * `combo(list_of_terms, any=TRUE`<br>Combine terminators with AND or OR.
