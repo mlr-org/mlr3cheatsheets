@@ -41,10 +41,10 @@ tune_ps = ps(
 `id` is Param identifier. `lower`/`upper` for ranges, `levels` for categories.
 
 ```{r, results='hide'}
-lrn("classif.rpart", 
+learner = lrn("classif.rpart", 
   cp = to_tune(0.001, 0.1, logscale = TRUE),
   minsplit = to_tune(1, 10))
-lrn$param_set$search_space # only for inspection
+learner$param_set$search_space() # only for inspection
 ```
 
 Or, use `to_tune()` to set SS for each param in `Learner`. 
@@ -60,7 +60,7 @@ Construction: `trm(.key, ...)`
 * `clock_time` (`secs `)<br> At given timepoint.
 * `perf_reached` (`level`)<br> After performance was reached.
 * `stagnation` (`iters`, `threshold`)<br> After performance stagnated.
-* `combo(list_of_terms, any=TRUE`<br>Combine terminators with AND or OR.
+* `combo` (list_of_terms, `any=TRUE`)<br>Combine terminators with AND or OR.
 ```{r, results='hide'}
 as.data.table(mlr_terminators)
 ```
