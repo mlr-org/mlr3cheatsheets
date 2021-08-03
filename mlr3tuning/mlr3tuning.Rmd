@@ -48,8 +48,8 @@ learner$param_set$search_space() # only for inspection
 
 Or, use `to_tune()` to set SS for each param in `Learner`. 
 SS is auto-generated when learner is tuned. 
-Params can be arbitrarily transformed by setting a global trafo in the SS,
-or the `p_*` shortforms, `logscale = TRUE` is short for the most common choice.
+Params can be arbitrarily transformed by setting a global trafo in SS,
+or `p_*` shortforms, `logscale = TRUE` is short for most common choice.
 
 ## Terminators - When to stop
 
@@ -67,9 +67,9 @@ as.data.table(mlr_terminators) # list all
 
 ## TuningInstance* - Search Scenario
 
-Evaluator and container for resampled performances of HPCs during tuning.
-The main (internal) function `eval_batch(xdt)` calls `benchmark()` to evaluate a table of HP configurations.
-Also stores archive of all evaluated experiments and the final result.
+Evaluator and container for resampled performances of HPCs.
+The (internal) `eval_batch(xdt)` calls `benchmark()` to eval a table of HPCs.
+Stores archive of all evaluated experiments and final result.
 
 ```{r, include=FALSE}
 task = tsk("iris")
@@ -91,14 +91,15 @@ instance = TuningInstanceSingleCrit$new(task,
 ```{r, results='hide', class.source='example'}
 # optimize HPs of RBF SVM on logscale
 learner = lrn("classif.svm", kernel = "radial", type = "C-classification") 
-ss = ps(
-  cost = p_dbl(1e-4, 1e4, logscale = TRUE),
+ss = ps(cost = p_dbl(1e-4, 1e4, logscale = TRUE),
   gamma = p_dbl(1e-4, 1e4, logscale = TRUE))
 evals = trm("evals", n_evals = 20)
 instance = TuningInstanceSingleCrit$new(task, learner, resampling, measure, evals, ss)
 tuner = tnr("random_search")
 tuner$optimize(instance)
 instance$result
+# >        cost     gamma learner_param_vals  x_domain classif.ce
+# > 1: 5.852743 -7.281365          <list[4]> <list[2]>       0.04
 ```
 
 Use `TuningInstanceMultiCrit` for multi-criteria tuning.
