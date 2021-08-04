@@ -1,0 +1,68 @@
+name: render
+on:
+  workflow_dispatch:
+  push:
+    branch: 
+      - main
+  pull_request:
+  schedule:
+    - cron: "0 4 * * *"
+
+jobs:
+  all:
+    name: Render cheat sheets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: r-lib/actions/setup-r@v1
+
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: "Prepare daily timestamp for cache"
+        if: runner.os != 'Windows'
+        id: date
+        run: echo "::set-output name=date::$(date '+%d-%m')"
+
+      - name: "Cache R packages"
+        if: runner.os != 'Windows'
+        uses: pat-s/always-upload-cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: cheatsheets-${{steps.date.outputs.date}}
+          restore-keys: cheatsheets-${{steps.date.outputs.date}}
+
+      - name: Install curl
+        run: sudo apt install libcurl4-openssl-dev
+
+      - name: Install dependencies
+        run: |
+          Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+
+      - name: Render cheat sheets
+        run: |
+          Rscript -e "cheatdown::print_pdf('mlr3/mlr3.Rmd', 'pdf/mlr3.pdf')"
+          Rscript -e "cheatdown::print_pdf('mlr3tuning/mlr3tuning.Rmd', 'pdf/mlr3tuning.pdf')"
+          Rscript -e "cheatdown::print_pdf('mlr3fselect/mlr3fselect.Rmd', 'pdf/mlr3fselect.pdf')"
+          Rscript -e "cheatdown::print_pdf('mlr3pipelines/mlr3pipelines.Rmd', 'pdf/mlr3pipelines.pdf')"
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: pdf/
+          CLEAN: false
+
+      - name: Upload actifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: cheatsheet
+          path: |
+            pdf/
+            mlr3/
+            mlr3tuning/
+            mlr3fselect/
+            mlr3pipelines/
