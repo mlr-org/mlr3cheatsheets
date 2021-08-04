@@ -25,6 +25,8 @@ The package provides a set of R6 classes which allow to
 (c) combine learners with tuners (for nested resampling).
 
 ![](class_diagram.png)
+<br>
+[NB: In many table prints we suppres cols for readability.]
 
 ## ParamSet - Parameters and Ranges
 
@@ -43,7 +45,7 @@ ss = ps(
 ```{r, results='hide'}
 learner = lrn("classif.rpart", 
   cp = to_tune(0.001, 0.1, logscale = TRUE))
-learner$param_set$search_space() # only for inspection
+learner$param_set$search_space() # for inspection
 ```
 
 Or, use `to_tune()` to set SS for each param in `Learner`. 
@@ -138,8 +140,7 @@ Speeds up tuning by running iterations in parallel.
 
 ## Execute Tuning and Access Results
 
-
-```{r, results='hide', class.source='example'}
+```{r, results='hide', class.source='multiline'}
 tuner$optimize(instance)
 as.data.table(instance$archive)
 ## >     cost gamma classif.ce     uhash x_domain_cost x_domain_gamma
@@ -159,7 +160,8 @@ Set optimal HPC in `Learner`.
 
 ```{r, results='hide', class.source='example'}
 learner = lrn("classif.svm", type = "C-classification", kernel = "radial",
-  cost = to_tune(1e-4, 1e4, logscale = TRUE))
+  cost = to_tune(1e-4, 1e4, logscale = TRUE),
+  gamma = to_tune(1e-4, 1e4, logscale = TRUE))
 instance = tune(method = "grid_search", task = tsk("iris"), learner = learner, 
   resampling = rsmp ("holdout"), measure = msr("classif.ce"), resolution = 5)
 ```
@@ -193,8 +195,10 @@ at$learner
 
 Returns tuned learner trained on full data set.
 
-```{r, results='hide'}
+```{r, results='hide', class.source='multiline'}
 at$tuning_result
+# >        cost     gamma learner_param_vals  x_domain classif.ce
+# > 1: 5.270814 -4.414869          <list[4]> <list[2]>       0.08
 ```
 
 Access tuning result.
@@ -208,16 +212,13 @@ Use shortcut to create `AutoTuner`.
 
 ## Nested Resampling
 
-Resampling the `AutoTuner` results in nested resampling with an inner and outer loop.
+Just resample `AutoTuner`; now has inner and outer loop.
 							
 ```{r, results='hide', class.source='example'}
-inner_resampling = rsmp("holdout")
-
-at = auto_tuner(method = "random_search", learner, inner_resampling, 
-  measure, term_evals = 20) 
-									
-outer_resampling = rsmp("cv", folds = 2)
-rr = resample(task, at, outer_resampling, store_models = TRUE)
+inner = rsmp("holdout")
+at = auto_tuner(method = "gensa", learner, inner, measure, term_evals = 20) 
+outer = rsmp("cv", folds = 2)
+rr = resample(task, at, outer, store_models = TRUE)
 									
 as.data.table(rr)
 ## >             learner         resampling iteration  
@@ -225,34 +226,44 @@ as.data.table(rr)
 ## > 2:  <AutoTuner[37]> <ResamplingCV[19]>         2
 ```
 
-```{r, results='hide'}
+```{r, results='hide', class.source='multiline'}
 extract_inner_tuning_results(rr)
+# >    iteration     cost      gamma classif.ce learner_param_vals  x_domain
+# > 1:         1 1.222198 -0.4974749       0.08          <list[4]> <list[2]>
+# > 2:         2 2.616557 -3.1440039       0.08          <list[4]> <list[2]>
 ```
 
 Check inner tuning results for stable HPs.
 
-```{r, results='hide'}
+```{r, results='hide', class.source='multiline'}
 rr$score()
+# >             learner  iteration              prediction classif.ce
+# > 1:  <AutoTuner[40]>          1 <PredictionClassif[19]> 0.05333333
+# > 2:  <AutoTuner[40]>          2 <PredictionClassif[19]> 0.02666667
 ```
 
 Predictive performances estimated on the outer resampling.
 
-```{r, results='hide'}
+```{r, results='hide', class.source='multiline'}
 extract_inner_tuning_archives(rr)
+# >    iteration     cost   gamma classif.ce  runtime      resample_result
+# >  1:        1  -7.4572  4.1506       0.68    0.013 <ResampleResult[20]>
+# > 21:        2   1.0056  0.4003       0.12    0.014 <ResampleResult[20]>
 ```
 
 All evaluated HP configurations.
 
 ```{r, results='hide'}
 rr$aggregate()
+#> classif.ce 
+#>       0.04 
 ```
 
 Aggregates performances of outer resampling iterations. 
 						
 ```{r, results='hide'}
 rr = tune_nested(method = "grid_search", task, 
-  learner = learner, inner_resampling, 
-  outer_resampling, measure, term_evals = 20)
+  learner, inner, outer, measure, term_evals = 20)
 ```
 
 Use shortcut to execute nested resampling.
