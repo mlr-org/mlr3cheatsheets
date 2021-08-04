@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branch: 
-      - render
+      - main
   pull_request:
   schedule:
     - cron: "0 4 * * *"
