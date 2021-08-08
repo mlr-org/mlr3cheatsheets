@@ -88,7 +88,7 @@ gr$add_edge("pca", "classif.rpart")
 
 ## GraphLearner
               
-`GraphLearner` behave like `Learner` and enable all mlr3 features : `grl = GraphLearner$new(gr)`
+`GraphLearner` behave like `Learner` and enable all mlr3 features: `grl = GraphLearner$new(gr)`.
 See slots `$encapsulate` for debugging and `$model` for results after training.
           
 ## Linear Graphs
@@ -112,7 +112,7 @@ rr = resample(task, grl, rsmp("cv", folds = 3))
 ## Debugging and Intermediate Results
 
 ```{r, results='hide'}
-gr$keep_results = TRUE
+grl$graph$keep_results = TRUE
 ```
 
 Store intermediate results of `PipeOp`s.
@@ -145,7 +145,7 @@ IDs are prefixed with the respective `PipeOp`'s `id`.
              
 ## Tuning
              
-Can jointly tune any Pipeline.        
+Can jointly tune any Pipeline.
              
 ```{r, results='hide', class.source='example'}
 gr = po("encode") %>>% lrn("classif.rpart")
@@ -191,7 +191,7 @@ Change log-level only for mlr3pipelines.
 
 ## Nonlinear Graphs
 
-`gunion`()` arranges `PipeOp`s or `Graph`s next to each other in a disjoint graph union.
+`gunion()` arranges `PipeOp`s or `Graph`s next to each other in a disjoint graph union.
               
 ![](gunion.png)
               
@@ -220,8 +220,8 @@ Controls the path execution.
 Only one branch can be active.
 Which one is controlled by a hyperparameter.
 Unbranching ends the forking.
-              
-             
+
+
 ```{r, results='hide', class.source='example'}
 gr = ppl("branch", list(
   pca = po("pca"), scale = po("scale"))
