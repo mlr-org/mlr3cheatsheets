@@ -1,5 +1,5 @@
 Package: mlr3cheatsheets
-Title: R Package to Build the mlr3 cheatsheets via Cheatdown
+Title: R Package to Build the mlr3 Cheatsheets via Cheatdown
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Marc",
@@ -16,11 +16,12 @@ Imports:
     cheatdown,
     data.table,
     e1071,
-    mlr3,
-    mlr3fselect,
+    GenSA,
+    mlr3 (>= 0.12.0),
+    mlr3fselect (>= 0.6.0),
     mlr3learners,
     mlr3pipelines,
-    mlr3tuning,
+    mlr3tuning (>= 0.9.0),
     mlr3verse,
     paradox
 Remotes: 
