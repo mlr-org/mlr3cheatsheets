@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branch: 
-      - main
+      - tic2
   pull_request:
   schedule:
     - cron: "0 4 * * *"
@@ -34,7 +34,7 @@ jobs:
           restore-keys: cheatsheets-${{steps.date.outputs.date}}
 
       - name: Install curl
-        run: sudo apt install libcurl4-openssl-dev
+        run: sudo apt install libcurl4-openssl-dev libgit2-dev
 
       - name: Install dependencies
         env:
