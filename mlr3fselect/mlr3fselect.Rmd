@@ -138,7 +138,7 @@ Use `fselect()`-shortcut.
 Wraps learner and performs integrated feature selection.
 						
 ```{r, results='hide'}
-at = AutoFSelector$new(learner, resampling,
+afs = AutoFSelector$new(learner, resampling,
   measure, terminator, fselector)
 ```
 						
@@ -151,18 +151,18 @@ row_ids = 1:50
 ```
 
 ```{r, eval = FALSE}
-at$train(task)
-at$predict(task, row_ids)
+afs$train(task)
+afs$predict(task, row_ids)
 ```
 
 ```{r, results='hide'}
-at$learner
+afs$learner
 ```
 
 Returns learner trained on full data set with optimized feature subset.
 
 ```{r, results='hide', class.source='multiline'}
-at$fselect_result
+afs$fselect_result
 # >    Petal.Width Sepal.Length Sepal.Width classif.ce
 # > 1:        TRUE         TRUE        TRUE       0.02
 ```
@@ -170,7 +170,7 @@ at$fselect_result
 Access feature selection result.
 
 ```{r, results='hide'}
-at = auto_fselector(method = "random_search",
+afs = auto_fselector(method = "random_search",
   learner, resampling, measure, term_evals = 20)
 ```
 
@@ -182,9 +182,9 @@ Just resample `AutoFSelector`; now has inner and outer loop.
 						
 ```{r, results='hide', class.source='example'}
 inner = rsmp("holdout")
-at = auto_fselector(method = "random_search", learner, inner, measure, term_evals = 20)
+afs = auto_fselector(method = "random_search", learner, inner, measure, term_evals = 20)
 outer = rsmp("cv", folds = 2)
-rr = resample(task, at, outer, store_models = TRUE)
+rr = resample(task, afs, outer, store_models = TRUE)
 
 as.data.table(rr)
 ## >              learner         resampling iteration              prediction
