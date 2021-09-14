@@ -17,18 +17,15 @@ Imports:
     data.table,
     e1071,
     GenSA,
-    mlr3 (>= 0.11.0.9000),
-    mlr3fselect (>= 0.5.1.9000),
+    mlr3 (>= 0.12.0),
+    mlr3fselect (>= 0.6.0),
     mlr3learners,
     mlr3pipelines,
-    mlr3tuning (>= 0.8.0.9000),
+    mlr3tuning (>= 0.9.0),
     mlr3verse,
     paradox
 Remotes: 
-    be-marc/cheatdown,
-    mlr-org/mlr3,
-    mlr-org/mlr3fselect,
-    mlr-org/mlr3tuning
+    be-marc/cheatdown
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
