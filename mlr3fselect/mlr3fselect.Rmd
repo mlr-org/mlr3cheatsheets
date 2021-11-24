@@ -95,7 +95,7 @@ Lists all available feature selection algorithms.
 ## Logging and Parallelization
 
 ```{r, eval=FALSE}
-lgr::get_logger("bbotk`")$set_threshold("<level>")`
+lgr::get_logger("bbotk`")$set_threshold("<level>")
 ```
 
 Change log-level only for mlr3fselect.
