@@ -310,7 +310,22 @@ iters = 1
 rr$filter(iters)
 ```
 Filters to specific iterations.
-								
+
+```{r, results='hide'}
+learner$predict_sets = c("train", "test")
+rr = resample(task, learner, resampling)
+rr$score(msr("classif.ce", predict_sets = "train"))
+## >            resampling iteration   classif.ce
+## > 1: <ResamplingCV[19]>         1    0.1601562
+## > 2: <ResamplingCV[19]>         2    0.1464844
+
+rr$score(msr("classif.ce", predict_sets = "test"))
+## >            resampling iteration   classif.ce
+## > 1: <ResamplingCV[19]>         1    0.2695312
+## > 2: <ResamplingCV[19]>         2    0.2656250
+```
+Predict on train and test sets.
+
 ```{r, eval = FALSE, class.source='example'}
 library(mlr3learners)
 task = tsk("pima")
