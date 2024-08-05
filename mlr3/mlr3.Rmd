@@ -394,7 +394,7 @@ bmr1 = bmr
 ```
 
 ```{r, results='hide'}
-bmr$combine(bmr)
+bmr$combine(bmr1)
 c(bmr, bmr1) # alternative S3 method
 ```
 Merge other `BenchmarkResult`.
