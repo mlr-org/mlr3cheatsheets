@@ -36,7 +36,7 @@ Scalar doubles, integers, factors or logicals are combined to define a multivari
 ss = ps(
   <id> = p_int(lower, upper),
   <id> = p_dbl(lower, upper),
-  <id> = p_dct(levels),
+  <id> = p_fct(levels),
   <id> = p_lgl())
 ```
 
