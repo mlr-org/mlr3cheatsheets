@@ -8,13 +8,6 @@ column_breaks: [2, 3, 4, 7, 8, 11]
 header-includes:
   - |
     <style>
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    .cheatsheet_wrap {
-      box-sizing: border-box !important;
-    }
     div.sourceCode,
     pre.sourceCode,
     pre.sourceCode.r,
@@ -34,6 +27,27 @@ output:
 library(mlr3)
 library(data.table)
 ```
+
+<style>
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.cheatsheet_wrap {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+div.sourceCode,
+pre.sourceCode,
+pre.sourceCode.r,
+code.sourceCode {
+  text-align: left !important;
+}
+div.sourceCode {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+</style>
 
 ## Class Overview
 

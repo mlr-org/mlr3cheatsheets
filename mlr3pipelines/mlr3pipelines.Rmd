@@ -8,13 +8,6 @@ column_breaks: [3, 8, 12]
 header-includes:
   - |
     <style>
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    .cheatsheet_wrap {
-      box-sizing: border-box !important;
-    }
     div.sourceCode,
     pre.sourceCode,
     pre.sourceCode.r,
@@ -37,6 +30,27 @@ library(mlr3tuning)
 library(paradox)
 library(mlr3verse)
 ```
+
+<style>
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.cheatsheet_wrap {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+div.sourceCode,
+pre.sourceCode,
+pre.sourceCode.r,
+code.sourceCode {
+  text-align: left !important;
+}
+div.sourceCode {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+</style>
 
 ## Introduction
  

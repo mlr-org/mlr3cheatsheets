@@ -8,13 +8,6 @@ column_breaks: [2, 5, 7]
 header-includes:
   - |
     <style>
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    .cheatsheet_wrap {
-      box-sizing: border-box !important;
-    }
     div.sourceCode,
     pre.sourceCode,
     pre.sourceCode.r,
@@ -35,6 +28,27 @@ library(mlr3)
 library(mlr3fselect)
 library(data.table)
 ```
+
+<style>
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.cheatsheet_wrap {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+div.sourceCode,
+pre.sourceCode,
+pre.sourceCode.r,
+code.sourceCode {
+  text-align: left !important;
+}
+div.sourceCode {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+</style>
 
 ## Class Overview
 The package provides a set of R6 classes which allow to 
