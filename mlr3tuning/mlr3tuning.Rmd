@@ -5,6 +5,8 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
 column_breaks: [3, 6, 8]
+output: 
+  cheatdown::cheatdown_html
 ---
 
 ```{r, include=FALSE}

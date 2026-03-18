@@ -5,6 +5,8 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Machine learning with mlr3"
 logo: "logo.png"
 column_breaks: [2, 3, 4, 7, 8, 11]
+output: 
+  cheatdown::cheatdown_html
 ---
 
 ```{r, include=FALSE}

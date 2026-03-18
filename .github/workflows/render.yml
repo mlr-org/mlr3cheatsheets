@@ -8,9 +8,6 @@ on:
   schedule:
     - cron: "0 4 * * *"
 
-permissions:
-  contents: write
-
 jobs:
   all:
     name: Render cheat sheets
@@ -50,7 +47,6 @@ jobs:
 
       - name: Render cheat sheets
         run: |
-          Rscript -e "dir.create('pdf', showWarnings = FALSE)"
           Rscript -e "cheatdown::print_pdf('mlr3/mlr3.Rmd', 'pdf/mlr3.pdf')"
           Rscript -e "cheatdown::print_pdf('mlr3tuning/mlr3tuning.Rmd', 'pdf/mlr3tuning.pdf')"
           Rscript -e "cheatdown::print_pdf('mlr3fselect/mlr3fselect.Rmd', 'pdf/mlr3fselect.pdf')"

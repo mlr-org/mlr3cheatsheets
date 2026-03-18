@@ -5,6 +5,8 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Feature Selection with mlr3fselect"
 logo: "logo.png"
 column_breaks: [2, 5, 7]
+output: 
+  cheatdown::cheatdown_html
 ---
 
 ```{r, include=FALSE}

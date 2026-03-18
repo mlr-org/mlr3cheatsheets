@@ -5,6 +5,8 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Dataflow programming with mlr3pipelines"
 logo: "logo.png"
 column_breaks: [3, 8, 12]
+output: 
+  cheatdown::cheatdown_html
 ---
 
 ```{r, include=FALSE}
