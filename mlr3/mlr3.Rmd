@@ -17,6 +17,7 @@ library(data.table)
 <style>
 @media print {
   pre > code.sourceCode > span {
+    text-align: left !important;
     text-indent: 0 !important;
     padding-left: 0 !important;
   }
@@ -340,7 +341,7 @@ rr$aggregate(measure)
 learners = lrns(c("classif.rpart", "classif.ranger"))
 tasks = tsks(c("sonar", "spam"))
 resampling = rsmp("cv", folds = 3L)
-design = benchmark_grid(tasks, learners,resampling)
+design = benchmark_grid(tasks, learners, resampling)
 bmr = benchmark(design)
 bmr
 ## >                      learner         resampling   iteration
@@ -395,10 +396,7 @@ resampling_ids = "holdout"
 ```
 
 ```{r, results='hide'}	
-bmr$filter(
-  task_ids = task_ids,
-  learner_ids = learner_ids,
-  resampling_ids = resampling_ids)
+bmr$filter(task_ids, learner_ids, resampling_ids)
 ```
 Filter by task, learner and resampling.
 
@@ -459,8 +457,7 @@ Packages `evaluate` and `callr` can be used to encapsulate execution of `$train(
 
 ```{r, results='hide'}
 learner$encapsulate("evaluate", fallback = lrn("classif.featureless"))
-```
-								
+```							
 ```{r, results='hide'}
 learner$errors
 ```

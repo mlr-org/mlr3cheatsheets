@@ -18,6 +18,7 @@ library(data.table)
 <style>
 @media print {
   pre > code.sourceCode > span {
+    text-align: left !important;
     text-indent: 0 !important;
     padding-left: 0 !important;
   }
@@ -126,13 +127,14 @@ instance$result # datatable row with optimal feature subset and estimated perf
 ```
 
 Get evaluated feature subsets and performances; and result.
-			
-```{r, results='hide'}
+
+```{r, results='hide', include ='FALSE'}
 task_selected = task$clone(deep = TRUE)
+```
+```{r, results = 'hide'}
 task_selected$select(instance$result_feature_set)
 ```
 
-Set optimized feature subset in a cloned `Task`.
 
 ```{r, results='hide', class.source='example'}
 instance = fselect(fs("random_search"), task = tsk("iris"), learner = learner, 
@@ -146,8 +148,13 @@ Use `fselect()`-shortcut.
 Wraps learner and performs integrated feature selection.
 						
 ```{r, results='hide'}
-afs = AutoFSelector$new(fselector = fselector, learner = learner,
-  resampling = resampling, measure = measure, terminator = terminator)
+afs = auto_fselector(
+  fselector = fselector,
+  learner = learner,
+  resampling = resampling,
+  measure = measure,
+  term_evals = 20
+)
 ```
 						
 Inherits from class `Learner`.
@@ -176,13 +183,6 @@ afs$fselect_result
 ```
 
 Access feature selection result.
-
-```{r, results='hide'}
-afs = auto_fselector(fs("random_search"),
-  learner, resampling, measure, term_evals = 20)
-```
-
-Use shortcut to create `AutoFSelector`.
 
 ## Nested Resampling
 

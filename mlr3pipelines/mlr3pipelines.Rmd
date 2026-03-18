@@ -20,6 +20,7 @@ library(mlr3verse)
 <style>
 @media print {
   pre > code.sourceCode > span {
+    text-align: left !important;
     text-indent: 0 !important;
     padding-left: 0 !important;
   }
@@ -160,8 +161,8 @@ tune_ps = ps(
 )
 tt = trm("evals", n_evals = 20)
 rs = rsmp("holdout")
-inst = TuningInstanceBatchSingleCrit$new(task, grl, rs,
-  msr("classif.ce"), tt, tune_ps)
+inst = ti(task = task, learner = grl, resampling = rs,
+  measures = msr("classif.ce"), terminator = tt, search_space = tune_ps)
 tuner = tnr("random_search")
 tuner$optimize(inst)
 ```

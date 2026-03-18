@@ -20,6 +20,7 @@ library(paradox)
 <style>
 @media print {
   pre > code.sourceCode > span {
+    text-align: left !important;
     text-indent: 0 !important;
     padding-left: 0 !important;
   }
@@ -180,7 +181,7 @@ Use `tune()`-shortcut.
 Wraps learner and performs integrated tuning.
 							
 ```{r, results='hide'}
-at = AutoTuner$new(tuner = tuner, learner = learner, resampling = resampling,
+at = auto_tuner(tuner = tuner, learner = learner, resampling = resampling,
   measure = measure, terminator = terminator)
 ```
 
