@@ -99,7 +99,8 @@ Set with
 * `name` - Labels for plots.
 * `group` -  Groups for block resampling.
 * `stratum` - Stratification variables.
-* `weight` - Observation weights.
+* `weights_learner` - Observation weights for training.
+* `weights_measure` - Observation weights for scoring.
 
 ### Data Operations
 
@@ -385,7 +386,10 @@ resampling_ids = "holdout"
 ```
 
 ```{r, results='hide'}	
-bmr$filter(task_ids, learner_ids, resampling_ids)
+bmr$filter(
+  task_ids = task_ids,
+  learner_ids = learner_ids,
+  resampling_ids = resampling_ids)
 ```
 Filter by task, learner and resampling.
 
@@ -445,9 +449,7 @@ Creation: `mlr3viz::autoplot(object, type)`
 Packages `evaluate` and `callr` can be used to encapsulate execution of `$train()` and `$predict()` to prevent stops in case of errors - useful for larger experiments. `callr` isolates the execution in a separate R sessions, guarding against segfaults.
 
 ```{r, results='hide'}
-learner$encapsulate = c(
- train = "evaluate", 
- predict = "callr")
+learner$encapsulate("evaluate", fallback = lrn("classif.featureless"))
 ```
 								
 ```{r, results='hide'}
@@ -456,7 +458,7 @@ learner$errors
 Returns the log of recorded errors.
 								
 ```{r, eval=FALSE}
-learner$fallback = lrn(.key)
+learner$encapsulate("evaluate", fallback = lrn(.key))
 ```
 If learner fails, a fallback learner is used to generate predictions.
 Use a robust fallback, e.g. a "featureless" learner.
@@ -473,4 +475,3 @@ Use a robust fallback, e.g. a "featureless" learner.
 (ht<span>tps://github.com/mlr3learners)
 * [mlr3gallery use cases](https://mlr3gallery.mlr-org.com/)<br>
 (ht<span>tps://mlr3gallery.mlr-org.com/)
-

@@ -57,14 +57,14 @@ terminator = trm("evals", n_evals = 20)
 ```
 
 ```{r, results='hide'}
-instance = FSelectInstanceSingleCrit$new(task, 
+instance = FSelectInstanceBatchSingleCrit$new(task, 
   learner, resampling, measure, terminator)
 ```
 
 `store_benchmark_result = TRUE` to store resampled evals and `store_models = TRUE` for fitted models.
 
 ```{r, results='hide', class.source='example'}
-instance = FSelectInstanceSingleCrit$new(task, learner, resampling, measure, 
+instance = FSelectInstanceBatchSingleCrit$new(task, learner, resampling, measure, 
   terminator)
 fselector = fs("random_search", batch_size = 10)
 fselector$optimize(instance)
@@ -73,7 +73,7 @@ instance$result
 # > 1:        FALSE        TRUE         TRUE        TRUE       0.06
 ```
 
-Use `FSelectInstanceMultiCrit` for multi-criteria feature selection.
+Use `FSelectInstanceBatchMultiCrit` for multi-criteria feature selection.
 
 ## FSelector - Search Strategy
 						
@@ -95,7 +95,7 @@ Lists all available feature selection algorithms.
 ## Logging and Parallelization
 
 ```{r, eval=FALSE}
-lgr::get_logger("bbotk`")$set_threshold("<level>")
+lgr::get_logger("bbotk")$set_threshold("<level>")
 ```
 
 Change log-level only for mlr3fselect.
@@ -127,8 +127,8 @@ task$select(instance$result_feature_set)
 Set optimized feature subset in `Task`.
 
 ```{r, results='hide', class.source='example'}
-instance = fselect(method = "random_search", task = tsk("iris"), learner = learner, 
-  resampling = rsmp ("holdout"), measure = msr("classif.ce"), term_evals = 20)
+instance = fselect(fs("random_search"), task = tsk("iris"), learner = learner, 
+  resampling = rsmp("holdout"), measures = msr("classif.ce"), term_evals = 20)
 ```
 
 Use `fselect()`-shortcut.
@@ -138,8 +138,8 @@ Use `fselect()`-shortcut.
 Wraps learner and performs integrated feature selection.
 						
 ```{r, results='hide'}
-afs = AutoFSelector$new(learner, resampling,
-  measure, terminator, fselector)
+afs = AutoFSelector$new(fselector = fselector, learner = learner,
+  resampling = resampling, measure = measure, terminator = terminator)
 ```
 						
 Inherits from class `Learner`.
@@ -170,7 +170,7 @@ afs$fselect_result
 Access feature selection result.
 
 ```{r, results='hide'}
-afs = auto_fselector(method = "random_search",
+afs = auto_fselector(fs("random_search"),
   learner, resampling, measure, term_evals = 20)
 ```
 
@@ -182,7 +182,7 @@ Just resample `AutoFSelector`; now has inner and outer loop.
 						
 ```{r, results='hide', class.source='example'}
 inner = rsmp("holdout")
-afs = auto_fselector(method = "random_search", learner, inner, measure, term_evals = 20)
+afs = auto_fselector(fs("random_search"), learner, inner, measure, term_evals = 20)
 outer = rsmp("cv", folds = 2)
 rr = resample(task, afs, outer, store_models = TRUE)
 
@@ -229,7 +229,7 @@ rr$aggregate()
 Aggregates performances of outer resampling iterations. 
 							
 ```{r, results='hide'}
-rr = fselect_nested(method = "random_search", task, 
+rr = fselect_nested(fs("random_search"), task, 
   learner, inner, outer, measure, term_evals = 20)
 ```
 

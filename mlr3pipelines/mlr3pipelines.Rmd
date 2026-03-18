@@ -12,6 +12,7 @@ output:
 ```{r, include=FALSE}
 library(mlr3)
 library(mlr3pipelines)
+library(mlr3tuning)
 library(paradox)
 library(mlr3verse)
 ```
@@ -31,7 +32,7 @@ Flow operation with `$train()` and `$predict()` step.
 
 ![](po.png)
 
-Construction example: `pca = po`("pca")`
+Construction example: `pca = po("pca")`
 
 * $train(input): Named list
 * $predict(input): Named list
@@ -85,7 +86,7 @@ gr$add_edge("pca", "classif.rpart")
 ## GraphLearner
               
 `GraphLearner` behave like `Learner` and enable all mlr3 features: `grl = GraphLearner$new(gr)`.
-See slots `$encapsulate` for debugging and `$model` for results after training.
+See method `$encapsulate()` for debugging and `$model` for results after training.
           
 ## Linear Graphs
               
@@ -144,15 +145,13 @@ Can jointly tune any Pipeline.
 ```{r, results='hide', class.source='example'}
 gr = po("encode") %>>% lrn("classif.rpart")
 grl = GraphLearner$new(gr)
-tune_ps = ParamSet$new(list(
-  ParamFct$new("encode.method",
-    levels = c("one-hot", "poly")),
-  ParamDbl$new("classif.rpart.cp",
-    lower = 0, upper = 0.05)
-))
+tune_ps = ps(
+  encode.method = p_fct(levels = c("one-hot", "poly")),
+  classif.rpart.cp = p_dbl(lower = 0, upper = 0.05)
+)
 tt = trm("evals", n_evals = 20)
 rs = rsmp("holdout")
-inst = TuningInstanceSingleCrit$new(task, grl, rs,
+inst = TuningInstanceBatchSingleCrit$new(task, grl, rs,
   msr("classif.ce"), tt, tune_ps)
 tuner = tnr("random_search")
 tuner$optimize(inst)
