@@ -8,6 +8,13 @@ column_breaks: [3, 8, 12]
 header-includes:
   - |
     <style>
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .cheatsheet_wrap {
+      box-sizing: border-box !important;
+    }
     div.sourceCode,
     pre.sourceCode,
     pre.sourceCode.r,
