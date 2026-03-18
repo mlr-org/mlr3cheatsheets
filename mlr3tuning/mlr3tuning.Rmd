@@ -5,20 +5,6 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
 column_breaks: [3, 6, 8]
-header-includes:
-  - |
-    <style>
-    div.sourceCode,
-    pre.sourceCode,
-    pre.sourceCode.r,
-    code.sourceCode {
-      text-align: left !important;
-    }
-    div.sourceCode {
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-    }
-    </style>
 output: 
   cheatdown::cheatdown_html
 ---
@@ -32,23 +18,11 @@ library(paradox)
 ```
 
 <style>
-body {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.cheatsheet_wrap {
-  box-sizing: border-box !important;
-  margin: 0 !important;
-}
-div.sourceCode,
-pre.sourceCode,
-pre.sourceCode.r,
-code.sourceCode {
-  text-align: left !important;
-}
-div.sourceCode {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+@media print {
+  pre > code.sourceCode > span {
+    text-indent: 0 !important;
+    padding-left: 0 !important;
+  }
 }
 </style>
 
