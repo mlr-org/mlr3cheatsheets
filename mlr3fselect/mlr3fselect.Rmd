@@ -78,15 +78,13 @@ terminator = trm("evals", n_evals = 20)
 ```
 
 ```{r, results='hide'}
-instance = FSelectInstanceBatchSingleCrit$new(task, 
-  learner, resampling, measure, terminator)
+instance = fsi(task, learner, resampling, measure, terminator)
 ```
 
 `store_benchmark_result = TRUE` to store resampled evals and `store_models = TRUE` for fitted models.
 
 ```{r, results='hide', class.source='example'}
-instance = FSelectInstanceBatchSingleCrit$new(task, learner, resampling, measure, 
-  terminator)
+instance = fsi(task, learner, resampling, measure, terminator)
 fselector = fs("random_search", batch_size = 10)
 fselector$optimize(instance)
 instance$result

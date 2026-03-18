@@ -105,8 +105,7 @@ ss = ps(cp = p_dbl(0.001, 0.1, logscale = TRUE))
 ```
 
 ```{r, results='hide'}
-instance = TuningInstanceBatchSingleCrit$new(task, 
-  learner, resampling, measure, terminator, ss)
+instance = ti(task, learner, resampling, measure, terminator, ss)
 ```
 
 `store_benchmark_result = TRUE` to store resampled evals and `store_models = TRUE` for fitted models.
@@ -117,7 +116,7 @@ learner = lrn("classif.svm", kernel = "radial", type = "C-classification")
 ss = ps(cost = p_dbl(1e-4, 1e4, logscale = TRUE),
   gamma = p_dbl(1e-4, 1e4, logscale = TRUE))
 evals = trm("evals", n_evals = 20)
-instance = TuningInstanceBatchSingleCrit$new(task, learner, resampling, measure, evals, ss)
+instance = ti(task, learner, resampling, measure, evals, ss)
 tuner = tnr("random_search")
 tuner$optimize(instance)
 instance$result
