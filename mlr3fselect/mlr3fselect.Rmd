@@ -121,10 +121,11 @@ instance$result # datatable row with optimal feature subset and estimated perf
 Get evaluated feature subsets and performances; and result.
 			
 ```{r, results='hide'}
-task$select(instance$result_feature_set)
+task_selected = task$clone(deep = TRUE)
+task_selected$select(instance$result_feature_set)
 ```
 
-Set optimized feature subset in `Task`.
+Set optimized feature subset in a cloned `Task`.
 
 ```{r, results='hide', class.source='example'}
 instance = fselect(fs("random_search"), task = tsk("iris"), learner = learner, 
