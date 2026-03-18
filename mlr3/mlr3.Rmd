@@ -5,6 +5,20 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Machine learning with mlr3"
 logo: "logo.png"
 column_breaks: [2, 3, 4, 7, 8, 11]
+header-includes:
+  - |
+    <style>
+    div.sourceCode,
+    pre.sourceCode,
+    pre.sourceCode.r,
+    code.sourceCode {
+      text-align: left !important;
+    }
+    div.sourceCode {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    </style>
 output: 
   cheatdown::cheatdown_html
 ---
