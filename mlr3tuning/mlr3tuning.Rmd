@@ -5,23 +5,6 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
 column_breaks: [3, 6, 8]
-header-includes:
-  - |
-    <style>
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-      width: 297mm !important;
-      overflow: hidden !important;
-    }
-    .cheatsheet_wrap {
-      box-sizing: border-box !important;
-      width: 297mm !important;
-      margin: 0 !important;
-    }
-    </style>
-output: 
-  cheatdown::cheatdown_html
 ---
 
 ```{r, include=FALSE}
