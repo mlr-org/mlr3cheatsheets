@@ -4,7 +4,7 @@ author: "mlr3-org"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
-column_breaks: [3, 6]
+column_breaks: [3, 6, 8]
 output: 
   cheatdown::cheatdown_html
 ---
@@ -25,9 +25,6 @@ library(paradox)
     padding-left: 0 !important;
   }
   pre.sourceCode.r.nested_small > code.sourceCode.r.example_code,
-  pre.sourceCode.r.nested_small > code.sourceCode.r {
-    font-size: 3.5pt !important;
-  }
   div.sourceCode:has(> pre.nested_narrow) {
     width: 94% !important;
     margin-left: auto !important;
@@ -180,7 +177,8 @@ learner = lrn("classif.svm", type = "C-classification", kernel = "radial",
   cost = to_tune(1e-4, 1e4, logscale = TRUE),
   gamma = to_tune(1e-4, 1e4, logscale = TRUE))
 instance = tune(tnr("grid_search", resolution = 5), task = tsk("iris"),
-  learner = learner, resampling = rsmp("holdout"), measures = msr("classif.ce"))
+  learner = learner, resampling = rsmp("holdout"), 
+  measures = msr("classif.ce"))
 ```
 Use `tune()`-shortcut.
 
@@ -220,13 +218,6 @@ at$tuning_result
 ```
 
 Access tuning result.
-
-```{r, results='hide', class.source='nested_small'}
-at = auto_tuner(tnr("grid_search"), learner,
-  resampling, measure, term_evals = 20)
-```
-
-Use shortcut to create `AutoTuner`.
 
 ## Nested Resampling
 

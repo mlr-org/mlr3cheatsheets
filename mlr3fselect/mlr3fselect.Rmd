@@ -151,9 +151,9 @@ Use `fselect()`-shortcut.
 Wraps learner and performs integrated feature selection.
 						
 ```{r, results='hide'}
-afs = auto_fselector(fselector = fselector, learner = learner,
-  resampling = resampling, measure = measure, term_evals = 20
-  )
+afs = auto_fselector(fselector = fselector,
+  learner = learner, resampling = resampling,
+  measure = measure, term_evals = 20)
 ```
 						
 Inherits from class `Learner`.
