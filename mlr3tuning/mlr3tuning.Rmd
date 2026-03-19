@@ -26,7 +26,7 @@ library(paradox)
   }
   pre.sourceCode.r.nested_small > code.sourceCode.r.example_code,
   pre.sourceCode.r.nested_small > code.sourceCode.r {
-    font-size: 3.2pt !important;
+    font-size: 3.5pt !important;
   }
   div.sourceCode:has(> pre.nested_narrow) {
     width: 94% !important;
