@@ -4,7 +4,7 @@ author: "mlr3-org"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
-column_breaks: [3, 6, 8]
+column_breaks: [3, 6]
 output: 
   cheatdown::cheatdown_html
 ---
@@ -26,7 +26,7 @@ library(paradox)
   }
   pre.sourceCode.r.nested_small > code.sourceCode.r.example_code,
   pre.sourceCode.r.nested_small > code.sourceCode.r {
-    font-size: 3.5pt !important;
+    font-size: 3.2pt !important;
   }
 }
 </style>
@@ -127,7 +127,6 @@ Creation: `tnr(.key, ...)`
 * `grid_search` (`resolution`, `batch_size`) <br> Grid search.
 * `random_search` (`batch_size`) <br> Random search.
 * `design_points` (`design`) <br> Search at predefined points.
-* `random_search` (`batch_size`) <br> Random search.
 * `nloptr` (`algorithm`) <br> Non-linear optimization.
 * `gensa` (`smooth`, `temperature`) <br> Generalized Simulated Annealing.
 * `irace` <br> Iterated racing.
@@ -209,7 +208,7 @@ at$learner
 
 Returns tuned learner trained on full data set.
 
-```{r, results='hide', class.source='multiline'}
+```{r, results='hide', class.source='multiline nested_small'}
 at$tuning_result
 # >        cost     gamma learner_param_vals  x_domain classif.ce
 # > 1: 5.270814 -4.414869          <list[4]> <list[2]>       0.08
@@ -217,7 +216,7 @@ at$tuning_result
 
 Access tuning result.
 
-```{r, results='hide'}
+```{r, results='hide', class.source='nested_small'}
 at = auto_tuner(tnr("grid_search"), learner,
   resampling, measure, term_evals = 20)
 ```
@@ -237,32 +236,28 @@ rr = resample(task, at, outer, store_models = TRUE)
 as.data.table(rr)
 ## >             learner         resampling iteration  
 ## > 1:  <AutoTuner[37]> <ResamplingCV[19]>         1
-## > 2:  <AutoTuner[37]> <ResamplingCV[19]>         2
 ```
 
 ```{r, results='hide', class.source='multiline nested_small'}
 extract_inner_tuning_results(rr)
-# >    iteration     cost      gamma classif.ce learner_param_vals  x_domain
-# > 1:         1 1.222198 -0.4974749       0.08          <list[4]> <list[2]>
-# > 2:         2 2.616557 -3.1440039       0.08          <list[4]> <list[2]>
+# >    iteration     cost      gamma classif.ce ...
+# > 1:         1 1.222198 -0.4974749       0.08 ...
 ```
 
 Check inner tuning results for stable HPs.
 
 ```{r, results='hide', class.source='multiline nested_small'}
 rr$score()
-# >             learner  iteration              prediction classif.ce
-# > 1:  <AutoTuner[40]>          1 <PredictionClassif[19]> 0.05333333
-# > 2:  <AutoTuner[40]>          2 <PredictionClassif[19]> 0.02666667
+# >    iteration classif.ce
+# > 1:         1 0.05333333
 ```
 
 Predictive performances estimated on the outer resampling.
 
 ```{r, results='hide', class.source='multiline nested_small'}
 extract_inner_tuning_archives(rr)
-# >    iteration     cost   gamma classif.ce  runtime      resample_result
-# >  1:        1  -7.4572  4.1506       0.68    0.013 <ResampleResult[20]>
-# > 21:        2   1.0056  0.4003       0.12    0.014 <ResampleResult[20]>
+# >    iteration     cost   gamma classif.ce runtime ...
+# > 1:         1  -7.4572  4.1506       0.68   0.013 ...
 ```
 
 All evaluated HP configurations.
