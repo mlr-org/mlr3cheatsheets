@@ -22,6 +22,9 @@ library(data.table)
     text-indent: 0 !important;
     padding-left: 0 !important;
   }
+  pre.sourceCode.r.nested_small > code.sourceCode.r.example_code {
+    font-size: 3.5pt !important;
+  }
 }
 </style>
 
@@ -148,13 +151,9 @@ Use `fselect()`-shortcut.
 Wraps learner and performs integrated feature selection.
 						
 ```{r, results='hide'}
-afs = auto_fselector(
-  fselector = fselector,
-  learner = learner,
-  resampling = resampling,
-  measure = measure,
-  term_evals = 20
-)
+afs = auto_fselector(fselector = fselector, learner = learner,
+  resampling = resampling, measure = measure, term_evals = 20
+  )
 ```
 						
 Inherits from class `Learner`.
@@ -188,7 +187,7 @@ Access feature selection result.
 
 Just resample `AutoFSelector`; now has inner and outer loop.
 						
-```{r, results='hide', class.source='example'}
+```{r, results='hide', class.source='example nested_small'}
 inner = rsmp("holdout")
 afs = auto_fselector(fs("random_search"), learner, inner, measure, term_evals = 20)
 outer = rsmp("cv", folds = 2)
