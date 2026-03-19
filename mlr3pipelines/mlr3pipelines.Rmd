@@ -20,7 +20,6 @@ library(mlr3verse)
 <style>
 @media print {
   pre > code.sourceCode > span {
-    text-align: left !important;
     text-indent: 0 !important;
     padding-left: 0 !important;
   }
