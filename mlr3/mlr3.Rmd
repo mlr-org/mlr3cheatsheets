@@ -456,7 +456,8 @@ Creation: `mlr3viz::autoplot(object, type)`
 Packages `evaluate` and `callr` can be used to encapsulate execution of `$train()` and `$predict()` to prevent stops in case of errors - useful for larger experiments. `callr` isolates the execution in a separate R sessions, guarding against segfaults.
 
 ```{r, results='hide'}
-learner$encapsulate("evaluate", fallback = lrn("classif.featureless"))
+learner$encapsulate("evaluate", 
+  fallback = lrn("classif.featureless"))
 ```							
 ```{r, results='hide'}
 learner$errors
