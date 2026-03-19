@@ -396,7 +396,7 @@ resampling_ids = "holdout"
 ```
 
 ```{r, results='hide'}	
-bmr$filter(task_ids, learner_ids, resampling_ids)
+bmr$filter(task_ids = task_ids, learner_ids = learner_ids, resampling_ids = resampling_ids)
 ```
 Filter by task, learner and resampling.
 
