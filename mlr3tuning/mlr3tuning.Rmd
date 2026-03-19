@@ -17,6 +17,18 @@ library(data.table)
 library(paradox)
 ```
 
+<style>
+@media print {
+  pre > code.sourceCode > span {
+    text-indent: 0 !important;
+    padding-left: 0 !important;
+  }
+  div.sourceCode:has(> pre.nested_narrow) {
+    width: 94% !important;
+  }
+}
+</style>
+
 ## Class Overview
 
 The package provides a set of R6 classes which allow to 
