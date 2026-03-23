@@ -86,7 +86,7 @@ Sugar to get example task from `mlr_tasks`:
 							
 * Twoclass: `german_credit`, `pima`, `sonar`,  `spam`
 * Multiclass: `iris`, `wine`, `zoo`
-* Regression: `boston_housing`, `mtcars`
+* Regression: `mtcars`, `california_housing`
 
 Print the `mlr_tasks` dictionary for more.
 							
@@ -148,7 +148,7 @@ learner = lrn(.key, ...)
 Get learner by `.key` (from `mlr_learners`)
 and construct the learner with specific hyperparameters and settings "..." in one go.
 							
-[github.com/mlr-org/mlr3learners](https://github.com/mlr-org/mlr3learners) (R package) and [github.com/mlr3learners](https://github.com/mlr3learners) (GitHub organization) hold all available learners.
+[github.com/mlr-org/mlr3learners](https://github.com/mlr-org/mlr3learners) holds all available learners.
 							
 ```{r, eval=FALSE}
 learner$param_set
@@ -221,7 +221,7 @@ Predict on ( selected) observations.
 measure = msr(.key)
 ```
 
-Get measure by `.key` from `mlr_measures:
+Get measure by `.key` from `mlr_measures`:
 
 * `classif.ce` - Classification error.
 * `classif.auc` - AUROC.
@@ -376,7 +376,7 @@ Creates a cross-join datatable with list-columns. Can also be set up manually fo
 ```{r, results='hide'}	
 bmr = benchmark(design)
 ```
-Returns a `BenckmarkResult` container.
+Returns a `BenchmarkResult` container.
 								
 ```{r, results='hide'}	
 bmr$aggregate(measures)
@@ -465,21 +465,17 @@ learner$errors
 ```
 Returns the log of recorded errors.
 								
-```{r, eval=FALSE}
-learner$encapsulate("evaluate", fallback = lrn(.key))
-```
-If learner fails, a fallback learner is used to generate predictions.
+If learner fails, the fallback learner is used to generate predictions.
 Use a robust fallback, e.g. a "featureless" learner.
 
 ## Resources
 
+<!-- ht<span>tps prevents the plain-text URL from being auto-linked -->
 * [mlr3book](https://mlr3book.mlr-org.com/index.html)<br>
 (ht<span>tps://mlr3book.mlr-org.com)
 * [mlr-org on GitHub](https://github.com/mlr-org)<br>
 (ht<span>tps://github.com/mlr-org)
-* [mlr3learners R package](https://github.com/mlr-org/mlr3learners)<br>
+* [mlr3learners](https://github.com/mlr-org/mlr3learners)<br>
 (ht<span>tps://github.com/mlr-org/mlr3learners)
-* [mlr3learners organization](https://github.com/mlr3learners)<br>
-(ht<span>tps://github.com/mlr3learners)
 * [mlr3gallery use cases](https://mlr3gallery.mlr-org.com/)<br>
 (ht<span>tps://mlr3gallery.mlr-org.com/)
