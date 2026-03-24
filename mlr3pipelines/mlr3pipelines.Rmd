@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Dataflow programming with mlr3pipelines"
 logo: "logo.png"
 column_breaks: [3, 8, 12]
-output: 
+output:
   cheatdown::cheatdown_html
 ---
 
@@ -27,14 +27,14 @@ library(mlr3verse)
 </style>
 
 ## Introduction
- 
-Combine ML operations to flexible pipelines and processing graphs, which can be configured trained, resampled, tuned as any regular learner.
+
+Combine ML operations to flexible pipelines and processing graphs, which can be configured, trained, resampled, tuned as any regular learner.
 The main purpose of a `Graph` is to build combined preprocessing and model fitting pipelines that can be used as a `Learner`.
 
 ![](grl_linear.png)
-             
+
 Each operation in the above example is a `PipeOp` which transforms the data in each step. `PipeOp`s are chained with the `%>>%` operator.
-            
+
 ## PipeOp
 
 Flow operation with `$train()` and `$predict()` step.
@@ -63,7 +63,7 @@ Construction example: `pca = po("pca")`
 | PipeOpClassBalancing  | "classbalancing"  | Imbalanced Data       |
 | PipeOpLearner         | "learner"         | Use Learner           |
 | PipeOpLearnerCV       | "learner_cv"      | Crossval Learner      |
-| PipeOpMutate          | "mutate"          | Fearure Engineering   |
+| PipeOpMutate          | "mutate"          | Feature Engineering   |
 | PipeOpChunk           | "chunk"           | Split Data            |
 | PipeOpSubsample       | "subsample"       | Subsample Rows        |
 | PipeOpFeatureUnion    | "featureunion"    | Combine Features      |
@@ -75,10 +75,10 @@ Construction example: `pca = po("pca")`
 ## Graph
 
 Connects `PipeOp`s with edges to control data flow during training and prediction. Input is sent to sources (no in-edges), output is read from sinks (no out-edges).
-              
+
 Important methods and slots:
 
-* Display: `print`(gr)`, `gr$plot`(html = TRUE)`
+* Display: `print(gr)`, `gr$plot(html = TRUE)`
 * Accessing `PipeOp`s: `gr$pipeops` <br> Named list of all contained POs.
 
 ## Graph Construction
@@ -93,12 +93,12 @@ gr$add_edge("pca", "classif.rpart")
 ```
 
 ## GraphLearner
-              
-`GraphLearner` behave like `Learner` and enable all mlr3 features: `grl = GraphLearner$new(gr)`.
+
+`GraphLearner` behaves like a `Learner` and enable all mlr3 features: `grl = GraphLearner$new(gr)`.
 See method `$encapsulate()` for debugging and `$model` for results after training.
-          
+
 ## Linear Graphs
-              
+
 Concatenate POs with `%>>%`:
 
 ```{r, class.source='example', results='hide'}
@@ -136,21 +136,21 @@ Internal state of graph learner. Contains fitted models in `$model`.
 ## Hyperparameters
 
 For POs: Exactly as in a `Learner`.
-              
+
 ```{r, results='hide'}
-enc = po("encode") 
+enc = po("encode")
 enc$param_set
-enc$param_set$values = list(method="one-hot") 
+enc$param_set$values = list(method="one-hot")
 po("encode", param_vals = list(method="one-hot"))
 ```
-              
+
 For `Graph` / `GraphLearner`: All HPs are collected in a global ParamSet stored in `$param_set`.
 IDs are prefixed with the respective `PipeOp`'s `id`.
-             
+
 ## Tuning
-             
+
 Can jointly tune any Pipeline.
-             
+
 ```{r, results='hide', class.source='example'}
 gr = po("encode") %>>% lrn("classif.rpart")
 grl = GraphLearner$new(gr)
@@ -172,7 +172,7 @@ Usage of `AutoTuner` is identical.
 
 `PipeOpMutate` adds new features.
 This works by providing expressions in a `list`.
-              
+
 ```{r, results='hide', class.source='example'}
 task = tsk("iris")
 mutations = list(
@@ -194,16 +194,16 @@ Change log-level only for mlr3pipelines.
 ## Nonlinear Graphs
 
 `gunion()` arranges `PipeOp`s or `Graph`s next to each other in a disjoint graph union.
-              
+
 ![](gunion.png)
-              
+
 `pipeline_greplicate()` creates a new `Graph` containing `n` copies of the input (`PipeOp` or `Graph`).
-              
+
 ![](greplicate.png)
-             
+
 `PipeOpFeatureUnion` aggregates features from all input tasks into a single `Task`.
-              
-        
+
+
 ```{r, results='hide', class.source='example'}
 # train on orig and pca features
 gunion(list(po("nop"), po("pca"))) %>>%
@@ -231,6 +231,6 @@ gr = ppl("branch", list(
 # set the "pca" path as the active one:
 gr$param_set$values$branch.selection = "pca"
 ```
-              
+
 Tuning the branching selection enables powerful model selection.
-            
+

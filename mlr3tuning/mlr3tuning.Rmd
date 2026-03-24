@@ -1,11 +1,11 @@
 ---
 title: "mlr3tuning"
-author: "mlr3-org"
+author: "mlr-org"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Hyperparameter Tuning with mlr3tuning"
 logo: "logo.png"
 column_breaks: [3, 6, 8]
-output: 
+output:
   cheatdown::cheatdown_html
 ---
 
@@ -31,14 +31,14 @@ library(paradox)
 
 ## Class Overview
 
-The package provides a set of R6 classes which allow to 
+The package provides a set of R6 classes which allow to
 (a) define general hyperparameter (HP) tuning instances, i.e., the black-box objective that maps HP configurations (HPCs) to resampled performance values;
-(b) run black-box optimzers;
+(b) run black-box optimizers;
 (c) combine learners with tuners (for nested resampling).
 
 ![](class_diagram.png)
 <br>
-[NB: In many table prints we suppres cols for readability.]
+[NB: In many table prints we suppress cols for readability.]
 
 ## ParamSet - Parameters and Ranges
 
@@ -55,13 +55,13 @@ ss = ps(
 `id` is identifier. `lower`/`upper` ranges, `levels` categories.
 
 ```{r, results='hide'}
-learner = lrn("classif.rpart", 
+learner = lrn("classif.rpart",
   cp = to_tune(0.001, 0.1, logscale = TRUE))
 learner$param_set$search_space() # for inspection
 ```
 
-Or, use `to_tune()` to set SS for each param in `Learner`. 
-SS is auto-generated when learner is tuned. 
+Or, use `to_tune()` to set SS for each param in `Learner`.
+SS is auto-generated when learner is tuned.
 Params can be arbitrarily transformed by setting a global trafo in SS,
 or `p_*` shortforms, `logscale = TRUE` is short for most common choice.
 
@@ -70,8 +70,8 @@ or `p_*` shortforms, `logscale = TRUE` is short for most common choice.
 Construction: `trm(.key, ...)`
 
 * `evals` (`n_evals`)<br> After iterations.
-* `run_time` (`secs `)<br> After training time.
-* `clock_time` (`stop_time `)<br> At given timepoint.
+* `run_time` (`secs`)<br> After training time.
+* `clock_time` (`stop_time`)<br> At given timepoint.
 * `perf_reached` (`level`)<br> After performance was reached.
 * `stagnation` (`iters`, `threshold`)<br> After performance stagnated.
 * `combo` (list_of_terms, `any=TRUE`)<br>Combine terminators with AND or OR.
@@ -103,7 +103,7 @@ instance = ti(task, learner, resampling, measure, terminator, ss)
 
 ```{r, results='hide', class.source='example'}
 # optimize HPs of RBF SVM on logscale
-learner = lrn("classif.svm", kernel = "radial", type = "C-classification") 
+learner = lrn("classif.svm", kernel = "radial", type = "C-classification")
 ss = ps(cost = p_dbl(1e-4, 1e4, logscale = TRUE),
   gamma = p_dbl(1e-4, 1e4, logscale = TRUE))
 evals = trm("evals", n_evals = 20)
@@ -139,7 +139,7 @@ as.data.table(mlr_tuners) # list all
 lgr::get_logger("bbotk")$set_threshold("<level>")
 ```
 
-Change log-level only for mlr3tuning.
+Change log-level for mlr3tuning (uses `bbotk` logger internally).
 
 ```{r, eval=FALSE}
 future::plan(strategy)
@@ -158,11 +158,11 @@ as.data.table(instance$archive)
 ## > 2: -1.94  1.32       0.10  f5623...         -1.94           1.32
 instance$result # datatable row with optimal HPC and estimated perf
 ```
-Get evaluated HPcs and performances; and result.
+Get evaluated HPCs and performances; and result.
 `x_domain_*` cols contain HP values after trafo (if any).
 
 ```{r, results='hide'}
-learner$param_set$values = 
+learner$param_set$values =
   instance$result_learner_param_vals
 ```
 
@@ -173,7 +173,7 @@ learner = lrn("classif.svm", type = "C-classification", kernel = "radial",
   cost = to_tune(1e-4, 1e4, logscale = TRUE),
   gamma = to_tune(1e-4, 1e4, logscale = TRUE))
 instance = tune(tnr("grid_search", resolution = 5), task = tsk("iris"),
-  learner = learner, resampling = rsmp("holdout"), 
+  learner = learner, resampling = rsmp("holdout"),
   measures = msr("classif.ce"))
 ```
 Use `tune()`-shortcut.
@@ -181,10 +181,10 @@ Use `tune()`-shortcut.
 ## AutoTuner - Tune before Train
 
 Wraps learner and performs integrated tuning.
-							
+
 ```{r, results='hide'}
 at = auto_tuner(tuner = tuner, learner = learner,
-  resampling = resampling, measure = measure, 
+  resampling = resampling, measure = measure,
   terminator = terminator)
 ```
 
@@ -218,15 +218,15 @@ Access tuning result.
 ## Nested Resampling
 
 Just resample `AutoTuner`; now has inner and outer loop.
-							
+
 ```{r, results='hide', class.source='example nested_narrow'}
 inner = rsmp("holdout")
-at = auto_tuner(tnr("gensa"), learner, inner, measure, term_evals = 20) 
+at = auto_tuner(tnr("gensa"), learner, inner, measure, term_evals = 20)
 outer = rsmp("cv", folds = 2)
 rr = resample(task, at, outer, store_models = TRUE)
-									
+
 as.data.table(rr)
-## >             learner         resampling iteration  
+## >             learner         resampling iteration
 ## > 1:  <AutoTuner[37]> <ResamplingCV[19]>         1
 ```
 
@@ -256,16 +256,26 @@ All evaluated HP configurations.
 
 ```{r, results='hide', class.source='nested_narrow'}
 rr$aggregate()
-#> classif.ce 
-#>       0.04 
+# > classif.ce
+# >       0.04
 ```
 
-Aggregates performances of outer resampling iterations. 
-						
+Aggregates performances of outer resampling iterations.
+
 ```{r, results='hide', class.source='nested_narrow'}
-rr = tune_nested(tnr("grid_search"), task, 
+rr = tune_nested(tnr("grid_search"), task,
   learner, inner, outer, measure,
   term_evals = 20)
 ```
 
 Use shortcut to execute nested resampling.
+
+## Resources
+
+<!-- ht<span>tps prevents the plain-text URL from being auto-linked -->
+* [mlr3book](https://mlr3book.mlr-org.com)<br>
+(ht<span>tps://mlr3book.mlr-org.com)
+* [mlr-org on GitHub](https://github.com/mlr-org)<br>
+(ht<span>tps://github.com/mlr-org)
+* [mlr3tuning](https://github.com/mlr-org/mlr3tuning)<br>
+(ht<span>tps://github.com/mlr-org/mlr3tuning)
