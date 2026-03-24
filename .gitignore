@@ -177,6 +177,11 @@ renv.lock
 # revdep
 revdep/
 
+# Cheatsheet build artifacts
+*.html
+*.pdf
+*_files/
+
 # AI
 .claude/settings.local.json
 CLAUDE.md
