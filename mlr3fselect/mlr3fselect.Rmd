@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 short_description: "Feature Selection with mlr3fselect"
 logo: "logo.png"
 column_breaks: [2, 5, 7]
-output: 
+output:
   cheatdown::cheatdown_html
 ---
 
@@ -15,23 +15,35 @@ library(mlr3fselect)
 library(data.table)
 ```
 
+<style>
+@media print {
+  pre > code.sourceCode > span {
+    text-indent: 0 !important;
+    padding-left: 0 !important;
+  }
+  pre.sourceCode.r.nested_small > code.sourceCode.r.example_code {
+    font-size: 3.5pt !important;
+  }
+}
+</style>
+
 ## Class Overview
-The package provides a set of R6 classes which allow to 
+The package provides a set of R6 classes which allow to
 (a) define general feature selection instances;
-(b) run black-box optimzers;
+(b) run black-box optimizers;
 (c) combine learners with feature selection (for nested resampling).
-					
+
 ![](class_diagram.png)
 <br>
-[NB: In many table prints we suppres cols for readability.]
+[NB: In many table prints we suppress cols for readability.]
 
 ## Terminators - When to stop
 
 Construction: `trm(.key, ...)`
 
 * `evals` (`n_evals`)<br> After iterations.
-* `run_time` (`secs `)<br> After training time.
-* `clock_time` (`stop_time `)<br> At given timepoint.
+* `run_time` (`secs`)<br> After training time.
+* `clock_time` (`stop_time`)<br> At given timepoint.
 * `perf_reached` (`level`)<br> After performance was reached.
 * `stagnation` (`iters`, `threshold`)<br> After performance stagnated.
 * `stagnation_batch` (`n`, `threshold`) <br> After performance stagnated for batches.
@@ -43,9 +55,9 @@ as.data.table(mlr_terminators) # list all
 Lists all available terminators.
 
 ## FSelectInstance* - Search Scenario
-					
+
 Evaluator and container for resampled performances of feature subsets.
-The (internal) function `eval_batch(xdt)` calls `benchmark()` to evaluate a table of feature subsets. 
+The (internal) function `eval_batch(xdt)` calls `benchmark()` to evaluate a table of feature subsets.
 Stores archive of all evaluated feature subsets and the final result.
 
 ```{r, include=FALSE}
@@ -57,15 +69,13 @@ terminator = trm("evals", n_evals = 20)
 ```
 
 ```{r, results='hide'}
-instance = FSelectInstanceSingleCrit$new(task, 
-  learner, resampling, measure, terminator)
+instance = fsi(task, learner, resampling, measure, terminator)
 ```
 
 `store_benchmark_result = TRUE` to store resampled evals and `store_models = TRUE` for fitted models.
 
 ```{r, results='hide', class.source='example'}
-instance = FSelectInstanceSingleCrit$new(task, learner, resampling, measure, 
-  terminator)
+instance = fsi(task, learner, resampling, measure, terminator)
 fselector = fs("random_search", batch_size = 10)
 fselector$optimize(instance)
 instance$result
@@ -73,19 +83,19 @@ instance$result
 # > 1:        FALSE        TRUE         TRUE        TRUE       0.06
 ```
 
-Use `FSelectInstanceMultiCrit` for multi-criteria feature selection.
+Use `FSelectInstanceBatchMultiCrit` for multi-criteria feature selection.
 
 ## FSelector - Search Strategy
-						
+
 Generates feature subsets and passes to instance for evaluation until termination.
 Creation: `fs(.key, ...)`
-						
+
 * `random_search` (`batch_size`) <br> Random search.
 * `exhaustive_search` (`max_features`) <br> Exhaustive Search.
 * `sequential` (`strategy`) <br> Sequential Selection.
 * `rfe` (`feature_fraction`, `recursive`) <br> Recursive Feature Elimination.
 * `design_points` (`batch_size `, `design`) <br> User supplied feature subsets.
-						
+
 ```{r, results='hide'}
 as.data.table(mlr_fselectors) # list all
 ```
@@ -95,7 +105,7 @@ Lists all available feature selection algorithms.
 ## Logging and Parallelization
 
 ```{r, eval=FALSE}
-lgr::get_logger("bbotk`")$set_threshold("<level>")
+lgr::get_logger("mlr3/bbotk")$set_threshold("<level>")
 ```
 
 Change log-level only for mlr3fselect.
@@ -106,7 +116,7 @@ future::plan(strategy)
 
 Sets the parallelization backend.
 Speeds up feature selection by running iterations in parallel.
-				
+
 ## Executing the Feature Selection
 
 ```{r, results='hide', class.source='multiline'}
@@ -114,21 +124,23 @@ fselector$optimize(instance)
 as.data.table(instance$archive)
 ## >    Petal.Length Petal.Width Sepal.Length Sepal.Width classif.ce
 ## > 1:         TRUE        TRUE         TRUE        TRUE 0.09333333
-## > 2:         TRUE        TRUE         TRUE       FALSE 0.09333333 
+## > 2:         TRUE        TRUE         TRUE       FALSE 0.09333333
 instance$result # datatable row with optimal feature subset and estimated perf
 ```
 
 Get evaluated feature subsets and performances; and result.
-			
-```{r, results='hide'}
-task$select(instance$result_feature_set)
+
+```{r, results='hide', include ='FALSE'}
+task_selected = task$clone(deep = TRUE)
+```
+```{r, results = 'hide'}
+task_selected$select(instance$result_feature_set)
 ```
 
-Set optimized feature subset in `Task`.
 
 ```{r, results='hide', class.source='example'}
-instance = fselect(method = "random_search", task = tsk("iris"), learner = learner, 
-  resampling = rsmp ("holdout"), measure = msr("classif.ce"), term_evals = 20)
+instance = fselect(fs("random_search"), task = tsk("iris"), learner = learner,
+  resampling = rsmp("holdout"), measures = msr("classif.ce"), term_evals = 20)
 ```
 
 Use `fselect()`-shortcut.
@@ -136,12 +148,13 @@ Use `fselect()`-shortcut.
 ## AutoFSelector - Select before Train
 
 Wraps learner and performs integrated feature selection.
-						
+
 ```{r, results='hide'}
-afs = AutoFSelector$new(learner, resampling,
-  measure, terminator, fselector)
+afs = auto_fselector(fselector = fselector,
+  learner = learner, resampling = resampling,
+  measure = measure, term_evals = 20)
 ```
-						
+
 Inherits from class `Learner`.
 Training starts feature selection on the training set.
 After completion the learner is trained with the "optimal" feature subset on the given task.
@@ -169,20 +182,13 @@ afs$fselect_result
 
 Access feature selection result.
 
-```{r, results='hide'}
-afs = auto_fselector(method = "random_search",
-  learner, resampling, measure, term_evals = 20)
-```
-
-Use shortcut to create `AutoFSelector`.
-
 ## Nested Resampling
 
 Just resample `AutoFSelector`; now has inner and outer loop.
-						
-```{r, results='hide', class.source='example'}
+
+```{r, results='hide', class.source='example nested_small'}
 inner = rsmp("holdout")
-afs = auto_fselector(method = "random_search", learner, inner, measure, term_evals = 20)
+afs = auto_fselector(fs("random_search"), learner, inner, measure, term_evals = 20)
 outer = rsmp("cv", folds = 2)
 rr = resample(task, afs, outer, store_models = TRUE)
 
@@ -222,14 +228,14 @@ All evaluated feature subsets.
 
 ```{r, eval=FALSE}
 rr$aggregate()
-# > classif.ce 
-# > 0.05333333 
+# > classif.ce
+# > 0.05333333
 ```
 
-Aggregates performances of outer resampling iterations. 
-							
+Aggregates performances of outer resampling iterations.
+
 ```{r, results='hide'}
-rr = fselect_nested(method = "random_search", task, 
+rr = fselect_nested(fs("random_search"), task,
   learner, inner, outer, measure, term_evals = 20)
 ```
 
